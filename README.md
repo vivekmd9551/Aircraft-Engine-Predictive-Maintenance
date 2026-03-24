@@ -190,9 +190,9 @@ Top 3 most predictive features:
 - Data Science & AI/ML Specialist
 - Aviation Technology Enthusiast
 
-📧 Email: [Your Email]  
-💼 LinkedIn: [Your LinkedIn]  
-🐙 GitHub: [@YourUsername](https://github.com/YourUsername)
+📧 Email: vivekmd9551@gmail.com
+💼 LinkedIn: www.linkedin.com/in/vivek-m-d/
+🐙 GitHub: [@vivekmd9551](https://github.com/vivekmd9551)
 
 ---
 
