@@ -1,0 +1,31 @@
+
+======================================================================
+FEATURE ENGINEERING SUMMARY
+======================================================================
+
+Original Features (after removing constants): 17
+  - Useful sensors: 11
+  - Operational settings: 3
+  - Metadata: unit_id, time_cycles, RUL
+
+Engineered Features: 103
+  ├─ Rolling statistics: 66
+  │  └─ Windows: [5, 10, 20]
+  ├─ Rate-of-change: 11
+  ├─ Exponential MA: 22
+  │  └─ Spans: [10, 20]
+  └─ Lifecycle features: 4
+
+TOTAL FEATURES: 120
+
+Feature Breakdown:
+  - Base sensors: 11
+  - Rolling mean: 33
+  - Rolling std: 33
+  - Rate-of-change: 11
+  - EMA: 22
+  - Lifecycle: 4
+  - Settings: 3
+  - Metadata: 3 (unit_id, time_cycles, RUL)
+
+======================================================================

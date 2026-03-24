@@ -1,0 +1,78 @@
+
+================================================================================
+EDA KEY INSIGHTS & RECOMMENDATIONS
+Aircraft Engine Predictive Maintenance Project
+================================================================================
+
+1. DATA QUALITY
+   ✅ No missing values found in any dataset
+   ✅ All data types are numeric (float64)
+   ✅ Data is clean and ready for modeling
+
+2. ENGINE LIFECYCLE
+   - Average engine lifespan: 206.3 cycles
+   - Range: 128 to 362 cycles
+   - High variability indicates different operating conditions
+
+3. SENSOR SELECTION
+   ❌ Constant sensors to REMOVE: 10
+      sensor_13, sensor_8, sensor_15, sensor_6, sensor_1, sensor_5, sensor_10, sensor_16, sensor_19, sensor_18
+   
+   ✅ Useful sensors to KEEP: 11
+      These sensors show variation and predictive potential
+
+4. RUL DISTRIBUTION
+   - RUL capped at 125 cycles (piecewise linear degradation)
+   - Class imbalance detected:
+     * Good (60+ cycles): 14631 samples
+     * Warning (30-60 cycles): 3000 samples
+     * Critical (<30 cycles): 3000 samples
+   
+   💡 Recommendation: Consider resampling or class weights for classification tasks
+
+5. SENSOR CORRELATIONS
+   - Top 3 sensors correlated with RUL:
+     1. sensor_12: 0.749
+     2. sensor_7: 0.733
+     3. sensor_21: 0.707
+   
+   - Highly correlated sensor pairs: 1
+     Consider feature selection to remove redundancy
+
+6. DEGRADATION PATTERNS
+   - Sensors show clear degradation trends over time
+   - Non-linear relationships observed
+   - Time-series patterns suggest LSTM models will be beneficial
+
+7. DATASET COMPLEXITY
+   - FD001: Simplest (1 condition, 1 fault) - ideal for baseline
+   - FD002: Medium (6 conditions, 1 fault) - tests generalization
+   - FD003: Medium (1 condition, 2 faults) - multi-fault detection
+   - FD004: Most complex (6 conditions, 2 faults) - real-world scenario
+
+================================================================================
+NEXT STEPS - FEATURE ENGINEERING
+================================================================================
+
+1. Remove constant sensors: sensor_13, sensor_8, sensor_15, sensor_6, sensor_1, sensor_5, sensor_10, sensor_16, sensor_19, sensor_18
+2. Create rolling window features (mean, std) for useful sensors
+3. Engineer rate-of-change features to capture degradation speed
+4. Normalize all sensor values (MinMaxScaler or StandardScaler)
+5. Create time-based features (early/mid/late lifecycle indicators)
+6. Consider polynomial features for top correlated sensors
+7. Prepare sequence data for LSTM (window size: 50 cycles)
+
+================================================================================
+MODELING STRATEGY
+================================================================================
+
+Phase 1: Build on FD001 (simple baseline)
+Phase 2: Validate on FD002 & FD003 (generalization)
+Phase 3: Final test on FD004 (production-level complexity)
+
+Target Metrics:
+- RMSE < 18.0 cycles
+- R² > 0.85
+- Early detection rate > 90%
+
+================================================================================
