@@ -1,3 +1,12 @@
+<div align="center">
+
+![Aircraft Engine Maintenance](https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=1200&h=300&fit=crop)
+
+</div>
+
+---
+
+
 # ✈️ Aircraft Engine Predictive Maintenance
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
