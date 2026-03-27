@@ -11,7 +11,8 @@ import os
 # ============================================================================
 # PROJECT PATHS
 # ============================================================================
-PROJECT_ROOT = '/content/drive/MyDrive/Aircraft_Engine_Predictive_Maintenance'
+# Automatically set the root to the folder where config.py is located
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Data paths
 DATA_RAW = os.path.join(PROJECT_ROOT, 'data/raw')
