@@ -88,44 +88,37 @@ with st.sidebar:
 # Load models (cached)
 @st.cache_resource
 def load_models():
-    """Load all trained models with debugging"""
+    """Load all trained models"""
     try:
-        # Get the directory where streamlit_app.py lives (the 'deployment' folder)
+        # Get the directory where streamlit_app.py lives
         CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-        
-        # Go up one level to the main project root
         PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
-        
-        # Now point to the models folder
         model_path = os.path.join(PROJECT_ROOT, "models")
         
-        # --- DIAGNOSTIC CHECK 1: DOES THE FOLDER EXIST? ---
-        if not os.path.exists(model_path):
-            st.error(f"🛑 DIAGNOSTIC: The folder path does not exist: {model_path}")
-            return None, None, None
+        # Dictionary to store our loaded models
+        loaded_models = {}
+        
+        # Load LightGBM
+        with open(os.path.join(model_path, 'lightgbm_optimized.pkl'), 'rb') as f:
+            loaded_models['LightGBM (Optimized)'] = pickle.load(f)
             
-        # --- DIAGNOSTIC CHECK 2: WHAT IS IN THE FOLDER? ---
-        files_in_folder = os.listdir(model_path)
-        st.info(f"📁 DIAGNOSTIC: Files found in models folder: {files_in_folder}")
-        
-        # Load XGBoost
-        with open(os.path.join(model_path, 'xgboost_optimized.pkl'), 'rb') as f:
-            xgb_model = pickle.load(f)
-        
-        # Load Random Forest
-        with open(os.path.join(model_path, 'random_forest_baseline.pkl'), 'rb') as f:
-            rf_model = pickle.load(f)
+        # Load Gradient Boosting
+        with open(os.path.join(model_path, 'gradient_boosting_baseline.pkl'), 'rb') as f:
+            loaded_models['Gradient Boosting'] = pickle.load(f)
+            
+        # Load Linear Regression
+        with open(os.path.join(model_path, 'linear_regression_baseline.pkl'), 'rb') as f:
+            loaded_models['Linear Regression'] = pickle.load(f)
         
         # Load scaler
         with open(os.path.join(model_path, 'feature_scaler.pkl'), 'rb') as f:
             scaler = pickle.load(f)
         
-        return xgb_model, rf_model, scaler
+        return loaded_models, scaler
         
     except Exception as e:
-        # --- DIAGNOSTIC CHECK 3: WHAT IS THE EXACT ERROR? ---
         st.error(f"🛑 EXACT ERROR: {type(e).__name__} - {str(e)}")
-        return None, None, None
+        return None, None
 
 # Helper functions
 def get_rul_category(rul):
@@ -231,47 +224,26 @@ if page == "🏠 Home":
 elif page == "🔮 RUL Prediction":
     st.markdown("## 🔮 Predict Engine RUL")
     
-    # Load models
-    xgb_model, rf_model, scaler = load_models()
+    # Load models dictionary and scaler
+    models_dict, scaler = load_models()
     
-    if xgb_model is None:
-        st.error("⚠️ Models not found! Please check the file paths.")
-        st.info("💡 To use this app, upload your trained models or update the paths in the code.")
-        
-        st.markdown("### 📝 Demo Mode")
-        st.write("Since models aren't loaded, here's a demonstration of how predictions would work:")
-        
-        # Demo input
-        demo_rul = st.slider("Simulated RUL", 0, 125, 45, help="This is a demo value")
-        
-        status, icon = get_rul_category(demo_rul)
-        
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            st.markdown(f"### {icon} Status")
-            st.markdown(f"<h2>{status}</h2>", unsafe_allow_html=True)
-        
-        with col2:
-            st.markdown("### ⏱️ Predicted RUL")
-            st.markdown(f"<h2>{demo_rul} cycles</h2>", unsafe_allow_html=True)
-        
-        with col3:
-            cost = calculate_maintenance_cost(demo_rul)
-            st.markdown("### 💰 Est. Cost")
-            st.markdown(f"<h2>${cost:,}</h2>", unsafe_allow_html=True)
-        
-        # Recommendations
-        st.markdown("### 📋 Recommendations")
-        if demo_rul < 30:
-            st.error("🔴 **CRITICAL:** Schedule immediate maintenance!")
-        elif demo_rul < 60:
-            st.warning("🟡 **WARNING:** Plan maintenance within 30 cycles")
-        else:
-            st.success("🟢 **GOOD:** Engine operating normally")
-    
+    if models_dict is None:
+        st.error("⚠️ Models not found! Please check the exact file names and paths.")
     else:
         st.success("✅ Models loaded successfully!")
+        
+        # --- MODEL SELECTOR DROPDOWN ---
+        st.markdown("### 🤖 Select Prediction Model")
+        selected_model_name = st.selectbox(
+            "Choose which machine learning model to use for this prediction:",
+            list(models_dict.keys())
+        )
+        
+        # Grab the actual model the user selected
+        active_model = models_dict[selected_model_name]
+        
+        st.info(f"Currently using: **{selected_model_name}**")
+        st.markdown("---")
         
         # Input method
         input_method = st.radio("Choose input method:", 
