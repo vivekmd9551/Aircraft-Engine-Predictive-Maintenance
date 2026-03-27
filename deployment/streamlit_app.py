@@ -152,6 +152,14 @@ div[data-testid="stRadio"] label > div:first-child { display: none !important; }
     background: var(--amber) !important; color: #FFFFFF !important; box-shadow: 0 8px 32px rgba(200,137,42,0.35) !important; transform: translateY(-2px) !important;
 }
 
+/* ── SELECT ── */
+[data-baseweb="select"] {
+    border-radius: var(--radius-sm) !important;
+    border-color: var(--warm-200) !important;
+    background: #FFFFFF !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
 /* ── DATAFRAME & PLOTS ── */
 [data-testid="stDataFrame"], [data-testid="stPlotlyChart"] {
     border-radius: var(--radius) !important; overflow: hidden !important; border: 1px solid var(--warm-100) !important; box-shadow: var(--shadow-sm) !important; background: #FFFFFF !important;
@@ -361,9 +369,23 @@ elif page == "RUL Prediction":
         st.markdown("<hr style='margin:0.5rem 0 1rem 0; border-color: #EDE7D9;'>", unsafe_allow_html=True)
 
         if input_mode == "🎛️ Simple Controls":
-            heat_val  = st.slider("Overall Engine Heat [T24 / T50]", 0, 100, 30, 1, format="%d%% wear")
-            press_val = st.slider("Compressor Pressure Level [P30 / Ps30]", 0, 100, 20, 1, format="%d%% wear")
-            rpm_val   = st.slider("Fan & Core Speed Stress [NF / NC]", 0, 100, 40, 1, format="%d%% wear")
+            # RESTORED: Scenario Presets
+            scenario = st.selectbox("Flight Scenario Presets", 
+                                    ["✈️ Healthy Engine (Nominal)", 
+                                     "⚠️ Moderate Wear (Mid-Life)", 
+                                     "🚨 Impending Failure (Critical)"])
+            
+            # Map scenarios to baseline values
+            if "Healthy" in scenario:
+                def_t, def_p, def_r = 10, 10, 10
+            elif "Moderate" in scenario:
+                def_t, def_p, def_r = 45, 50, 40
+            else:
+                def_t, def_p, def_r = 85, 90, 85
+
+            heat_val  = st.slider("Overall Engine Heat [T24 / T50]", 0, 100, def_t, 1, format="%d%% wear")
+            press_val = st.slider("Compressor Pressure Level [P30 / Ps30]", 0, 100, def_p, 1, format="%d%% wear")
+            rpm_val   = st.slider("Fan & Core Speed Stress [NF / NC]", 0, 100, def_r, 1, format="%d%% wear")
             
             # Translate simple percentages into a mock calculation payload
             baseline = 125
@@ -432,7 +454,7 @@ elif page == "RUL Prediction":
                     <p>Continue standard monitoring intervals.</p>
                 </div>""", unsafe_allow_html=True)
 
-            # RESTORED Gauge Chart
+            # Gauge Chart
             fig_g = go.Figure(go.Indicator(
                 mode="gauge+number",
                 value=rul_pred,
@@ -510,7 +532,6 @@ elif page == "Model Performance":
         st.plotly_chart(fig_r, use_container_width=True)
 
     with col2:
-        # RESTORED R² Score Chart
         fig_r2 = go.Figure(go.Bar(
             x=df_perf['Model'], y=df_perf['R²'],
             marker=dict(color=['#1C1C1E','#C8892A','#E8A83E','#D9CEBC'], cornerradius=10),
@@ -524,7 +545,6 @@ elif page == "Model Performance":
             yaxis_title="R² Score", showlegend=False, height=320)
         st.plotly_chart(fig_r2, use_container_width=True)
 
-    # RESTORED Radar Chart
     categories  = ['RMSE (inv)','MAE (inv)','R² Score','Speed','Explainability']
     radar_vals  = {
         'LSTM':          [0.95, 0.90, 0.95, 0.5, 0.3],
@@ -642,7 +662,6 @@ elif page == "Business Impact":
         </div>""", unsafe_allow_html=True)
 
     with col_chart:
-        # RESTORED 5-Year Savings Line Chart
         years   = [1,2,3,4,5]
         cum_sav = [(savings - ann_maint)*y - dev_cost for y in years]
 
@@ -662,7 +681,6 @@ elif page == "Business Impact":
             xaxis_title="Year", yaxis_title="Savings ($M)", height=340)
         st.plotly_chart(fig_roi, use_container_width=True)
 
-        # RESTORED Bar Chart
         fig_cmp = go.Figure(go.Bar(
             x=['Without ML','With ML'], y=[cost_wo/1e6, cost_w/1e6],
             marker=dict(color=['#B84A2E','#1E7A6E'], cornerradius=12),
@@ -740,7 +758,6 @@ elif page == "About":
             </div>
         </div>""", unsafe_allow_html=True)
 
-        # RESTORED Project Stats
         st.markdown("""<div class="card">
             <p style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;
                text-transform:uppercase;color:#C8892A;margin-bottom:0.8rem;">Project Stats</p>""",
@@ -754,7 +771,6 @@ elif page == "About":
             st.metric("Visualizations", "12+")
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # RESTORED Roadmap
     st.markdown("""<div class="rule">
         <div class="rule-line"></div>
         <span class="rule-label">Roadmap</span>
@@ -784,6 +800,6 @@ st.markdown("""
         <strong style="color:#1C1C1E;font-weight:600;">AeroMind</strong> · Aircraft Engine Predictive Maintenance ·
         Built with ❤️ by <strong style="color:#1C1C1E;font-weight:600;">Vivek M D</strong></p>
     <p style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:#C8C8CA;letter-spacing:0.1em;">
-        NASA C-MAPSS · Streamlit · v1.2 · 2026</p>
+        NASA C-MAPSS · Streamlit · v1.3 · 2026</p>
 </div>
 """, unsafe_allow_html=True)
