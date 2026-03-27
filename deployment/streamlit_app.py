@@ -5,10 +5,10 @@ Design: Warm Light Editorial — Ivory + Amber + Charcoal, Premium Aerospace
 """
 
 import os
-import time
 import streamlit as st
 import pandas as pd
 import numpy as np
+import pickle
 import plotly.graph_objects as go
 from datetime import datetime
 import warnings
@@ -133,16 +133,12 @@ div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 [data-testid="stMetricValue"] { font-family: 'Playfair Display', serif !important; font-size: 2.1rem !important; font-weight: 700 !important; color: var(--charcoal) !important; }
 [data-testid="stMetricLabel"] { font-family: 'IBM Plex Mono', monospace !important; font-size: 0.6rem !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; color: var(--mid) !important; }
 
-/* ── BUTTONS ── */
-[data-testid="stButton"] > button {
-    background: var(--charcoal) !important; color: var(--amber-lt) !important; border: none !important;
-    border-radius: var(--radius-sm) !important; font-family: 'IBM Plex Mono', monospace !important;
-    font-size: 0.72rem !important; letter-spacing: 0.2em !important; text-transform: uppercase !important;
-    padding: 0.75rem 2rem !important; box-shadow: var(--shadow-md) !important; transition: all 0.22s !important;
-    width: 100% !important; margin-top: 1rem !important;
-}
-[data-testid="stButton"] > button:hover {
-    background: var(--amber) !important; color: #FFFFFF !important; box-shadow: 0 8px 32px rgba(200,137,42,0.35) !important; transform: translateY(-2px) !important;
+/* ── SELECT ── */
+[data-baseweb="select"] {
+    border-radius: var(--radius-sm) !important;
+    border-color: var(--warm-200) !important;
+    background: #FFFFFF !important;
+    font-family: 'Outfit', sans-serif !important;
 }
 
 /* ── ALERTS ── */
@@ -302,7 +298,6 @@ elif page == "RUL Prediction":
     col_sliders, col_result = st.columns([1.1, 1], gap="large")
 
     with col_sliders:
-        # Replaced the raw HTML <div class="card"> with a clean Streamlit container
         with st.container(border=True):
             st.markdown("<p style=\"font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:#C8892A;margin-bottom:1.2rem;\">Sensor Dashboard</p>", unsafe_allow_html=True)
             
@@ -336,8 +331,6 @@ elif page == "RUL Prediction":
                 press_fx = (s3 - 1590)  / 4
                 rpm_fx   = (s4 - 1410)  / 3
                 base_rul = int(max(0, min(125, baseline - temp_fx - press_fx - rpm_fx)))
-        
-        predict_btn = st.button("▶ COMPUTE REMAINING USEFUL LIFE")
 
     with col_result:
         # Simulate algorithmic variance based on model selection
@@ -351,10 +344,6 @@ elif page == "RUL Prediction":
             rul_pred = base_rul
             
         rul_pred = max(0, min(125, rul_pred))
-
-        if predict_btn:
-            with st.spinner(f"Running inference via {chosen} model..."):
-                time.sleep(0.6) # Add a satisfying visual delay for the button press
 
         label, kind = rul_status(rul_pred)
         cost = maintenance_cost(rul_pred)
@@ -455,7 +444,9 @@ elif page == "Model Performance":
             x=df_perf['Model'], y=df_perf['R²'], marker=dict(color=['#1C1C1E','#C8892A','#E8A83E','#D9CEBC'], cornerradius=10),
             text=[f"{v:.4f}" for v in df_perf['R²']], textposition='outside', textfont=dict(family='IBM Plex Mono', size=11), hovertemplate='<b>%{x}</b><br>R²: %{y:.4f}<extra></extra>'
         ))
-        fig_r2.update_layout(**PLOT_LAYOUT, title=dict(text="R² Score — Higher is Better", font=dict(family='Playfair Display', size=15, color='#1C1C1E')), yaxis=dict(range=[0.93,0.96], **PLOT_LAYOUT['yaxis']), yaxis_title="R² Score", showlegend=False, height=320)
+        # FIXED BUG: Using update_yaxes instead of passing 'yaxis' dict inside update_layout
+        fig_r2.update_layout(**PLOT_LAYOUT, title=dict(text="R² Score — Higher is Better", font=dict(family='Playfair Display', size=15, color='#1C1C1E')), yaxis_title="R² Score", showlegend=False, height=320)
+        fig_r2.update_yaxes(range=[0.93, 0.96])
         st.plotly_chart(fig_r2, use_container_width=True)
 
     categories  = ['RMSE (inv)','MAE (inv)','R² Score','Speed','Explainability']
@@ -558,4 +549,4 @@ elif page == "About":
 # ─────────────────────────────────────────────
 # FOOTER
 # ─────────────────────────────────────────────
-st.markdown("""<div style="margin-top:4rem;padding-top:1.5rem;border-top:1px solid #EDE7D9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;"><p style="font-size:0.8rem;color:#9A9A9E;font-weight:300;font-family:'Outfit',sans-serif;"><strong style="color:#1C1C1E;font-weight:600;">AeroMind</strong> · Aircraft Engine Predictive Maintenance · Built with ❤️ by <strong style="color:#1C1C1E;font-weight:600;">Vivek M D</strong></p><p style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:#C8C8CA;letter-spacing:0.1em;">NASA C-MAPSS · Streamlit · v1.4 · 2026</p></div>""", unsafe_allow_html=True)
+st.markdown("""<div style="margin-top:4rem;padding-top:1.5rem;border-top:1px solid #EDE7D9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;"><p style="font-size:0.8rem;color:#9A9A9E;font-weight:300;font-family:'Outfit',sans-serif;"><strong style="color:#1C1C1E;font-weight:600;">AeroMind</strong> · Aircraft Engine Predictive Maintenance · Built with ❤️ by <strong style="color:#1C1C1E;font-weight:600;">Vivek M D</strong></p><p style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:#C8C8CA;letter-spacing:0.1em;">NASA C-MAPSS · Streamlit · v1.5 · 2026</p></div>""", unsafe_allow_html=True)
