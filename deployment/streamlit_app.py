@@ -25,7 +25,7 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS — Warm Light Editorial Theme
+# GLOBAL CSS & ANIMATED BACKGROUND
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -65,9 +65,12 @@ html, body,
     font-family: 'Outfit', sans-serif !important;
 }
 
+/* Ensure Main Content sits above background */
 [data-testid="stMainBlockContainer"] {
     padding-top: 2rem !important;
     max-width: 1300px !important;
+    position: relative;
+    z-index: 1; 
 }
 
 /* ── HIDE CHROME ── */
@@ -186,13 +189,109 @@ div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 .pill-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 1rem; }
 .pill { background: var(--cream); border: 1px solid var(--warm-200); border-radius: 6px; padding: 4px 11px; font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: var(--slate); letter-spacing: 0.05em; }
 
-/* ANIMATED BACKGROUND */
+/* ── AIRCRAFT ANIMATED BACKGROUND ── */
 body::before {
     content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     opacity: 0.4;
 }
+
+.aircraft-bg-container {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.aircraft-bg-container svg {
+    width: 90vw;
+    min-width: 1000px;
+    opacity: 0.12; /* Very subtle premium watermark look */
+}
+
+/* Spool up effect: Start 0, accelerate for 4s, then spin continuously fast */
+.fan-blades {
+    transform-origin: center;
+    animation: spoolUp 4s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+               spinContinuous 0.25s linear 4s infinite;
+}
+
+@keyframes spoolUp {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(1440deg); } /* 4 fast rotations to build speed */
+}
+@keyframes spinContinuous {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Pulsing engine core for heat effect */
+.engine-core {
+    animation: pulseHeat 2s ease-in-out infinite alternate;
+}
+@keyframes pulseHeat {
+    0% { fill: rgba(200,137,42,0.2); stroke: rgba(200,137,42,0.5); }
+    100% { fill: rgba(232,168,62,0.6); stroke: rgba(232,168,62,0.9); }
+}
 </style>
+
+<div class="aircraft-bg-container">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#C8892A" fill="none" stroke-width="1.5">
+            <ellipse cx="600" cy="400" rx="90" ry="280" fill="rgba(250,248,244,0.3)" />
+            
+            <path d="M 545 220 Q 600 170 655 220 L 665 280 Q 600 300 535 280 Z" fill="rgba(200,137,42,0.08)" stroke-width="2" />
+            <line x1="600" y1="190" x2="600" y2="290" stroke-width="2" /> <line x1="565" y1="205" x2="550" y2="285" stroke-width="1" /> <line x1="635" y1="205" x2="650" y2="285" stroke-width="1" /> <path d="M 515 450 L 50 550 L 50 620 L 515 580 Z" fill="rgba(200,137,42,0.02)" />
+            <path d="M 685 450 L 1150 550 L 1150 620 L 685 580 Z" fill="rgba(200,137,42,0.02)" />
+
+            <line x1="320" y1="500" x2="320" y2="580" stroke-width="3" />
+            <line x1="880" y1="500" x2="880" y2="580" stroke-width="3" />
+            
+            <g transform="translate(320, 580)">
+                <circle cx="0" cy="0" r="75" stroke-width="3" fill="#FAF8F4" />
+                <circle cx="0" cy="0" r="68" stroke-width="1" />
+                
+                <g class="fan-blades">
+                    <line x1="0" y1="-68" x2="0" y2="68" />
+                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(30)" />
+                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(60)" />
+                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(90)" />
+                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(120)" />
+                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(150)" />
+                    
+                    <circle cx="0" cy="0" r="40" stroke-width="0.5" stroke-dasharray="2 4" />
+                </g>
+                
+                <circle cx="0" cy="0" r="18" class="engine-core" stroke-width="2" />
+                <path d="M 0 -18 Q 8 0 0 18 Q -8 0 0 -18" fill="none" stroke-width="1" opacity="0.6" />
+            </g>
+
+            <g transform="translate(880, 580)">
+                <circle cx="0" cy="0" r="75" stroke-width="3" fill="#FAF8F4" />
+                <circle cx="0" cy="0" r="68" stroke-width="1" />
+                
+                <g class="fan-blades">
+                    <line x1="0" y1="-68" x2="0" y2="68" />
+                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(30)" />
+                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(60)" />
+                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(90)" />
+                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(120)" />
+                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(150)" />
+                    
+                    <circle cx="0" cy="0" r="40" stroke-width="0.5" stroke-dasharray="2 4" />
+                </g>
+                
+                <circle cx="0" cy="0" r="18" class="engine-core" stroke-width="2" />
+                <path d="M 0 -18 Q 8 0 0 18 Q -8 0 0 -18" fill="none" stroke-width="1" opacity="0.6" />
+            </g>
+
+        </g>
+    </svg>
+</div>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
@@ -333,7 +432,6 @@ elif page == "RUL Prediction":
                 base_rul = int(max(0, min(125, baseline - temp_fx - press_fx - rpm_fx)))
 
     with col_result:
-        # Simulate algorithmic variance based on model selection
         if chosen == 'XGBoost':
             rul_pred = int(base_rul * 0.96) + 3
         elif chosen == 'Random Forest':
@@ -444,7 +542,6 @@ elif page == "Model Performance":
             x=df_perf['Model'], y=df_perf['R²'], marker=dict(color=['#1C1C1E','#C8892A','#E8A83E','#D9CEBC'], cornerradius=10),
             text=[f"{v:.4f}" for v in df_perf['R²']], textposition='outside', textfont=dict(family='IBM Plex Mono', size=11), hovertemplate='<b>%{x}</b><br>R²: %{y:.4f}<extra></extra>'
         ))
-        # FIXED BUG: Using update_yaxes instead of passing 'yaxis' dict inside update_layout
         fig_r2.update_layout(**PLOT_LAYOUT, title=dict(text="R² Score — Higher is Better", font=dict(family='Playfair Display', size=15, color='#1C1C1E')), yaxis_title="R² Score", showlegend=False, height=320)
         fig_r2.update_yaxes(range=[0.93, 0.96])
         st.plotly_chart(fig_r2, use_container_width=True)
@@ -549,4 +646,4 @@ elif page == "About":
 # ─────────────────────────────────────────────
 # FOOTER
 # ─────────────────────────────────────────────
-st.markdown("""<div style="margin-top:4rem;padding-top:1.5rem;border-top:1px solid #EDE7D9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;"><p style="font-size:0.8rem;color:#9A9A9E;font-weight:300;font-family:'Outfit',sans-serif;"><strong style="color:#1C1C1E;font-weight:600;">AeroMind</strong> · Aircraft Engine Predictive Maintenance · Built with ❤️ by <strong style="color:#1C1C1E;font-weight:600;">Vivek M D</strong></p><p style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:#C8C8CA;letter-spacing:0.1em;">NASA C-MAPSS · Streamlit · v1.5 · 2026</p></div>""", unsafe_allow_html=True)
+st.markdown("""<div style="margin-top:4rem;padding-top:1.5rem;border-top:1px solid #EDE7D9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;"><p style="font-size:0.8rem;color:#9A9A9E;font-weight:300;font-family:'Outfit',sans-serif;"><strong style="color:#1C1C1E;font-weight:600;">AeroMind</strong> · Aircraft Engine Predictive Maintenance · Built with ❤️ by <strong style="color:#1C1C1E;font-weight:600;">Vivek M D</strong></p><p style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:#C8C8CA;letter-spacing:0.1em;">NASA C-MAPSS · Streamlit · v1.6 · 2026</p></div>""", unsafe_allow_html=True)
