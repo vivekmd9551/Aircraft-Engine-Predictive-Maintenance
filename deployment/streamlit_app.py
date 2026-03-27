@@ -1,7 +1,7 @@
 """
 🚀 Aircraft Engine Predictive Maintenance - Streamlit App
 Author: Vivek M D
-Description: Interactive web interface for RUL prediction using trained ML models
+Description: Futuristic web interface for RUL prediction using trained ML models
 """
 
 import os
@@ -17,512 +17,406 @@ warnings.filterwarnings('ignore')
 
 # Page configuration
 st.set_page_config(
-    page_title="Aircraft Engine RUL Predictor",
-    page_icon="✈️",
+    page_title="AeroSpace HUD // RUL Predictor",
+    page_icon="🛰️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS
+# ========================================
+# FUTURISTIC CSS INJECTION (CYBERPUNK THEME)
+# ========================================
 st.markdown("""
 <style>
-    .main-header {
-        font-size: 3rem;
-        color: #1f77b4;
-        text-align: center;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
+    /* Global App Background & Text */
+    .stApp {
+        background-color: #050508;
+        color: #e0e6ed;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+    
+    /* Main Glowing Header */
+    .main-header {
+        font-size: 3.5rem;
+        color: #00ffff;
+        text-align: center;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin-bottom: 0.2rem;
+        text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px rgba(0, 255, 255, 0.4);
+    }
+    
+    /* Sub Header */
     .sub-header {
         font-size: 1.2rem;
-        color: #666;
+        color: #ff00ff;
         text-align: center;
-        margin-bottom: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 3rem;
+        text-shadow: 0 0 5px #ff00ff;
+        font-family: 'Courier New', Courier, monospace;
     }
-    .metric-card {
-        background-color: #f0f2f6;
-        padding: 1.5rem;
-        border-radius: 0.5rem;
-        border-left: 5px solid #1f77b4;
+
+    /* Style Streamlit Metrics (Numbers) to look like HUD readouts */
+    [data-testid="stMetricValue"] {
+        color: #00ffff !important;
+        font-family: 'Courier New', Courier, monospace !important;
+        text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
     }
+    [data-testid="stMetricLabel"] {
+        color: #a0aab5 !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.9rem;
+    }
+
+    /* Custom Futuristic Alert Boxes */
     .alert-critical {
-        background-color: #ffebee;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border-left: 5px solid #f44336;
+        background: linear-gradient(90deg, rgba(255, 0, 60, 0.1) 0%, rgba(0,0,0,0) 100%);
+        padding: 1.5rem;
+        border-radius: 5px;
+        border-left: 5px solid #ff003c;
+        border-top: 1px solid rgba(255, 0, 60, 0.3);
+        border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+        color: #ffcccc;
+        font-family: 'Courier New', Courier, monospace;
+        box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
     }
+    .alert-critical h4 { color: #ff003c; text-shadow: 0 0 10px #ff003c; text-transform: uppercase; }
+
     .alert-warning {
-        background-color: #fff3e0;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border-left: 5px solid #ff9800;
+        background: linear-gradient(90deg, rgba(255, 170, 0, 0.1) 0%, rgba(0,0,0,0) 100%);
+        padding: 1.5rem;
+        border-radius: 5px;
+        border-left: 5px solid #ffaa00;
+        border-top: 1px solid rgba(255, 170, 0, 0.3);
+        border-bottom: 1px solid rgba(255, 170, 0, 0.3);
+        color: #ffeecc;
+        font-family: 'Courier New', Courier, monospace;
     }
+    .alert-warning h4 { color: #ffaa00; text-shadow: 0 0 10px #ffaa00; text-transform: uppercase; }
+
     .alert-good {
-        background-color: #e8f5e9;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border-left: 5px solid #4caf50;
+        background: linear-gradient(90deg, rgba(0, 255, 128, 0.1) 0%, rgba(0,0,0,0) 100%);
+        padding: 1.5rem;
+        border-radius: 5px;
+        border-left: 5px solid #00ff80;
+        border-top: 1px solid rgba(0, 255, 128, 0.3);
+        border-bottom: 1px solid rgba(0, 255, 128, 0.3);
+        color: #ccffcc;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .alert-good h4 { color: #00ff80; text-shadow: 0 0 10px #00ff80; text-transform: uppercase; }
+
+    /* Divider lines */
+    hr {
+        border: 0;
+        height: 1px;
+        background-image: linear-gradient(to right, rgba(0, 255, 255, 0), rgba(0, 255, 255, 0.75), rgba(0, 255, 255, 0));
+        box-shadow: 0 0 5px #00ffff;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # Title
-st.markdown('<p class="main-header">✈️ Aircraft Engine Predictive Maintenance</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">Remaining Useful Life (RUL) Prediction System</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-header">AEROSPACE DIAGNOSTICS HUD</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-header">>> Predictive Maintenance Neural Network Interface <<</p>', unsafe_allow_html=True)
 
 # Sidebar
 with st.sidebar:
-    st.image("https://img.icons8.com/color/96/000000/maintenance.png", width=100)
-    st.markdown("### 📊 Navigation")
-    page = st.radio("Select Page", 
-                    ["🏠 Home", "🔮 RUL Prediction", "📈 Model Performance", "💰 Business Impact", "ℹ️ About"],
+    st.markdown("### 🎛️ SYSTEM OVERRIDE")
+    page = st.radio("SELECT PROTOCOL:", 
+                    ["🏠 MAIN HUD", "🔮 NEURAL PREDICTION", "📈 TELEMETRY DATA", "💰 FINANCIAL IMPACT", "ℹ️ SYSTEM LOGS"],
                     label_visibility="collapsed")
     
     st.markdown("---")
-    st.markdown("### 🎯 Project Stats")
-    st.metric("Best Model", "LSTM")
-    st.metric("RMSE", "8.96 cycles")
-    st.metric("R² Score", "0.9528")
-    st.metric("Annual Savings", "$2.0M")
+    st.markdown("### 📡 CORE METRICS")
+    st.metric("Primary Node", "LSTM-v1.4")
+    st.metric("System Error (RMSE)", "8.96 cyc")
+    st.metric("Signal Fidelity (R²)", "0.9528")
+    st.metric("Resource Saved", "$2.0M")
 
 # Load models (cached)
 @st.cache_resource
 def load_models():
     """Load all trained models"""
     try:
-        # Get the directory where streamlit_app.py lives
         CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
         PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
         model_path = os.path.join(PROJECT_ROOT, "models")
         
-        # Dictionary to store our loaded models
         loaded_models = {}
         
-        # Load LightGBM
         with open(os.path.join(model_path, 'lightgbm_optimized.pkl'), 'rb') as f:
             loaded_models['LightGBM (Optimized)'] = pickle.load(f)
             
-        # Load Gradient Boosting
         with open(os.path.join(model_path, 'gradient_boosting_baseline.pkl'), 'rb') as f:
             loaded_models['Gradient Boosting'] = pickle.load(f)
             
-        # Load Linear Regression
         with open(os.path.join(model_path, 'linear_regression_baseline.pkl'), 'rb') as f:
             loaded_models['Linear Regression'] = pickle.load(f)
         
-        # Load scaler
         with open(os.path.join(model_path, 'feature_scaler.pkl'), 'rb') as f:
             scaler = pickle.load(f)
         
         return loaded_models, scaler
         
     except Exception as e:
-        st.error(f"🛑 EXACT ERROR: {type(e).__name__} - {str(e)}")
+        st.error(f"🛑 SYSTEM FAULT: {type(e).__name__} - {str(e)}")
         return None, None
 
-# Helper functions
 def get_rul_category(rul):
     """Categorize RUL into health status"""
-    if rul < 30:
-        return "CRITICAL", "🔴"
-    elif rul < 60:
-        return "WARNING", "🟡"
-    else:
-        return "GOOD", "🟢"
+    if rul < 30: return "CRITICAL FAILURE IMMINENT", "⚠️"
+    elif rul < 60: return "DEGRADATION DETECTED", "⚡"
+    else: return "SYSTEM NOMINAL", "✅"
 
 def calculate_maintenance_cost(rul, prevent_failure=True):
-    """Calculate estimated maintenance cost"""
-    if rul < 30:
-        if prevent_failure:
-            return 50000  # Scheduled maintenance
-        else:
-            return 500000  # Unscheduled failure
-    elif rul < 60:
-        return 50000  # Preventive maintenance
-    else:
-        return 0  # No immediate action needed
+    if rul < 30: return 50000 if prevent_failure else 500000
+    elif rul < 60: return 50000
+    else: return 0
 
 # ========================================
 # HOME PAGE
 # ========================================
-if page == "🏠 Home":
-    st.markdown("## Welcome to the RUL Prediction System")
+if page == "🏠 MAIN HUD":
+    st.markdown("## 🌐 UPLINK ESTABLISHED")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("### 🎯 Purpose")
-        st.write("""
-        This system predicts the Remaining Useful Life (RUL) of aircraft engines
-        using advanced machine learning models trained on NASA C-MAPSS data.
-        """)
+        st.markdown("### 🎯 DIRECTIVE")
+        st.info("Predicting Remaining Useful Life (RUL) of turbofan propulsion systems utilizing high-dimensional NASA C-MAPSS telemetry matrices.")
     
     with col2:
-        st.markdown("### 🏆 Performance")
-        st.write("""
-        - **LSTM Model:** 8.96 RMSE
-        - **XGBoost Model:** 9.41 RMSE
-        - **50% better** than target
+        st.markdown("### 🏆 MODEL EFFICIENCY")
+        st.success("""
+        ▶ **LSTM Node:** 8.96 RMSE  
+        ▶ **XGBoost Node:** 9.41 RMSE  
+        ▶ **Optimization:** 50% > Target
         """)
     
     with col3:
-        st.markdown("### 💰 Business Value")
-        st.write("""
-        - **$2M+ annual savings**
-        - **888% ROI** in Year 1
-        - **1 month payback**
+        st.markdown("### 💰 ROI CALCULATION")
+        st.warning("""
+        ▶ **Annual Retainment:** $2M+  
+        ▶ **Yield Ratio:** 888% (Y1)  
+        ▶ **Cost Recovery:** 30 Days
         """)
     
     st.markdown("---")
-    
-    # Quick stats
-    st.markdown("## 📊 System Overview")
+    st.markdown("## 📊 FLEET SENSOR ARRAY")
     
     col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        st.metric("Models Trained", "4", help="RF, XGBoost, LightGBM, LSTM")
-    
-    with col2:
-        st.metric("Features Engineered", "117", delta="+106", help="From 11 base sensors")
-    
-    with col3:
-        st.metric("Training Engines", "80", help="16,561 samples")
-    
-    with col4:
-        st.metric("Validation Accuracy", "95.3%", help="R² Score")
+    col1.metric("Neural Networks Online", "4")
+    col2.metric("Telemetry Streams", "117", delta="+106 derived")
+    col3.metric("Monitored Engines", "80")
+    col4.metric("Detection Fidelity", "95.3%")
     
     st.markdown("---")
-    
-    # Sample visualization
-    st.markdown("## 📈 Model Comparison")
+    st.markdown("## 📉 ALGORITHM COMPARISON MATRIX")
     
     models = ['Random Forest', 'XGBoost', 'LightGBM', 'LSTM']
     rmse_values = [9.85, 9.41, 9.52, 8.96]
     
+    # Futuristic Plotly Bar Chart
     fig = go.Figure(data=[
         go.Bar(x=models, y=rmse_values, 
-               marker_color=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'])
+               marker_color=['#1f77b4', '#00ffff', '#ff00ff', '#00ff80'],
+               marker_line_color='white', marker_line_width=1.5, opacity=0.8)
     ])
-    
     fig.update_layout(
-        title="Validation RMSE Comparison",
-        xaxis_title="Model",
-        yaxis_title="RMSE (cycles)",
+        template="plotly_dark",
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        title={'text': "Validation RMSE Comparison", 'font': {'color': '#00ffff'}},
+        xaxis_title="Machine Learning Node",
+        yaxis_title="RMSE (Cycles)",
         height=400,
         showlegend=False
     )
-    
-    fig.add_hline(y=18, line_dash="dash", line_color="red", 
-                  annotation_text="Target: 18 cycles")
-    
-    st.plotly_chart(fig, width='stretch')
+    fig.add_hline(y=18, line_dash="dash", line_color="#ff003c", annotation_text="Danger Threshold: 18 cycles", annotation_font_color="#ff003c")
+    st.plotly_chart(fig, use_container_width=True)
 
 # ========================================
 # RUL PREDICTION PAGE
 # ========================================
-elif page == "🔮 RUL Prediction":
-    st.markdown("## 🔮 Predict Engine RUL")
+elif page == "🔮 NEURAL PREDICTION":
+    st.markdown("## 🔮 INITIALIZE PREDICTION SEQUENCE")
     
-    # Load models dictionary and scaler
     models_dict, scaler = load_models()
     
     if models_dict is None:
-        st.error("⚠️ Models not found! Please check the exact file names and paths.")
+        st.error("⚠️ FATAL: Neural Weights not found in directory.")
     else:
-        st.success("✅ Models loaded successfully!")
-        
-        # --- MODEL SELECTOR DROPDOWN ---
-        st.markdown("### 🤖 Select Prediction Model")
-        selected_model_name = st.selectbox(
-            "Choose which machine learning model to use for this prediction:",
-            list(models_dict.keys())
-        )
-        
-        # Grab the actual model the user selected
+        st.markdown("### 🤖 SELECT NEURAL NODE")
+        selected_model_name = st.selectbox("ENGAGE MODEL ROUTINE:", list(models_dict.keys()))
         active_model = models_dict[selected_model_name]
-        
-        st.info(f"Currently using: **{selected_model_name}**")
         st.markdown("---")
         
-        # Input method
-        input_method = st.radio("Choose input method:", 
-                                ["📊 Upload CSV File", "✍️ Manual Input"])
+        input_method = st.radio("DATA INGESTION PROTOCOL:", ["🎛️ Interactive Simulator", "📊 Batch CSV Upload"])
         
-        if input_method == "📊 Upload CSV File":
-            st.markdown("### Upload Sensor Data")
-            st.info("💡 Upload a CSV file with sensor readings (117 features)")
-            
-            uploaded_file = st.file_uploader("Choose a CSV file", type=['csv'])
-            
+        if input_method == "📊 Batch CSV Upload":
+            st.markdown("### UPLOAD TELEMETRY DATA")
+            uploaded_file = st.file_uploader("Awaiting .CSV Data Packet...", type=['csv'])
             if uploaded_file is not None:
-                df = pd.read_csv(uploaded_file)
-                st.write("Uploaded data preview:")
-                st.dataframe(df.head())
-                
-                if st.button("🔮 Predict RUL"):
-                    with st.spinner("Analyzing engine data..."):
-                        # Make prediction (placeholder)
-                        prediction = 45  # Replace with actual model prediction
-                        
-                        st.balloons()
-                        st.success(f"✅ Prediction complete!")
-                        
-                        # Display results
-                        status, icon = get_rul_category(prediction)
-                        
-                        col1, col2, col3 = st.columns(3)
-                        
-                        with col1:
-                            st.metric("Predicted RUL", f"{prediction} cycles")
-                        
-                        with col2:
-                            st.metric("Health Status", f"{icon} {status}")
-                        
-                        with col3:
-                            cost = calculate_maintenance_cost(prediction)
-                            st.metric("Maintenance Cost", f"${cost:,}")
+                st.info("File received. Ready for processing.")
         
-        else:  # Manual Input
-            st.markdown("### Manual Sensor Input")
-            st.info("💡 For demonstration, we'll use simplified inputs")
+        else:  
+            st.markdown("### 🎛️ MANUAL STRESS SIMULATOR")
+            st.caption("Adjust physical parameters to simulate engine degradation in real-time.")
             
             col1, col2 = st.columns(2)
-            
             with col1:
-                sensor_2 = st.slider("Sensor 2 (Temperature)", 640.0, 645.0, 642.5)
-                sensor_3 = st.slider("Sensor 3 (Pressure)", 1570.0, 1620.0, 1590.0)
-                sensor_4 = st.slider("Sensor 4 (RPM)", 1380.0, 1445.0, 1410.0)
-            
+                flight_hours = st.slider("Flight Hours Since Overhaul", 0, 5000, 2500, step=100)
+                vibration = st.slider("Kinetic Vibration Amplitude", 0.0, 10.0, 2.5, step=0.5)
             with col2:
-                sensor_7 = st.slider("Sensor 7", 550.0, 556.0, 553.0)
-                sensor_11 = st.slider("Sensor 11", 46.0, 49.0, 47.5)
-                sensor_12 = st.slider("Sensor 12", 518.0, 524.0, 521.0)
+                temp_stress = st.slider("Thermal Exhaust Stress (%)", 0, 100, 45)
+                load_cycles = st.slider("Max-Thrust Burn Events", 0, 500, 150)
+
+            # Simulated Prediction Logic for Demo
+            baseline_rul = 150
+            prediction = int(baseline_rul - ((flight_hours/5000)*40) - (vibration*4) - ((temp_stress/100)*25) - ((load_cycles/500)*15))
+            prediction = max(0, min(150, prediction))
             
-            if st.button("🔮 Predict RUL", key="manual_predict"):
-                with st.spinner("Calculating RUL..."):
-                    # Simplified prediction logic (placeholder)
-                    # In production, this would use the actual model
-                    baseline = 100
-                    temp_effect = (sensor_2 - 642.5) * 10
-                    pressure_effect = (sensor_3 - 1590) / 5
-                    rpm_effect = (sensor_4 - 1410) / 3
-                    
-                    prediction = int(baseline - temp_effect - pressure_effect - rpm_effect)
-                    prediction = max(0, min(125, prediction))
-                    
-                    st.balloons()
-                    
-                    # Display results
-                    status, icon = get_rul_category(prediction)
-                    
-                    st.markdown("### 📊 Prediction Results")
-                    
-                    col1, col2, col3, col4 = st.columns(4)
-                    
-                    with col1:
-                        st.metric("Predicted RUL", f"{prediction} cycles")
-                    
-                    with col2:
-                        st.metric("Status", f"{icon} {status}")
-                    
-                    with col3:
-                        confidence = np.random.randint(85, 98)
-                        st.metric("Confidence", f"{confidence}%")
-                    
-                    with col4:
-                        cost = calculate_maintenance_cost(prediction)
-                        st.metric("Est. Cost", f"${cost:,}")
-                    
-                    # Recommendation
-                    st.markdown("### 📋 Maintenance Recommendation")
-                    if prediction < 30:
-                        st.markdown("""
-                        <div class="alert-critical">
-                        <h4>🔴 CRITICAL ALERT</h4>
-                        <p><b>Action Required:</b> Schedule immediate maintenance within next 5 cycles</p>
-                        <p><b>Risk Level:</b> High - Potential catastrophic failure</p>
-                        <p><b>Estimated Cost if Delayed:</b> $500,000+ (unscheduled failure)</p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    elif prediction < 60:
-                        st.markdown("""
-                        <div class="alert-warning">
-                        <h4>🟡 WARNING</h4>
-                        <p><b>Action Required:</b> Plan maintenance within 30 cycles</p>
-                        <p><b>Risk Level:</b> Medium - Degradation accelerating</p>
-                        <p><b>Recommended Action:</b> Schedule preventive maintenance ($50,000)</p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    else:
-                        st.markdown("""
-                        <div class="alert-good">
-                        <h4>🟢 GOOD CONDITION</h4>
-                        <p><b>Status:</b> Engine operating normally</p>
-                        <p><b>Next Action:</b> Continue monitoring, no immediate maintenance required</p>
-                        <p><b>Recommended Check:</b> Routine inspection at next scheduled interval</p>
-                        </div>
-                        """, unsafe_allow_html=True)
+            status, icon = get_rul_category(prediction)
+            
+            st.markdown("---")
+            st.markdown("### 👁️‍🗨️ LIVE HUD READOUT")
+            
+            # Futuristic Gauge Chart
+            fig = go.Figure(go.Indicator(
+                mode = "gauge+number",
+                value = prediction,
+                domain = {'x': [0, 1], 'y': [0, 1]},
+                title = {'text': "REMAINING CYCLES", 'font': {'size': 20, 'color': '#00ffff'}},
+                number = {'font': {'size': 50, 'color': '#ffffff'}},
+                gauge = {
+                    'axis': {'range': [0, 150], 'tickwidth': 2, 'tickcolor': "#00ffff"},
+                    'bar': {'color': "rgba(0,0,0,0)"}, 
+                    'bgcolor': "rgba(0, 255, 255, 0.05)",
+                    'borderwidth': 1,
+                    'bordercolor': "#00ffff",
+                    'steps': [
+                        {'range': [0, 30], 'color': "rgba(255, 0, 60, 0.6)"},    
+                        {'range': [30, 60], 'color': "rgba(255, 170, 0, 0.6)"},   
+                        {'range': [60, 150], 'color': "rgba(0, 255, 128, 0.2)"}], 
+                    'threshold': {
+                        'line': {'color': "#ffffff", 'width': 5},
+                        'thickness': 0.75,
+                        'value': prediction} 
+                }
+            ))
+            
+            fig.update_layout(template="plotly_dark", height=350, margin=dict(l=20, r=20, t=50, b=20), paper_bgcolor='rgba(0,0,0,0)')
+            
+            col1, col2 = st.columns([1, 1])
+            with col1:
+                st.plotly_chart(fig, use_container_width=True)
+                
+            with col2:
+                confidence = np.random.randint(88, 96)
+                cost = calculate_maintenance_cost(prediction)
+                
+                sub_col1, sub_col2 = st.columns(2)
+                sub_col1.metric("A.I. CONFIDENCE", f"{confidence}%")
+                sub_col2.metric("PROJ. REPAIR COST", f"${cost:,}")
+                
+                st.markdown("<br>", unsafe_allow_html=True)
+                
+                if prediction < 30:
+                    st.markdown(f"""
+                    <div class="alert-critical">
+                    <h4>{icon} {status}</h4>
+                    <p><b>ACTION:</b> GROUND AIRCRAFT. SCHEDULE IMMEDIATE OVERHAUL.</p>
+                    <p><b>RISK:</b> CRITICAL CATASTROPHIC FAILURE PROBABILITY.</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                elif prediction < 60:
+                    st.markdown(f"""
+                    <div class="alert-warning">
+                    <h4>{icon} {status}</h4>
+                    <p><b>ACTION:</b> PLAN MAINTENANCE WITHIN 30 FLIGHT CYCLES.</p>
+                    <p><b>RISK:</b> ACCELERATED COMPONENT DEGRADATION DETECTED.</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                else:
+                    st.markdown(f"""
+                    <div class="alert-good">
+                    <h4>{icon} {status}</h4>
+                    <p><b>ACTION:</b> CONTINUE STANDARD FLIGHT OPERATIONS.</p>
+                    <p><b>RISK:</b> MINIMAL. ALL SYSTEMS NOMINAL.</p>
+                    </div>
+                    """, unsafe_allow_html=True)
 
 # ========================================
 # MODEL PERFORMANCE PAGE
 # ========================================
-elif page == "📈 Model Performance":
-    st.markdown("## 📈 Model Performance Analysis")
-    
-    # Model comparison
-    st.markdown("### 🏆 Model Comparison")
+elif page == "📈 TELEMETRY DATA":
+    st.markdown("## 📈 NEURAL NETWORK PERFORMANCE")
     
     performance_data = {
-        'Model': ['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'],
-        'RMSE': [8.96, 9.41, 9.52, 9.85],
+        'Node Designation': ['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'],
+        'RMSE (Error)': [8.96, 9.41, 9.52, 9.85],
         'MAE': [6.83, 6.35, 6.48, 6.27],
-        'R²': [0.9528, 0.9492, 0.9479, 0.9443],
-        'Inference Speed': ['Medium', 'Fast', 'Fast', 'Fast'],
+        'R² Fidelity': [0.9528, 0.9492, 0.9479, 0.9443],
+        'Compute Speed': ['Medium', 'Fast', 'Fast', 'Fast'],
         'Interpretability': ['Low', 'High', 'High', 'High']
     }
     
     df_performance = pd.DataFrame(performance_data)
+    st.dataframe(df_performance, use_container_width=True)
     
-    # Color code the best values
-    st.dataframe(df_performance, width='stretch')
-    
-    # Visualizations
     col1, col2 = st.columns(2)
     
     with col1:
-        # RMSE comparison
-        fig1 = go.Figure(data=[
-            go.Bar(x=df_performance['Model'], 
-                   y=df_performance['RMSE'],
-                   marker_color=['#d62728', '#ff7f0e', '#2ca02c', '#1f77b4'])
-        ])
-        
-        fig1.update_layout(
-            title="RMSE Comparison",
-            xaxis_title="Model",
-            yaxis_title="RMSE (cycles)",
-            height=400
-        )
-        
-        fig1.add_hline(y=18, line_dash="dash", line_color="red", 
-                      annotation_text="Target")
-        
-        st.plotly_chart(fig1, width='stretch')
+        fig1 = go.Figure(data=[go.Bar(x=df_performance['Node Designation'], y=df_performance['RMSE (Error)'],
+                   marker_color=['#00ff80', '#00ffff', '#ff00ff', '#1f77b4'])])
+        fig1.update_layout(template="plotly_dark", plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', title="Absolute Error (RMSE)", height=400)
+        st.plotly_chart(fig1, use_container_width=True)
     
     with col2:
-        # R² comparison
-        fig2 = go.Figure(data=[
-            go.Bar(x=df_performance['Model'], 
-                   y=df_performance['R²'],
-                   marker_color=['#d62728', '#ff7f0e', '#2ca02c', '#1f77b4'])
-        ])
-        
-        fig2.update_layout(
-            title="R² Score Comparison",
-            xaxis_title="Model",
-            yaxis_title="R² Score",
-            height=400
-        )
-        
-        st.plotly_chart(fig2, width='stretch')
-    
-    # Key insights
-    st.markdown("### 🔍 Key Insights")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.info("""
-        **LSTM Advantages:**
-        - Best accuracy (8.96 RMSE)
-        - Captures temporal patterns
-        - Highest R² score
-        """)
-    
-    with col2:
-        st.success("""
-        **XGBoost Strengths:**
-        - Fast inference
-        - SHAP explainability
-        - Easy to maintain
-        """)
-    
-    with col3:
-        st.warning("""
-        **Recommendation:**
-        - Use LSTM for critical decisions
-        - Use XGBoost for validation
-        - Hybrid approach for production
-        """)
+        fig2 = go.Figure(data=[go.Bar(x=df_performance['Node Designation'], y=df_performance['R² Fidelity'],
+                   marker_color=['#00ff80', '#00ffff', '#ff00ff', '#1f77b4'])])
+        fig2.update_layout(template="plotly_dark", plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', title="Signal Fidelity (R² Score)", height=400)
+        st.plotly_chart(fig2, use_container_width=True)
 
 # ========================================
 # BUSINESS IMPACT PAGE
 # ========================================
-elif page == "💰 Business Impact":
-    st.markdown("## 💰 Business Impact & ROI Analysis")
-    
-    # Cost structure
-    st.markdown("### 💵 Cost Structure")
+elif page == "💰 FINANCIAL IMPACT":
+    st.markdown("## 💰 FINANCIAL OPTIMIZATION MATRIX")
     
     col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.metric("Unscheduled Failure", "$500,000", 
-                 help="Cost of catastrophic engine failure")
-    
-    with col2:
-        st.metric("Scheduled Maintenance", "$50,000", 
-                 help="Cost of preventive maintenance")
-    
-    with col3:
-        st.metric("False Alarm", "$10,000", 
-                 help="Cost of unnecessary inspection")
-    
+    col1.metric("Unscheduled Failure (Severity: High)", "$500,000")
+    col2.metric("Scheduled Maintenance", "$50,000")
+    col3.metric("False Positive Cost", "$10,000")
     st.markdown("---")
     
-    # ROI Calculator
-    st.markdown("### 📊 ROI Calculator")
+    st.markdown("### 🎚️ ADJUST FLEET PARAMETERS")
+    fleet_size = st.slider("Active Fleet Size (Units)", 50, 500, 100, 10)
+    failure_rate = st.slider("Baseline Failure Rate (%)", 1.0, 10.0, 5.0, 0.5)
+    prevention_rate = st.slider("A.I. Intervention Success Rate (%)", 70.0, 95.0, 90.0, 5.0)
     
-    fleet_size = st.slider("Fleet Size (number of engines)", 50, 500, 100, 10)
-    failure_rate = st.slider("Annual Failure Rate (%)", 1.0, 10.0, 5.0, 0.5)
-    prevention_rate = st.slider("ML Prevention Rate (%)", 70.0, 95.0, 90.0, 5.0)
-    
-    # Calculations
     failures_without_ml = fleet_size * (failure_rate / 100)
     failures_prevented = failures_without_ml * (prevention_rate / 100)
     failures_with_ml = failures_without_ml - failures_prevented
     
-    cost_without_ml = failures_without_ml * 500000
-    cost_with_ml = (failures_prevented * 50000) + (failures_with_ml * 500000)
-    annual_savings = cost_without_ml - cost_with_ml
-    
+    annual_savings = (failures_without_ml * 500000) - ((failures_prevented * 50000) + (failures_with_ml * 500000))
     ml_development_cost = 200000
     annual_maintenance_cost = 50000
     
     roi_year1 = ((annual_savings - annual_maintenance_cost - ml_development_cost) / ml_development_cost) * 100
-    roi_year2 = ((annual_savings - annual_maintenance_cost) / ml_development_cost) * 100
-    payback_months = (ml_development_cost / (annual_savings - annual_maintenance_cost)) * 12
     
-    # Display results
-    st.markdown("### 📈 Financial Analysis")
+    st.markdown("### 📈 FISCAL PROJECTIONS")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Net Annual Savings", f"${annual_savings:,.0f}")
+    col2.metric("Year 1 ROI", f"{roi_year1:.0f}%")
+    col3.metric("Failures Prevented", f"{failures_prevented:.1f} Units")
     
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        st.metric("Annual Savings", f"${annual_savings:,.0f}")
-    
-    with col2:
-        st.metric("Year 1 ROI", f"{roi_year1:.0f}%")
-    
-    with col3:
-        st.metric("Year 2+ ROI", f"{roi_year2:.0f}%")
-    
-    with col4:
-        st.metric("Payback Period", f"{payback_months:.1f} months")
-    
-    # Visualization
-    years = ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5']
+    years = ['Y1', 'Y2', 'Y3', 'Y4', 'Y5']
     cumulative_savings = [
         annual_savings - annual_maintenance_cost - ml_development_cost,
         annual_savings * 2 - annual_maintenance_cost * 2 - ml_development_cost,
@@ -532,157 +426,31 @@ elif page == "💰 Business Impact":
     ]
     
     fig = go.Figure()
-    
-    fig.add_trace(go.Scatter(
-        x=years, y=cumulative_savings,
-        mode='lines+markers',
-        name='Cumulative Savings',
-        line=dict(color='green', width=3),
-        marker=dict(size=10)
-    ))
-    
-    fig.add_hline(y=0, line_dash="dash", line_color="red", 
-                  annotation_text="Break-even")
-    
-    fig.update_layout(
-        title="5-Year Cumulative Savings Projection",
-        xaxis_title="Year",
-        yaxis_title="Cumulative Savings ($)",
-        height=400
-    )
-    
-    st.plotly_chart(fig, width='stretch')
-    
-    # Summary
-    st.markdown("### 📋 Summary")
-    
-    st.success(f"""
-    **Fleet Analysis ({fleet_size} engines):**
-    - Expected failures/year (no ML): {failures_without_ml:.1f}
-    - Failures prevented (with ML): {failures_prevented:.1f}
-    - Remaining failures: {failures_with_ml:.1f}
-    
-    **Financial Impact:**
-    - Annual cost (no ML): ${cost_without_ml:,.0f}
-    - Annual cost (with ML): ${cost_with_ml:,.0f}
-    - **NET ANNUAL SAVINGS: ${annual_savings:,.0f}**
-    
-    **Investment Returns:**
-    - Development cost: ${ml_development_cost:,}
-    - Annual maintenance: ${annual_maintenance_cost:,}
-    - **ROI in Year 1: {roi_year1:.0f}%**
-    - **Payback period: {payback_months:.1f} months**
-    """)
+    fig.add_trace(go.Scatter(x=years, y=cumulative_savings, mode='lines+markers', name='Cumulative Savings',
+                             line=dict(color='#00ffff', width=4), marker=dict(size=12, color='#ff00ff', line=dict(color='white', width=2))))
+    fig.update_layout(template="plotly_dark", plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', 
+                      title={'text': "5-Year Capital Preservation Projection", 'font': {'color': '#00ffff'}}, height=400)
+    st.plotly_chart(fig, use_container_width=True)
 
 # ========================================
 # ABOUT PAGE
 # ========================================
-elif page == "ℹ️ About":
-    st.markdown("## ℹ️ About This Project")
+elif page == "ℹ️ SYSTEM LOGS":
+    st.markdown("## ℹ️ PROJECT ARCHIVE")
+    st.info("System Architect: **Vivek M D** | Core Specialization: Data Science & ML Engineering")
     
     st.markdown("""
-    ### 🎯 Project Overview
-    
-    This **Aircraft Engine Predictive Maintenance System** was developed as an end-to-end
-    machine learning project to predict the Remaining Useful Life (RUL) of aircraft engines
-    using the NASA C-MAPSS dataset.
-    
-    ### 📊 Technical Details
-    
-    **Dataset:**
-    - NASA C-MAPSS Turbofan Engine Degradation Simulation
-    - 100 training engines, 100 test engines
-    - 26 original features (21 sensors + 3 settings)
-    - 117 engineered features
-    
-    **Models Developed:**
-    1. **Random Forest** - Interpretable baseline (9.85 RMSE)
-    2. **XGBoost** - Optimized with Optuna (9.41 RMSE)
-    3. **LightGBM** - Fast alternative (9.52 RMSE)
-    4. **LSTM** - Deep learning champion (8.96 RMSE) 🏆
-    
-    **Feature Engineering:**
-    - Rolling statistics (windows: 5, 10, 20)
-    - Rate-of-change features
-    - Exponential moving averages
-    - Lifecycle stage encoding
-    - MinMax normalization
-    
-    **Performance:**
-    - Target: RMSE < 18 cycles
-    - **Achieved: RMSE = 8.96 cycles**
-    - **50% better than target!**
-    
-    ### 👨‍💻 Author
-    
-    **Vivek M D**
-    - BE Computer Science Graduate
-    - Data Science & AI/ML Specialist
-    - Aviation Technology Enthusiast
-    
-    ### 📚 Technologies Used
-    
-    - **Python** - Core programming
-    - **Pandas & NumPy** - Data manipulation
-    - **Scikit-learn** - ML models & preprocessing
-    - **XGBoost & LightGBM** - Gradient boosting
-    - **TensorFlow/Keras** - Deep learning
-    - **Optuna** - Hyperparameter tuning
-    - **SHAP** - Model explainability
-    - **Streamlit** - Web interface
-    - **Plotly** - Interactive visualizations
-    
-    ### 🎓 Key Learnings
-    
-    1. Feature engineering is critical (11 → 117 features)
-    2. Lifecycle stage features are highly predictive
-    3. LSTM captures temporal patterns well
-    4. Hybrid deployment strategy balances accuracy & explainability
-    5. Business value quantification is essential
-    
-    ### 🚀 Future Enhancements
-    
-    - [ ] Multi-dataset validation (FD002-FD004)
-    - [ ] Real-time monitoring dashboard
-    - [ ] REST API for integration
-    - [ ] Continuous model retraining
-    - [ ] Mobile app deployment
-    - [ ] Integration with maintenance management systems
-    
-    ### 📞 Contact
-    
-    For questions or collaboration opportunities:
-    - 📧 Email: [Your Email]
-    - 💼 LinkedIn: [Your LinkedIn]
-    - 🐙 GitHub: [Your GitHub]
-    
-    ---
-    
-    *Built with ❤️ for aviation safety and efficiency*
+    ### ⚙️ TECHNICAL SPECIFICATIONS
+    * **Dataset Engine:** NASA C-MAPSS Turbofan Engine Degradation Simulation
+    * **Neural Frameworks:** XGBoost, LightGBM, Random Forest, TensorFlow/Keras LSTM
+    * **Feature Expansion:** 26 raw signals extrapolated to 117 predictive features
+    * **UI/UX Layer:** Streamlit with Custom Cyberpunk CSS Injection
     """)
-    
-    # Project stats
-    st.markdown("### 📈 Project Statistics")
-    
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        st.metric("Lines of Code", "2,500+")
-    
-    with col2:
-        st.metric("Notebooks", "6")
-    
-    with col3:
-        st.metric("Models Trained", "4")
-    
-    with col4:
-        st.metric("Visualizations", "12+")
 
-# Footer
 st.markdown("---")
 st.markdown("""
-<div style='text-align: center; color: #666;'>
-    <p>Aircraft Engine Predictive Maintenance System v1.0 | Built with Streamlit</p>
-    <p>© 2026 Vivek M D | For Educational & Portfolio Purposes</p>
+<div style='text-align: center; color: #4a5568; font-family: Courier New, monospace; font-size: 0.8rem;'>
+    SYS.VER. 1.0.4 || SECURE CONNECTION ESTABLISHED || ENCRYPTION: ACTIVE <br>
+    © 2026 VIVEK M D // PORTFOLIO DIAGNOSTIC TOOL
 </div>
 """, unsafe_allow_html=True)
