@@ -24,12 +24,13 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS & A320NEO ANIMATED BACKGROUND
+# GLOBAL CSS & ANIMATED BACKGROUND
 # ─────────────────────────────────────────────
-# NO EMPTY LINES inside the HTML block below to prevent Streamlit parsing errors!
+# NO EMPTY LINES inside the HTML tags below to prevent Streamlit parsing errors!
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
 :root {
     --ivory:     #FAF8F4;
     --cream:     #F3EFE7;
@@ -37,6 +38,7 @@ st.markdown("""
     --warm-200:  #D9CEBC;
     --amber:     #C8892A;
     --amber-lt:  #E8A83E;
+    --amber-dim: #F0D49A;
     --charcoal:  #1C1C1E;
     --slate:     #3A3A3C;
     --mid:       #6C6C70;
@@ -51,22 +53,28 @@ st.markdown("""
     --radius:    18px;
     --radius-sm: 10px;
 }
+
 *, *::before, *::after { box-sizing: border-box; }
+
 html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     background: var(--ivory) !important;
     font-family: 'Outfit', sans-serif !important;
 }
+
 [data-testid="stMainBlockContainer"] {
     padding-top: 2rem !important;
     max-width: 1300px !important;
     position: relative;
     z-index: 10; 
 }
+
 #MainMenu, footer, header { visibility: hidden; }
 [data-testid="stDecoration"] { display: none; }
 [data-testid="collapsedControl"] { display: none; } 
+
 h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif !important; color: var(--charcoal) !important; }
 p, li, span, div, label { font-family: 'Outfit', sans-serif !important; }
+
 div[data-testid="stRadio"] > div[role="radiogroup"] {
     display: flex; flex-direction: row; gap: 12px; background: transparent; padding: 0; flex-wrap: wrap; justify-content: center;
 }
@@ -80,13 +88,16 @@ div[data-testid="stRadio"] label:hover { border-color: var(--amber) !important; 
 div[data-testid="stRadio"] label[data-checked="true"] { background: var(--charcoal) !important; border-color: var(--charcoal) !important; }
 div[data-testid="stRadio"] label[data-checked="true"] * { color: var(--amber-lt) !important; font-weight: 600 !important; }
 div[data-testid="stRadio"] label > div:first-child { display: none !important; }
+
 [data-testid="stMetric"] {
     background: #FFFFFF !important; border: 1px solid var(--warm-100) !important; border-radius: var(--radius) !important;
     padding: 1.3rem 1.5rem !important; border-top: 3px solid var(--amber) !important; box-shadow: var(--shadow-sm) !important;
 }
 [data-testid="stMetricValue"] { font-family: 'Playfair Display', serif !important; font-size: 2.1rem !important; font-weight: 700 !important; color: var(--charcoal) !important; }
 [data-testid="stMetricLabel"] { font-family: 'IBM Plex Mono', monospace !important; font-size: 0.6rem !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; color: var(--mid) !important; }
+
 [data-baseweb="select"] { border-radius: var(--radius-sm) !important; border-color: var(--warm-200) !important; background: #FFFFFF !important; font-family: 'Outfit', sans-serif !important; }
+
 .alert-box { border-radius: var(--radius-sm); padding: 1.2rem 1.4rem; border-left: 4px solid; margin: 1rem 0; }
 .alert-critical { background: var(--rust-lt); border-color: var(--rust); }
 .alert-critical h4 { color: var(--rust) !important; font-family: 'Playfair Display', serif !important; font-size: 1rem !important; margin: 0 0 0.4rem !important; }
@@ -97,6 +108,7 @@ div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 .alert-good { background: var(--teal-lt); border-color: var(--teal); }
 .alert-good h4 { color: var(--teal) !important; font-family: 'Playfair Display', serif !important; font-size: 1rem !important; margin: 0 0 0.4rem !important; }
 .alert-good p  { color: #165A50 !important; font-size: 0.85rem !important; margin: 0.2rem 0 !important; line-height: 1.5 !important; }
+
 .card { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: var(--radius); padding: 1.8rem 2rem; box-shadow: var(--shadow-sm); margin-bottom: 1.2rem; }
 .card-dark { background: var(--charcoal); border: 1px solid rgba(200,137,42,0.18); border-radius: var(--radius); padding: 1.8rem 2rem; box-shadow: var(--shadow-lg); margin-bottom: 1.2rem; }
 .hero { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: 24px; padding: 3.5rem 3.5rem 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; box-shadow: var(--shadow-lg); }
@@ -109,12 +121,15 @@ div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 .hero-stats { display: flex; gap: 2.8rem; flex-wrap: wrap; }
 .hero-stat-val { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--charcoal); line-height: 1; }
 .hero-stat-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: 5px; }
+
 .rule { display: flex; align-items: center; gap: 1rem; margin: 2.8rem 0 2.2rem; }
 .rule-line { flex: 1; height: 1px; background: var(--warm-100); }
 .rule-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--amber); }
+
 .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.4rem; display: block; }
 .page-title { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 900; color: var(--charcoal); line-height: 1.05; margin-bottom: 0.4rem; }
 .page-body { font-size: 0.95rem; font-weight: 300; color: var(--mid); line-height: 1.65; margin-bottom: 2rem; }
+
 .chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 20px; padding: 5px 13px; font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; font-weight: 500; }
 .chip-dot { width: 6px; height: 6px; border-radius: 50%; }
 .chip-critical { background: var(--rust-lt);  color: var(--rust);  border: 1px solid rgba(184,74,46,0.25); }
@@ -126,130 +141,40 @@ div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 .pill-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 1rem; }
 .pill { background: var(--cream); border: 1px solid var(--warm-200); border-radius: 6px; padding: 4px 11px; font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: var(--slate); letter-spacing: 0.05em; }
 
-/* Noise Overlay */
 body::before {
     content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     opacity: 0.4;
 }
 
-/* A320NEO SVG BACKGROUND CONTAINER */
-.aircraft-bg-container { 
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; 
-    pointer-events: none; display: flex; justify-content: center; align-items: center; 
-    overflow: hidden; opacity: 0.25; 
-}
-.aircraft-bg-container svg { width: 100%; min-width: 1100px; height: auto; max-height: 90vh; }
+.aircraft-bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; display: flex; justify-content: center; align-items: center; overflow: hidden; opacity: 0.18; }
+.aircraft-bg-container svg { width: 100%; min-width: 1200px; height: auto; max-height: 95vh; }
 
-/* ── AVIATION LIGHTING & EMISSION ANIMATIONS ── */
-.strobe-light { animation: strobeFlash 1.5s infinite; }
-@keyframes strobeFlash { 
-    0%, 4%, 8% { opacity: 1; filter: drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 20px #ffffff); } 
-    2%, 6%, 10%, 100% { opacity: 0.1; filter: none; } 
-}
-.nav-red { fill: #ff1a1a; filter: drop-shadow(0 0 8px rgba(255,0,0,0.8)); }
-.nav-green { fill: #00ff00; filter: drop-shadow(0 0 8px rgba(0,255,0,0.8)); }
-.beacon-light { animation: beaconFlash 2s infinite; }
-@keyframes beaconFlash {
-    0%, 10% { fill: #ff0000; filter: drop-shadow(0 0 15px #ff0000); opacity: 1; }
-    20%, 100% { fill: #550000; filter: none; opacity: 0.2; }
-}
+/* ── AVIATION ANIMATIONS ── */
+.fan-blades { transform-origin: center; animation: spoolUp 4s cubic-bezier(0.4, 0, 0.2, 1) forwards, spinContinuous 0.25s linear 4s infinite; }
+@keyframes spoolUp { 0% { transform: rotate(0deg); } 100% { transform: rotate(1440deg); } }
+@keyframes spinContinuous { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.engine-core { animation: pulseHeat 2s ease-in-out infinite alternate; }
+@keyframes pulseHeat { 0% { fill: rgba(200,137,42,0.2); stroke: rgba(200,137,42,0.5); } 100% { fill: rgba(232,168,62,0.6); stroke: rgba(232,168,62,0.9); } }
 
-/* Engine Spool Glow */
-.engine-glow { animation: enginePulse 0.4s infinite alternate ease-in-out; }
-@keyframes enginePulse { 
-    0% { fill: rgba(255, 120, 0, 0.4); filter: drop-shadow(0 0 10px rgba(255,100,0,0.5)); } 
-    100% { fill: rgba(255, 60, 0, 0.7); filter: drop-shadow(0 0 25px rgba(255,50,0,0.9)); } 
+/* Light Animations */
+.strobe-light { animation: doubleFlash 1.5s infinite; }
+@keyframes doubleFlash { 
+    0%, 4%, 8% { opacity: 1; r: 7px; filter: drop-shadow(0 0 10px #fff); } 
+    2%, 6%, 10%, 100% { opacity: 0; r: 2px; filter: none; } 
 }
+.nav-red { fill: #ff2a2a; filter: drop-shadow(0 0 12px rgba(255,42,42,0.8)); animation: pulseNav 2s infinite alternate; }
+.nav-green { fill: #10ff10; filter: drop-shadow(0 0 12px rgba(16,255,16,0.8)); animation: pulseNav 2s infinite alternate; }
+@keyframes pulseNav { 0% { opacity: 0.7; } 100% { opacity: 1; } }
 </style>
-
-<div class="aircraft-bg-container">
-<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-    <g stroke="var(--amber)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        
-        <path d="M 595 240 L 600 80 L 605 240 Z" fill="rgba(200,137,42,0.05)" />
-        
-        <path d="M 510 460 L 80 390 L 80 410 L 510 480 Z" fill="rgba(200,137,42,0.05)" />
-        <path d="M 690 460 L 1120 390 L 1120 410 L 690 480 Z" fill="rgba(200,137,42,0.05)" />
-        
-        <path d="M 80 410 L 80 390 L 70 330 L 75 330 L 90 405 Z" fill="rgba(200,137,42,0.1)" />
-        <path d="M 1120 410 L 1120 390 L 1130 330 L 1125 330 L 1110 405 Z" fill="rgba(200,137,42,0.1)" />
-
-        <circle cx="85" cy="395" r="4" class="nav-red" stroke="none" />
-        <circle cx="70" cy="395" r="5" fill="#ffffff" stroke="none" class="strobe-light" />
-        <circle cx="1115" cy="395" r="4" class="nav-green" stroke="none" />
-        <circle cx="1130" cy="395" r="5" fill="#ffffff" stroke="none" class="strobe-light" />
-
-        <line x1="460" y1="475" x2="460" y2="615" stroke-width="4" stroke="var(--charcoal)" />
-        <line x1="445" y1="520" x2="460" y2="550" stroke-width="2" /> <rect x="440" y="585" width="14" height="45" rx="5" fill="var(--ivory)" stroke-width="2"/>
-        <rect x="466" y="585" width="14" height="45" rx="5" fill="var(--ivory)" stroke-width="2"/>
-
-        <line x1="740" y1="475" x2="740" y2="615" stroke-width="4" stroke="var(--charcoal)" />
-        <line x1="755" y1="520" x2="740" y2="550" stroke-width="2" /> <rect x="720" y="585" width="14" height="45" rx="5" fill="var(--ivory)" stroke-width="2"/>
-        <rect x="746" y="585" width="14" height="45" rx="5" fill="var(--ivory)" stroke-width="2"/>
-
-        <ellipse cx="600" cy="400" rx="95" ry="100" fill="var(--ivory)" stroke="var(--amber)" stroke-width="2.5" />
-        
-        <circle cx="600" cy="298" r="4" stroke="none" class="beacon-light" />
-
-        <line x1="600" y1="500" x2="600" y2="615" stroke-width="4" stroke="var(--charcoal)" />
-        <rect x="583" y="595" width="12" height="35" rx="4" fill="var(--ivory)" stroke-width="2"/>
-        <rect x="605" y="595" width="12" height="35" rx="4" fill="var(--ivory)" stroke-width="2"/>
-
-        <path d="M 525 365 Q 600 340 675 365 L 660 395 Q 600 380 540 395 Z" fill="rgba(200,137,42,0.15)" stroke-width="1.5" />
-        <line x1="600" y1="352" x2="600" y2="388" stroke-width="1.5" /> <line x1="560" y1="358" x2="570" y2="390" stroke-width="1.5" />
-        <line x1="640" y1="358" x2="630" y2="390" stroke-width="1.5" />
-
-        <path d="M 330 435 L 340 480 L 320 480 Z" fill="rgba(200,137,42,0.2)" stroke="none" />
-        <g transform="translate(330, 500)">
-            <circle cx="0" cy="0" r="65" stroke-width="3" fill="var(--ivory)" stroke="var(--amber)" />
-            <circle cx="0" cy="0" r="58" class="engine-glow" stroke="none" />
-            <g stroke="var(--charcoal)" stroke-width="2" opacity="0.85">
-                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
-                <line x1="0" y1="-58" x2="0" y2="58" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(22.5)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(45)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(67.5)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(90)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(112.5)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(135)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(157.5)" />
-            </g>
-            <circle cx="0" cy="0" r="16" fill="var(--charcoal)" stroke="var(--amber)" stroke-width="1.5" />
-            <circle cx="0" cy="0" r="4" fill="var(--ivory)" stroke="none" />
-        </g>
-
-        <path d="M 870 435 L 880 480 L 860 480 Z" fill="rgba(200,137,42,0.2)" stroke="none" />
-        <g transform="translate(870, 500)">
-            <circle cx="0" cy="0" r="65" stroke-width="3" fill="var(--ivory)" stroke="var(--amber)" />
-            <circle cx="0" cy="0" r="58" class="engine-glow" stroke="none" />
-            <g stroke="var(--charcoal)" stroke-width="2" opacity="0.85">
-                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
-                <line x1="0" y1="-58" x2="0" y2="58" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(22.5)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(45)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(67.5)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(90)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(112.5)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(135)" />
-                <line x1="0" y1="-58" x2="0" y2="58" transform="rotate(157.5)" />
-            </g>
-            <circle cx="0" cy="0" r="16" fill="var(--charcoal)" stroke="var(--amber)" stroke-width="1.5" />
-            <circle cx="0" cy="0" r="4" fill="var(--ivory)" stroke="none" />
-        </g>
-        
-        <line x1="100" y1="630" x2="1100" y2="630" stroke="rgba(200,137,42,0.3)" stroke-width="1" stroke-dasharray="10 10" />
-
-    </g>
-</svg>
-</div>
+<div class="aircraft-bg-container"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><g stroke="#C8892A" stroke-width="2" fill="none"><path d="M 590 350 L 600 160 L 610 350 Z" fill="rgba(200,137,42,0.05)" /><path d="M 500 510 L 80 450 L 80 480 L 500 540 Z" fill="rgba(200,137,42,0.05)" /><path d="M 700 510 L 1120 450 L 1120 480 L 700 540 Z" fill="rgba(200,137,42,0.05)" /><circle cx="80" cy="465" r="5" class="nav-red" stroke="none" /><circle cx="70" cy="465" r="3" fill="#ffffff" stroke="none" class="strobe-light" /><circle cx="1120" cy="465" r="5" class="nav-green" stroke="none" /><circle cx="1130" cy="465" r="3" fill="#ffffff" stroke="none" class="strobe-light" /><line x1="450" y1="520" x2="450" y2="680" stroke-width="4" /><rect x="432" y="650" width="12" height="36" rx="4" fill="#FAF8F4" stroke-width="2"/><rect x="456" y="650" width="12" height="36" rx="4" fill="#FAF8F4" stroke-width="2"/><line x1="750" y1="520" x2="750" y2="680" stroke-width="4" /><rect x="732" y="650" width="12" height="36" rx="4" fill="#FAF8F4" stroke-width="2"/><rect x="756" y="650" width="12" height="36" rx="4" fill="#FAF8F4" stroke-width="2"/><ellipse cx="600" cy="460" rx="120" ry="120" fill="#FAF8F4" /><ellipse cx="600" cy="460" rx="110" ry="110" opacity="0.3" /><line x1="600" y1="580" x2="600" y2="710" stroke-width="3" /><rect x="585" y="685" width="10" height="30" rx="3" fill="#FAF8F4" stroke-width="2"/><rect x="605" y="685" width="10" height="30" rx="3" fill="#FAF8F4" stroke-width="2"/><path d="M 510 420 Q 600 390 690 420 L 675 460 Q 600 440 525 460 Z" fill="rgba(200,137,42,0.15)" /><line x1="600" y1="405" x2="600" y2="450" /><line x1="555" y1="412" x2="565" y2="454" /><line x1="645" y1="412" x2="635" y2="454" /><g transform="translate(350, 540)"><path d="M -10 -60 L 10 -60 L 5 -90 L -5 -90 Z" fill="rgba(200,137,42,0.3)" /><circle cx="0" cy="0" r="55" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" /><circle cx="0" cy="0" r="48" stroke-width="1" stroke="#C8892A" /><g stroke="#C8892A" stroke-width="1.5"><animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.2s" repeatCount="indefinite" /><line x1="0" y1="-48" x2="0" y2="48" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(30)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(60)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(90)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(120)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(150)" /></g><circle cx="0" cy="0" r="14" fill="#C8892A" opacity="0.8" /></g><g transform="translate(850, 540)"><path d="M -10 -60 L 10 -60 L 5 -90 L -5 -90 Z" fill="rgba(200,137,42,0.3)" /><circle cx="0" cy="0" r="55" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" /><circle cx="0" cy="0" r="48" stroke-width="1" stroke="#C8892A" /><g stroke="#C8892A" stroke-width="1.5"><animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.2s" repeatCount="indefinite" /><line x1="0" y1="-48" x2="0" y2="48" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(30)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(60)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(90)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(120)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(150)" /></g><circle cx="0" cy="0" r="14" fill="#C8892A" opacity="0.8" /></g></g></svg></div>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
 # TOP NAVIGATION BAR
 # ─────────────────────────────────────────────
 st.markdown("""
-<div style="padding: 0.5rem 0 1.5rem 0; margin-bottom: 0.5rem; text-align: center; position: relative; z-index: 20;">
+<div style="padding: 0.5rem 0 1.5rem 0; margin-bottom: 0.5rem; text-align: center;">
     <div style="font-family:'Playfair Display',serif; font-size: 2.2rem; font-weight: 900; color: #1C1C1E; letter-spacing: -0.01em;">✈ AeroMind</div>
     <div style="font-family:'IBM Plex Mono',monospace; font-size: 0.65rem; letter-spacing: 0.2em; color: #C8892A; text-transform: uppercase; margin-top: 4px;">Engine Intelligence Platform</div>
 </div>
@@ -597,4 +522,4 @@ elif page == "About":
 # ─────────────────────────────────────────────
 # FOOTER
 # ─────────────────────────────────────────────
-st.markdown("""<div style="margin-top:4rem;padding-top:1.5rem;border-top:1px solid #EDE7D9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;"><p style="font-size:0.8rem;color:#9A9A9E;font-weight:300;font-family:'Outfit',sans-serif;"><strong style="color:#1C1C1E;font-weight:600;">AeroMind</strong> · Aircraft Engine Predictive Maintenance · Built with ❤️ by <strong style="color:#1C1C1E;font-weight:600;">Vivek M D</strong></p><p style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:#C8C8CA;letter-spacing:0.1em;">NASA C-MAPSS · Streamlit · v3.0 · 2026</p></div>""", unsafe_allow_html=True)
+st.markdown("""<div style="margin-top:4rem;padding-top:1.5rem;border-top:1px solid #EDE7D9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;"><p style="font-size:0.8rem;color:#9A9A9E;font-weight:300;font-family:'Outfit',sans-serif;"><strong style="color:#1C1C1E;font-weight:600;">AeroMind</strong> · Aircraft Engine Predictive Maintenance · Built with ❤️ by <strong style="color:#1C1C1E;font-weight:600;">Vivek M D</strong></p><p style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:#C8C8CA;letter-spacing:0.1em;">NASA C-MAPSS · Streamlit · v2.1 · 2026</p></div>""", unsafe_allow_html=True)
