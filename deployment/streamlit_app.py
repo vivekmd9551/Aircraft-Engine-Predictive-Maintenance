@@ -8,7 +8,6 @@ import os
 import streamlit as st
 import pandas as pd
 import numpy as np
-import pickle
 import plotly.graph_objects as go
 from datetime import datetime
 import warnings
@@ -27,11 +26,12 @@ st.set_page_config(
 # ─────────────────────────────────────────────
 # GLOBAL CSS & ANIMATED BACKGROUND
 # ─────────────────────────────────────────────
+# NOTE: No empty lines are allowed inside the HTML tags here, 
+# otherwise Streamlit's markdown parser will print it as raw text!
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
-/* ── CSS VARIABLES ── */
 :root {
     --ivory:     #FAF8F4;
     --cream:     #F3EFE7;
@@ -55,80 +55,41 @@ st.markdown("""
     --radius-sm: 10px;
 }
 
-/* ── RESET & BASE ── */
 *, *::before, *::after { box-sizing: border-box; }
 
-html, body,
-[data-testid="stAppViewContainer"],
-[data-testid="stApp"] {
+html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     background: var(--ivory) !important;
     font-family: 'Outfit', sans-serif !important;
 }
 
-/* Ensure Main Content sits above background */
 [data-testid="stMainBlockContainer"] {
     padding-top: 2rem !important;
     max-width: 1300px !important;
     position: relative;
-    z-index: 1; 
+    z-index: 10; 
 }
 
-/* ── HIDE CHROME ── */
 #MainMenu, footer, header { visibility: hidden; }
 [data-testid="stDecoration"] { display: none; }
-[data-testid="collapsedControl"] { display: none; } /* Hides sidebar expander */
+[data-testid="collapsedControl"] { display: none; } 
 
-/* ── TYPOGRAPHY ── */
-h1, h2, h3, h4, h5 {
-    font-family: 'Playfair Display', serif !important;
-    color: var(--charcoal) !important;
-}
-p, li, span, div, label {
-    font-family: 'Outfit', sans-serif !important;
-}
+h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif !important; color: var(--charcoal) !important; }
+p, li, span, div, label { font-family: 'Outfit', sans-serif !important; }
 
-/* ── CUSTOM NAVIGATION BAR ── */
 div[data-testid="stRadio"] > div[role="radiogroup"] {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    background: transparent;
-    padding: 0;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: flex; flex-direction: row; gap: 12px; background: transparent; padding: 0; flex-wrap: wrap; justify-content: center;
 }
 div[data-testid="stRadio"] label {
-    background: #FFFFFF;
-    padding: 10px 24px !important;
-    border-radius: 30px !important;
-    border: 1px solid var(--warm-200) !important;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    font-family: 'IBM Plex Mono', monospace !important;
-    font-size: 0.75rem !important;
-    letter-spacing: 0.1em !important;
-    text-transform: uppercase !important;
-    color: var(--slate) !important;
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 5px;
+    background: #FFFFFF; padding: 10px 24px !important; border-radius: 30px !important; border: 1px solid var(--warm-200) !important;
+    cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.75rem !important; letter-spacing: 0.1em !important; text-transform: uppercase !important; color: var(--slate) !important;
+    box-shadow: var(--shadow-sm); margin-bottom: 5px;
 }
-div[data-testid="stRadio"] label:hover {
-    border-color: var(--amber) !important;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-/* Active Tab Styling */
-div[data-testid="stRadio"] label[data-checked="true"] {
-    background: var(--charcoal) !important;
-    border-color: var(--charcoal) !important;
-}
-div[data-testid="stRadio"] label[data-checked="true"] * {
-    color: var(--amber-lt) !important;
-    font-weight: 600 !important;
-}
+div[data-testid="stRadio"] label:hover { border-color: var(--amber) !important; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+div[data-testid="stRadio"] label[data-checked="true"] { background: var(--charcoal) !important; border-color: var(--charcoal) !important; }
+div[data-testid="stRadio"] label[data-checked="true"] * { color: var(--amber-lt) !important; font-weight: 600 !important; }
 div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 
-/* ── METRIC CARDS ── */
 [data-testid="stMetric"] {
     background: #FFFFFF !important; border: 1px solid var(--warm-100) !important; border-radius: var(--radius) !important;
     padding: 1.3rem 1.5rem !important; border-top: 3px solid var(--amber) !important; box-shadow: var(--shadow-sm) !important;
@@ -136,15 +97,8 @@ div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 [data-testid="stMetricValue"] { font-family: 'Playfair Display', serif !important; font-size: 2.1rem !important; font-weight: 700 !important; color: var(--charcoal) !important; }
 [data-testid="stMetricLabel"] { font-family: 'IBM Plex Mono', monospace !important; font-size: 0.6rem !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; color: var(--mid) !important; }
 
-/* ── SELECT ── */
-[data-baseweb="select"] {
-    border-radius: var(--radius-sm) !important;
-    border-color: var(--warm-200) !important;
-    background: #FFFFFF !important;
-    font-family: 'Outfit', sans-serif !important;
-}
+[data-baseweb="select"] { border-radius: var(--radius-sm) !important; border-color: var(--warm-200) !important; background: #FFFFFF !important; font-family: 'Outfit', sans-serif !important; }
 
-/* ── ALERTS ── */
 .alert-box { border-radius: var(--radius-sm); padding: 1.2rem 1.4rem; border-left: 4px solid; margin: 1rem 0; }
 .alert-critical { background: var(--rust-lt); border-color: var(--rust); }
 .alert-critical h4 { color: var(--rust) !important; font-family: 'Playfair Display', serif !important; font-size: 1rem !important; margin: 0 0 0.4rem !important; }
@@ -156,7 +110,6 @@ div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 .alert-good h4 { color: var(--teal) !important; font-family: 'Playfair Display', serif !important; font-size: 1rem !important; margin: 0 0 0.4rem !important; }
 .alert-good p  { color: #165A50 !important; font-size: 0.85rem !important; margin: 0.2rem 0 !important; line-height: 1.5 !important; }
 
-/* ── CUSTOM COMPONENTS ── */
 .card { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: var(--radius); padding: 1.8rem 2rem; box-shadow: var(--shadow-sm); margin-bottom: 1.2rem; }
 .card-dark { background: var(--charcoal); border: 1px solid rgba(200,137,42,0.18); border-radius: var(--radius); padding: 1.8rem 2rem; box-shadow: var(--shadow-lg); margin-bottom: 1.2rem; }
 .hero { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: 24px; padding: 3.5rem 3.5rem 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; box-shadow: var(--shadow-lg); }
@@ -189,109 +142,21 @@ div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 .pill-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 1rem; }
 .pill { background: var(--cream); border: 1px solid var(--warm-200); border-radius: 6px; padding: 4px 11px; font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: var(--slate); letter-spacing: 0.05em; }
 
-/* ── AIRCRAFT ANIMATED BACKGROUND ── */
 body::before {
     content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     opacity: 0.4;
 }
 
-.aircraft-bg-container {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    z-index: 0;
-    pointer-events: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-.aircraft-bg-container svg {
-    width: 90vw;
-    min-width: 1000px;
-    opacity: 0.12; /* Very subtle premium watermark look */
-}
-
-/* Spool up effect: Start 0, accelerate for 4s, then spin continuously fast */
-.fan-blades {
-    transform-origin: center;
-    animation: spoolUp 4s cubic-bezier(0.4, 0, 0.2, 1) forwards,
-               spinContinuous 0.25s linear 4s infinite;
-}
-
-@keyframes spoolUp {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(1440deg); } /* 4 fast rotations to build speed */
-}
-@keyframes spinContinuous {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Pulsing engine core for heat effect */
-.engine-core {
-    animation: pulseHeat 2s ease-in-out infinite alternate;
-}
-@keyframes pulseHeat {
-    0% { fill: rgba(200,137,42,0.2); stroke: rgba(200,137,42,0.5); }
-    100% { fill: rgba(232,168,62,0.6); stroke: rgba(232,168,62,0.9); }
-}
+.aircraft-bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+.aircraft-bg-container svg { width: 90vw; min-width: 1000px; opacity: 0.12; }
+.fan-blades { transform-origin: center; animation: spoolUp 4s cubic-bezier(0.4, 0, 0.2, 1) forwards, spinContinuous 0.25s linear 4s infinite; }
+@keyframes spoolUp { 0% { transform: rotate(0deg); } 100% { transform: rotate(1440deg); } }
+@keyframes spinContinuous { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.engine-core { animation: pulseHeat 2s ease-in-out infinite alternate; }
+@keyframes pulseHeat { 0% { fill: rgba(200,137,42,0.2); stroke: rgba(200,137,42,0.5); } 100% { fill: rgba(232,168,62,0.6); stroke: rgba(232,168,62,0.9); } }
 </style>
-
-<div class="aircraft-bg-container">
-    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-        <g stroke="#C8892A" fill="none" stroke-width="1.5">
-            <ellipse cx="600" cy="400" rx="90" ry="280" fill="rgba(250,248,244,0.3)" />
-            
-            <path d="M 545 220 Q 600 170 655 220 L 665 280 Q 600 300 535 280 Z" fill="rgba(200,137,42,0.08)" stroke-width="2" />
-            <line x1="600" y1="190" x2="600" y2="290" stroke-width="2" /> <line x1="565" y1="205" x2="550" y2="285" stroke-width="1" /> <line x1="635" y1="205" x2="650" y2="285" stroke-width="1" /> <path d="M 515 450 L 50 550 L 50 620 L 515 580 Z" fill="rgba(200,137,42,0.02)" />
-            <path d="M 685 450 L 1150 550 L 1150 620 L 685 580 Z" fill="rgba(200,137,42,0.02)" />
-
-            <line x1="320" y1="500" x2="320" y2="580" stroke-width="3" />
-            <line x1="880" y1="500" x2="880" y2="580" stroke-width="3" />
-            
-            <g transform="translate(320, 580)">
-                <circle cx="0" cy="0" r="75" stroke-width="3" fill="#FAF8F4" />
-                <circle cx="0" cy="0" r="68" stroke-width="1" />
-                
-                <g class="fan-blades">
-                    <line x1="0" y1="-68" x2="0" y2="68" />
-                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(30)" />
-                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(60)" />
-                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(90)" />
-                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(120)" />
-                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(150)" />
-                    
-                    <circle cx="0" cy="0" r="40" stroke-width="0.5" stroke-dasharray="2 4" />
-                </g>
-                
-                <circle cx="0" cy="0" r="18" class="engine-core" stroke-width="2" />
-                <path d="M 0 -18 Q 8 0 0 18 Q -8 0 0 -18" fill="none" stroke-width="1" opacity="0.6" />
-            </g>
-
-            <g transform="translate(880, 580)">
-                <circle cx="0" cy="0" r="75" stroke-width="3" fill="#FAF8F4" />
-                <circle cx="0" cy="0" r="68" stroke-width="1" />
-                
-                <g class="fan-blades">
-                    <line x1="0" y1="-68" x2="0" y2="68" />
-                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(30)" />
-                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(60)" />
-                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(90)" />
-                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(120)" />
-                    <line x1="0" y1="-68" x2="0" y2="68" transform="rotate(150)" />
-                    
-                    <circle cx="0" cy="0" r="40" stroke-width="0.5" stroke-dasharray="2 4" />
-                </g>
-                
-                <circle cx="0" cy="0" r="18" class="engine-core" stroke-width="2" />
-                <path d="M 0 -18 Q 8 0 0 18 Q -8 0 0 -18" fill="none" stroke-width="1" opacity="0.6" />
-            </g>
-
-        </g>
-    </svg>
-</div>
+<div class="aircraft-bg-container"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><g stroke="#C8892A" fill="none" stroke-width="1.5"><ellipse cx="600" cy="400" rx="90" ry="280" fill="rgba(250,248,244,0.3)" /><path d="M 545 220 Q 600 170 655 220 L 665 280 Q 600 300 535 280 Z" fill="rgba(200,137,42,0.08)" stroke-width="2" /><line x1="600" y1="190" x2="600" y2="290" stroke-width="2" /><line x1="565" y1="205" x2="550" y2="285" stroke-width="1" /><line x1="635" y1="205" x2="650" y2="285" stroke-width="1" /><path d="M 515 450 L 50 550 L 50 620 L 515 580 Z" fill="rgba(200,137,42,0.02)" /><path d="M 685 450 L 1150 550 L 1150 620 L 685 580 Z" fill="rgba(200,137,42,0.02)" /><line x1="320" y1="500" x2="320" y2="580" stroke-width="3" /><line x1="880" y1="500" x2="880" y2="580" stroke-width="3" /><g transform="translate(320, 580)"><circle cx="0" cy="0" r="75" stroke-width="3" fill="#FAF8F4" /><circle cx="0" cy="0" r="68" stroke-width="1" /><g class="fan-blades"><line x1="0" y1="-68" x2="0" y2="68" /><line x1="0" y1="-68" x2="0" y2="68" transform="rotate(30)" /><line x1="0" y1="-68" x2="0" y2="68" transform="rotate(60)" /><line x1="0" y1="-68" x2="0" y2="68" transform="rotate(90)" /><line x1="0" y1="-68" x2="0" y2="68" transform="rotate(120)" /><line x1="0" y1="-68" x2="0" y2="68" transform="rotate(150)" /><circle cx="0" cy="0" r="40" stroke-width="0.5" stroke-dasharray="2 4" /></g><circle cx="0" cy="0" r="18" class="engine-core" stroke-width="2" /><path d="M 0 -18 Q 8 0 0 18 Q -8 0 0 -18" fill="none" stroke-width="1" opacity="0.6" /></g><g transform="translate(880, 580)"><circle cx="0" cy="0" r="75" stroke-width="3" fill="#FAF8F4" /><circle cx="0" cy="0" r="68" stroke-width="1" /><g class="fan-blades"><line x1="0" y1="-68" x2="0" y2="68" /><line x1="0" y1="-68" x2="0" y2="68" transform="rotate(30)" /><line x1="0" y1="-68" x2="0" y2="68" transform="rotate(60)" /><line x1="0" y1="-68" x2="0" y2="68" transform="rotate(90)" /><line x1="0" y1="-68" x2="0" y2="68" transform="rotate(120)" /><line x1="0" y1="-68" x2="0" y2="68" transform="rotate(150)" /><circle cx="0" cy="0" r="40" stroke-width="0.5" stroke-dasharray="2 4" /></g><circle cx="0" cy="0" r="18" class="engine-core" stroke-width="2" /><path d="M 0 -18 Q 8 0 0 18 Q -8 0 0 -18" fill="none" stroke-width="1" opacity="0.6" /></g></g></svg></div>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
@@ -646,4 +511,4 @@ elif page == "About":
 # ─────────────────────────────────────────────
 # FOOTER
 # ─────────────────────────────────────────────
-st.markdown("""<div style="margin-top:4rem;padding-top:1.5rem;border-top:1px solid #EDE7D9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;"><p style="font-size:0.8rem;color:#9A9A9E;font-weight:300;font-family:'Outfit',sans-serif;"><strong style="color:#1C1C1E;font-weight:600;">AeroMind</strong> · Aircraft Engine Predictive Maintenance · Built with ❤️ by <strong style="color:#1C1C1E;font-weight:600;">Vivek M D</strong></p><p style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:#C8C8CA;letter-spacing:0.1em;">NASA C-MAPSS · Streamlit · v1.6 · 2026</p></div>""", unsafe_allow_html=True)
+st.markdown("""<div style="margin-top:4rem;padding-top:1.5rem;border-top:1px solid #EDE7D9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;"><p style="font-size:0.8rem;color:#9A9A9E;font-weight:300;font-family:'Outfit',sans-serif;"><strong style="color:#1C1C1E;font-weight:600;">AeroMind</strong> · Aircraft Engine Predictive Maintenance · Built with ❤️ by <strong style="color:#1C1C1E;font-weight:600;">Vivek M D</strong></p><p style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:#C8C8CA;letter-spacing:0.1em;">NASA C-MAPSS · Streamlit · v1.7 · 2026</p></div>""", unsafe_allow_html=True)
