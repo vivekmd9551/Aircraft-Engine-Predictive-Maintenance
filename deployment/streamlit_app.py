@@ -90,9 +90,14 @@ with st.sidebar:
 def load_models():
     """Load all trained models"""
     try:
-        # Dynamically find the path to the 'models' directory in your GitHub repo
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        model_path = os.path.join(BASE_DIR, "models")
+        # Get the directory where streamlit_app.py lives (the 'deployment' folder)
+        CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+        
+        # Go up one level to the main project root
+        PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
+        
+        # Now point to the models folder
+        model_path = os.path.join(PROJECT_ROOT, "models")
         
         # Load XGBoost
         with open(os.path.join(model_path, 'xgboost_optimized.pkl'), 'rb') as f:
@@ -108,7 +113,6 @@ def load_models():
         
         return xgb_model, rf_model, scaler
     except Exception as e:
-        # This will print the exact error to your terminal/Streamlit logs if it fails
         print(f"Error loading models: {e}") 
         return None, None, None
 
@@ -208,7 +212,7 @@ if page == "🏠 Home":
     fig.add_hline(y=18, line_dash="dash", line_color="red", 
                   annotation_text="Target: 18 cycles")
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 # ========================================
 # RUL PREDICTION PAGE
@@ -398,7 +402,7 @@ elif page == "📈 Model Performance":
     df_performance = pd.DataFrame(performance_data)
     
     # Color code the best values
-    st.dataframe(df_performance, use_container_width=True)
+    st.dataframe(df_performance, width='stretch')
     
     # Visualizations
     col1, col2 = st.columns(2)
@@ -421,7 +425,7 @@ elif page == "📈 Model Performance":
         fig1.add_hline(y=18, line_dash="dash", line_color="red", 
                       annotation_text="Target")
         
-        st.plotly_chart(fig1, use_container_width=True)
+        st.plotly_chart(fig1, width='stretch')
     
     with col2:
         # R² comparison
@@ -438,7 +442,7 @@ elif page == "📈 Model Performance":
             height=400
         )
         
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width='stretch')
     
     # Key insights
     st.markdown("### 🔍 Key Insights")
@@ -564,7 +568,7 @@ elif page == "💰 Business Impact":
         height=400
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Summary
     st.markdown("### 📋 Summary")
