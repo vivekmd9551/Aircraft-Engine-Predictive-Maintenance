@@ -4,6 +4,7 @@ Author: Vivek M D
 Description: Interactive web interface for RUL prediction using trained ML models
 """
 
+import os
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -89,23 +90,26 @@ with st.sidebar:
 def load_models():
     """Load all trained models"""
     try:
-        # Update these paths to your Google Drive paths
-        model_path = "/content/drive/MyDrive/Aircraft_Engine_Predictive_Maintenance/models/"
+        # Dynamically find the path to the 'models' directory in your GitHub repo
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        model_path = os.path.join(BASE_DIR, "models")
         
         # Load XGBoost
-        with open(model_path + 'xgboost_optimized.pkl', 'rb') as f:
+        with open(os.path.join(model_path, 'xgboost_optimized.pkl'), 'rb') as f:
             xgb_model = pickle.load(f)
         
         # Load Random Forest
-        with open(model_path + 'random_forest_baseline.pkl', 'rb') as f:
+        with open(os.path.join(model_path, 'random_forest_baseline.pkl'), 'rb') as f:
             rf_model = pickle.load(f)
         
         # Load scaler
-        with open(model_path + 'feature_scaler.pkl', 'rb') as f:
+        with open(os.path.join(model_path, 'feature_scaler.pkl'), 'rb') as f:
             scaler = pickle.load(f)
         
         return xgb_model, rf_model, scaler
-    except:
+    except Exception as e:
+        # This will print the exact error to your terminal/Streamlit logs if it fails
+        print(f"Error loading models: {e}") 
         return None, None, None
 
 # Helper functions
