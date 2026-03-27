@@ -88,7 +88,7 @@ with st.sidebar:
 # Load models (cached)
 @st.cache_resource
 def load_models():
-    """Load all trained models"""
+    """Load all trained models with debugging"""
     try:
         # Get the directory where streamlit_app.py lives (the 'deployment' folder)
         CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -98,6 +98,15 @@ def load_models():
         
         # Now point to the models folder
         model_path = os.path.join(PROJECT_ROOT, "models")
+        
+        # --- DIAGNOSTIC CHECK 1: DOES THE FOLDER EXIST? ---
+        if not os.path.exists(model_path):
+            st.error(f"🛑 DIAGNOSTIC: The folder path does not exist: {model_path}")
+            return None, None, None
+            
+        # --- DIAGNOSTIC CHECK 2: WHAT IS IN THE FOLDER? ---
+        files_in_folder = os.listdir(model_path)
+        st.info(f"📁 DIAGNOSTIC: Files found in models folder: {files_in_folder}")
         
         # Load XGBoost
         with open(os.path.join(model_path, 'xgboost_optimized.pkl'), 'rb') as f:
@@ -112,8 +121,10 @@ def load_models():
             scaler = pickle.load(f)
         
         return xgb_model, rf_model, scaler
+        
     except Exception as e:
-        print(f"Error loading models: {e}") 
+        # --- DIAGNOSTIC CHECK 3: WHAT IS THE EXACT ERROR? ---
+        st.error(f"🛑 EXACT ERROR: {type(e).__name__} - {str(e)}")
         return None, None, None
 
 # Helper functions
