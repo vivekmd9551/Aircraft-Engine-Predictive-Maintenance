@@ -755,38 +755,25 @@ PLOT_LAYOUT = dict(
 )
 
 # ─────────────────────────────────────────────
-# SIDEBAR
+# TOP NAVIGATION BAR
 # ─────────────────────────────────────────────
-with st.sidebar:
-    st.markdown("""
-    <div class="sidebar-brand">
-        <div class="sidebar-brand-name">✈ AeroMind</div>
-        <div class="sidebar-brand-sub">Engine Intelligence Platform</div>
-    </div>
-    """, unsafe_allow_html=True)
+# Brand Header
+st.markdown("""
+<div style="padding: 0.5rem 0 1.5rem 0; margin-bottom: 0.5rem;">
+    <div style="font-family:'Playfair Display',serif; font-size: 2rem; font-weight: 900; color: #1C1C1E; letter-spacing: -0.01em;">✈ AeroMind</div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size: 0.65rem; letter-spacing: 0.2em; color: #C8892A; text-transform: uppercase; margin-top: 4px;">Engine Intelligence Platform</div>
+</div>
+""", unsafe_allow_html=True)
 
-    page = st.radio(
-        "Navigate",
-        ["Home", "RUL Prediction", "Model Performance", "Business Impact", "About"],
-        label_visibility="collapsed"
-    )
+# Horizontal Radio Navigation
+page = st.radio(
+    "Navigate",
+    ["Home", "RUL Prediction", "Model Performance", "Business Impact", "About"],
+    horizontal=True,
+    label_visibility="collapsed"
+)
 
-    st.markdown("---")
-    st.markdown("""<p style='font-family:IBM Plex Mono,monospace;font-size:0.58rem;
-        letter-spacing:0.22em;text-transform:uppercase;color:#6C6C70;margin-bottom:0.8rem;'>
-        Live Metrics</p>""", unsafe_allow_html=True)
-
-    st.metric("Champion Model", "LSTM")
-    st.metric("Best RMSE",      "8.96 cycles")
-    st.metric("R² Score",       "0.9528")
-    st.metric("Annual Savings", "$2.0M+")
-
-    st.markdown("---")
-    st.markdown(f"""<p style='font-family:IBM Plex Mono,monospace;font-size:0.56rem;
-        color:#4A4A4E;letter-spacing:0.1em;text-align:center;line-height:1.8;'>
-        NASA C-MAPSS · v1.0<br>{datetime.now().strftime('%H:%M UTC')}</p>""",
-        unsafe_allow_html=True)
-
+st.markdown("---")
 
 # ═══════════════════════════════════════════
 # HOME
