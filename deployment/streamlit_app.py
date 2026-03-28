@@ -24,42 +24,49 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (ENCODED FIX)
+# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (REALISTIC ENGINES FIX)
 # ─────────────────────────────────────────────
 import base64
 
-# Boeing 737 Sharp Specs: Scimitar Winglets, Connected Tail, Pylons, Cockpit
+# Boeing 737 Realistic Specs: Thick Engines, AT Scimitar Winglets, Bold Pylons
 svg_icon = """
 <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-    <g stroke="#C8892A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M 585 260 L 600 50 L 615 260 Z" fill="rgba(200,137,42,0.05)" />
-        <path d="M 480 380 L 120 355 L 105 280 L 115 280 L 135 345 L 480 355 Z" fill="rgba(200,137,42,0.05)" />
-        <path d="M 720 380 L 1080 355 L 1095 280 L 1085 280 L 1065 345 L 720 355 Z" fill="rgba(200,137,42,0.05)" />
-        <path d="M 315 365 L 315 400 M 325 365 L 325 400" opacity="0.6" /> 
-        <path d="M 875 365 L 875 400 M 885 365 L 885 400" opacity="0.6" /> 
-        <ellipse cx="600" cy="380" rx="125" ry="125" fill="#FAF8F4" />
-        <path d="M 530 330 Q 600 300 670 330 L 655 370 Q 600 350 545 370 Z" fill="rgba(200,137,42,0.15)" />
-        <g transform="translate(320, 440)">
-            <circle cx="0" cy="0" r="62" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
-            <g stroke="#C8892A" stroke-width="2">
+    <g stroke="#C8892A" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+        <path d="M 585 260 L 600 50 L 615 260 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
+        
+        <path d="M 480 380 L 120 355 L 110 310 L 115 310 L 130 350 L 480 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
+        <path d="M 720 380 L 1080 355 L 1090 310 L 1085 310 L 1070 350 L 720 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
+
+        <path d="M 310 360 L 310 405 M 330 360 L 330 405" stroke-width="3" stroke="rgba(200,137,42,0.8)" /> 
+        <path d="M 870 360 L 870 405 M 890 360 L 890 405" stroke-width="3" stroke="rgba(200,137,42,0.8)" /> 
+
+        <ellipse cx="600" cy="380" rx="125" ry="125" stroke-width="3" fill="#FAF8F4" />
+        <path d="M 530 330 Q 600 300 670 330 L 655 370 Q 600 350 545 370 Z" stroke-width="2" fill="rgba(200,137,42,0.15)" />
+
+        <g transform="translate(320, 450)">
+            <circle cx="0" cy="0" r="72" stroke-width="7" stroke="rgba(200,137,42,0.6)" fill="#FAF8F4" /> <circle cx="0" cy="0" r="62" stroke-width="2" stroke="#C8892A" /> <g stroke="#C8892A" stroke-width="2.5">
                 <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
                 <line x1="0" y1="-55" x2="0" y2="55" /><line x1="-55" y1="0" x2="55" y2="0" />
                 <line x1="-40" y1="-40" x2="40" y2="40" /><line x1="-40" y1="40" x2="40" y2="-40" />
             </g>
-        </g>
-        <g transform="translate(880, 440)">
-            <circle cx="0" cy="0" r="62" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
-            <g stroke="#C8892A" stroke-width="2">
+            <circle cx="0" cy="0" r="20" fill="#C8892A" /> </g>
+        
+        <g transform="translate(880, 450)">
+            <circle cx="0" cy="0" r="72" stroke-width="7" stroke="rgba(200,137,42,0.6)" fill="#FAF8F4" />
+            <circle cx="0" cy="0" r="62" stroke-width="2" stroke="#C8892A" />
+            <g stroke="#C8892A" stroke-width="2.5">
                 <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
                 <line x1="0" y1="-55" x2="0" y2="55" /><line x1="-55" y1="0" x2="55" y2="0" />
                 <line x1="-40" y1="-40" x2="40" y2="40" /><line x1="-40" y1="40" x2="40" y2="-40" />
             </g>
+            <circle cx="0" cy="0" r="20" fill="#C8892A" />
         </g>
     </g>
 </svg>
 """
 
-# Encode to Base64 to bypass Streamlit's markdown parser
+# Encode to Base64 to strictly prevent HTML spilling
 b64_svg = base64.b64encode(svg_icon.encode()).decode()
 
 st.markdown(f"""
@@ -72,7 +79,7 @@ st.markdown(f"""
     --charcoal:  #1C1C1E;
 }}
 
-/* THE FIX: Inject SVG via CSS pseudo-element to prevent code spilling */
+/* Centered background using Base64 injection */
 [data-testid="stAppViewContainer"]::before {{
     content: "";
     position: fixed;
@@ -83,8 +90,8 @@ st.markdown(f"""
     background-image: url("data:image/svg+xml;base64,{b64_svg}");
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 98% auto;
-    opacity: 0.15;
+    background-size: 92% auto;
+    opacity: 0.18;
 }}
 
 html, body, [data-testid="stAppViewContainer"] {{
