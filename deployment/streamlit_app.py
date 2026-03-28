@@ -1,16 +1,14 @@
 """
 ✈️ AeroMind — Aircraft Engine Predictive Maintenance
 Author: Vivek M D
-Design: Deep Space Cockpit — Midnight Navy + Electric Teal + Phosphor Green
+Design: Aerospace Engineering Light — Cloud White + Slate Blue + Vivid Coral
 """
 
-import os
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import base64
-from datetime import datetime
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -25,223 +23,188 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# ANIMATED BACKGROUND SVG — COCKPIT HUD
+# BACKGROUND SVG  — light, fine technical linework
 # ─────────────────────────────────────────────
 svg_bg = """
-<svg viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 1400 860" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="eng_glow_l" cx="25%" cy="55%" r="18%">
-      <stop offset="0%" stop-color="#00FFD1" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#00FFD1" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="eng_glow_r" cx="75%" cy="55%" r="18%">
-      <stop offset="0%" stop-color="#00FFD1" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#00FFD1" stop-opacity="0"/>
-    </radialGradient>
-    <filter id="hud_glow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="soft_glow" x="-80%" y="-80%" width="260%" height="260%">
-      <feGaussianBlur stdDeviation="8"/>
-    </filter>
-    <linearGradient id="wing_grad_l" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#00FFD1" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#00FFD1" stop-opacity="0.4"/>
+    <linearGradient id="wl" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0.35"/>
     </linearGradient>
-    <linearGradient id="wing_grad_r" x1="100%" y1="0%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#00FFD1" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#00FFD1" stop-opacity="0.4"/>
+    <linearGradient id="wr" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0.35"/>
     </linearGradient>
   </defs>
 
-  <!-- Engine glow halos -->
-  <ellipse cx="350" cy="490" rx="120" ry="120" fill="url(#eng_glow_l)"/>
-  <ellipse cx="1050" cy="490" rx="120" ry="120" fill="url(#eng_glow_r)"/>
+  <!-- Blueprint grid -->
+  <g stroke="#DBEAFE" stroke-width="0.6" opacity="0.9">
+    <line x1="0" y1="150" x2="1400" y2="150"/>
+    <line x1="0" y1="300" x2="1400" y2="300"/>
+    <line x1="0" y1="450" x2="1400" y2="450"/>
+    <line x1="0" y1="600" x2="1400" y2="600"/>
+    <line x1="0" y1="750" x2="1400" y2="750"/>
+    <line x1="175" y1="0" x2="175" y2="860"/>
+    <line x1="350" y1="0" x2="350" y2="860"/>
+    <line x1="525" y1="0" x2="525" y2="860"/>
+    <line x1="700" y1="0" x2="700" y2="860"/>
+    <line x1="875" y1="0" x2="875" y2="860"/>
+    <line x1="1050" y1="0" x2="1050" y2="860"/>
+    <line x1="1225" y1="0" x2="1225" y2="860"/>
+  </g>
 
-  <!-- Fuselage -->
-  <path d="M 680 120 L 700 80 L 720 120 L 730 480 L 700 510 L 670 480 Z"
-        stroke="#00FFD1" stroke-width="1.5" fill="rgba(0,255,209,0.03)" opacity="0.6"/>
-
-  <!-- Nose cone detail -->
-  <path d="M 695 82 L 700 64 L 705 82" stroke="#00FFD1" stroke-width="1" fill="none" opacity="0.5"/>
-  <line x1="700" y1="64" x2="700" y2="120" stroke="#00FFD1" stroke-width="0.5" opacity="0.3"/>
+  <!-- Fuselage body -->
+  <path d="M 685 90 L 700 55 L 715 90 L 724 460 L 700 488 L 676 460 Z"
+        stroke="#2563EB" stroke-width="1.8" fill="rgba(37,99,235,0.04)"/>
+  <line x1="700" y1="55" x2="700" y2="110" stroke="#2563EB" stroke-width="0.8" opacity="0.5"/>
+  <ellipse cx="700" cy="155" rx="14" ry="9" stroke="#2563EB" stroke-width="1.2" fill="rgba(37,99,235,0.08)"/>
 
   <!-- Left wing -->
-  <path d="M 678 390 L 120 430 L 110 400 L 115 398 L 130 424 L 675 375 Z"
-        stroke="#00FFD1" stroke-width="1.5" fill="url(#wing_grad_l)" opacity="0.55"/>
+  <path d="M 684 370 L 100 408 L 92 382 L 96 380 L 112 400 L 682 355 Z"
+        stroke="#2563EB" stroke-width="1.6" fill="url(#wl)" opacity="0.6"/>
   <!-- Right wing -->
-  <path d="M 722 390 L 1280 430 L 1290 400 L 1285 398 L 1270 424 L 725 375 Z"
-        stroke="#00FFD1" stroke-width="1.5" fill="url(#wing_grad_r)" opacity="0.55"/>
+  <path d="M 716 370 L 1300 408 L 1308 382 L 1304 380 L 1288 400 L 718 355 Z"
+        stroke="#2563EB" stroke-width="1.6" fill="url(#wr)" opacity="0.6"/>
 
-  <!-- Wing HUD tic marks -->
-  <g stroke="#00FFD1" stroke-width="0.7" opacity="0.35">
-    <line x1="200" y1="427" x2="200" y2="417"/>
-    <line x1="300" y1="425" x2="300" y2="415"/>
-    <line x1="400" y1="422" x2="400" y2="412"/>
-    <line x1="500" y1="420" x2="500" y2="413"/>
-    <line x1="1200" y1="427" x2="1200" y2="417"/>
-    <line x1="1100" y1="425" x2="1100" y2="415"/>
-    <line x1="1000" y1="422" x2="1000" y2="412"/>
-    <line x1="900" y1="420" x2="900" y2="413"/>
+  <!-- Wing tics -->
+  <g stroke="#2563EB" stroke-width="0.9" opacity="0.4">
+    <line x1="220" y1="404" x2="220" y2="393"/>
+    <line x1="340" y1="401" x2="340" y2="390"/>
+    <line x1="460" y1="398" x2="460" y2="388"/>
+    <line x1="580" y1="394" x2="580" y2="385"/>
+    <line x1="1180" y1="404" x2="1180" y2="393"/>
+    <line x1="1060" y1="401" x2="1060" y2="390"/>
+    <line x1="940" y1="398" x2="940" y2="388"/>
+    <line x1="820" y1="394" x2="820" y2="385"/>
   </g>
 
-  <!-- Left horizontal stabilizer -->
-  <path d="M 672 480 L 450 500 L 448 490 L 670 468 Z"
-        stroke="#00FFD1" stroke-width="1" fill="rgba(0,255,209,0.04)" opacity="0.5"/>
-  <!-- Right horizontal stabilizer -->
-  <path d="M 728 480 L 950 500 L 952 490 L 730 468 Z"
-        stroke="#00FFD1" stroke-width="1" fill="rgba(0,255,209,0.04)" opacity="0.5"/>
+  <!-- Stabilisers -->
+  <path d="M 678 464 L 490 482 L 488 472 L 677 452 Z"
+        stroke="#2563EB" stroke-width="1.1" fill="rgba(37,99,235,0.04)" opacity="0.55"/>
+  <path d="M 722 464 L 910 482 L 912 472 L 723 452 Z"
+        stroke="#2563EB" stroke-width="1.1" fill="rgba(37,99,235,0.04)" opacity="0.55"/>
 
-  <!-- Left engine nacelle -->
-  <ellipse cx="350" cy="490" rx="72" ry="72" stroke="#00FFD1" stroke-width="2.5" fill="rgba(0,8,32,0.5)" opacity="0.7"/>
-  <ellipse cx="350" cy="490" rx="52" ry="52" stroke="#00FFD1" stroke-width="1" fill="none" opacity="0.3"/>
-  <!-- Left fan blades spinning -->
-  <g filter="url(#hud_glow)">
-    <g transform="translate(350,490)">
-      <animateTransform attributeName="transform" type="rotate"
-        from="0 350 490" to="360 350 490" dur="0.08s" repeatCount="indefinite" additive="sum"/>
-      <polygon points="0,-62 -8,-8 0,-4 8,-8" fill="#00FFD1" opacity="0.9"/>
-      <polygon points="0,62 8,8 0,4 -8,8" fill="#00FFD1" opacity="0.9"/>
-      <polygon points="-62,0 -8,8 -4,0 -8,-8" fill="#00FFD1" opacity="0.9"/>
-      <polygon points="62,0 8,-8 4,0 8,8" fill="#00FFD1" opacity="0.9"/>
-      <polygon points="-44,-44 -6,0 -2,-6 2,-10" fill="#00FFD1" opacity="0.7"/>
-      <polygon points="44,44 6,0 2,6 -2,10" fill="#00FFD1" opacity="0.7"/>
-      <polygon points="-44,44 0,6 -6,2 -10,-2" fill="#00FFD1" opacity="0.7"/>
-      <polygon points="44,-44 0,-6 6,-2 10,2" fill="#00FFD1" opacity="0.7"/>
-    </g>
+  <!-- Left engine -->
+  <ellipse cx="318" cy="468" rx="64" ry="64"
+           stroke="#2563EB" stroke-width="2.2" fill="rgba(255,255,255,0.6)"/>
+  <ellipse cx="318" cy="468" rx="46" ry="46"
+           stroke="#2563EB" stroke-width="0.9" fill="none" opacity="0.35"/>
+  <g>
+    <animateTransform attributeName="transform" type="rotate"
+      from="0 318 468" to="360 318 468" dur="0.09s" repeatCount="indefinite"/>
+    <polygon points="318,406 310,462 318,464 326,462" fill="#2563EB" opacity="0.85"/>
+    <polygon points="318,530 326,474 318,472 310,474" fill="#2563EB" opacity="0.85"/>
+    <polygon points="254,468 310,460 310,468 310,476" fill="#2563EB" opacity="0.85"/>
+    <polygon points="382,468 326,476 326,468 326,460" fill="#2563EB" opacity="0.85"/>
+    <polygon points="272,422 310,462 316,456 312,450" fill="#2563EB" opacity="0.6"/>
+    <polygon points="364,514 326,474 320,480 324,486" fill="#2563EB" opacity="0.6"/>
+    <polygon points="272,514 312,474 318,480 314,486" fill="#2563EB" opacity="0.6"/>
+    <polygon points="364,422 324,462 318,456 322,450" fill="#2563EB" opacity="0.6"/>
   </g>
-  <circle cx="350" cy="490" r="14" fill="#001A3A" stroke="#00FFD1" stroke-width="1.5"/>
-  <!-- Engine exhaust glow left -->
-  <ellipse cx="350" cy="490" rx="72" ry="72" fill="none" stroke="#00FFD1" stroke-width="6" opacity="0.12">
-    <animate attributeName="r" values="72;80;72" dur="1.6s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0.12;0.22;0.12" dur="1.6s" repeatCount="indefinite"/>
+  <circle cx="318" cy="468" r="13" fill="white" stroke="#2563EB" stroke-width="1.6"/>
+  <ellipse cx="318" cy="468" rx="68" ry="68" fill="none" stroke="#3B82F6" stroke-width="4" opacity="0.1">
+    <animate attributeName="r" values="68;76;68" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.1;0.18;0.1" dur="2s" repeatCount="indefinite"/>
   </ellipse>
 
-  <!-- Right engine nacelle -->
-  <ellipse cx="1050" cy="490" rx="72" ry="72" stroke="#00FFD1" stroke-width="2.5" fill="rgba(0,8,32,0.5)" opacity="0.7"/>
-  <ellipse cx="1050" cy="490" rx="52" ry="52" stroke="#00FFD1" stroke-width="1" fill="none" opacity="0.3"/>
-  <!-- Right fan blades spinning -->
-  <g filter="url(#hud_glow)">
-    <g transform="translate(1050,490)">
-      <animateTransform attributeName="transform" type="rotate"
-        from="0 1050 490" to="360 1050 490" dur="0.08s" repeatCount="indefinite" additive="sum"/>
-      <polygon points="0,-62 -8,-8 0,-4 8,-8" fill="#00FFD1" opacity="0.9"/>
-      <polygon points="0,62 8,8 0,4 -8,8" fill="#00FFD1" opacity="0.9"/>
-      <polygon points="-62,0 -8,8 -4,0 -8,-8" fill="#00FFD1" opacity="0.9"/>
-      <polygon points="62,0 8,-8 4,0 8,8" fill="#00FFD1" opacity="0.9"/>
-      <polygon points="-44,-44 -6,0 -2,-6 2,-10" fill="#00FFD1" opacity="0.7"/>
-      <polygon points="44,44 6,0 2,6 -2,10" fill="#00FFD1" opacity="0.7"/>
-      <polygon points="-44,44 0,6 -6,2 -10,-2" fill="#00FFD1" opacity="0.7"/>
-      <polygon points="44,-44 0,-6 6,-2 10,2" fill="#00FFD1" opacity="0.7"/>
-    </g>
+  <!-- Right engine -->
+  <ellipse cx="1082" cy="468" rx="64" ry="64"
+           stroke="#2563EB" stroke-width="2.2" fill="rgba(255,255,255,0.6)"/>
+  <ellipse cx="1082" cy="468" rx="46" ry="46"
+           stroke="#2563EB" stroke-width="0.9" fill="none" opacity="0.35"/>
+  <g>
+    <animateTransform attributeName="transform" type="rotate"
+      from="0 1082 468" to="360 1082 468" dur="0.09s" repeatCount="indefinite"/>
+    <polygon points="1082,406 1074,462 1082,464 1090,462" fill="#2563EB" opacity="0.85"/>
+    <polygon points="1082,530 1090,474 1082,472 1074,474" fill="#2563EB" opacity="0.85"/>
+    <polygon points="1018,468 1074,460 1074,468 1074,476" fill="#2563EB" opacity="0.85"/>
+    <polygon points="1146,468 1090,476 1090,468 1090,460" fill="#2563EB" opacity="0.85"/>
+    <polygon points="1036,422 1074,462 1080,456 1076,450" fill="#2563EB" opacity="0.6"/>
+    <polygon points="1128,514 1090,474 1084,480 1088,486" fill="#2563EB" opacity="0.6"/>
+    <polygon points="1036,514 1076,474 1082,480 1078,486" fill="#2563EB" opacity="0.6"/>
+    <polygon points="1128,422 1088,462 1082,456 1086,450" fill="#2563EB" opacity="0.6"/>
   </g>
-  <circle cx="1050" cy="490" r="14" fill="#001A3A" stroke="#00FFD1" stroke-width="1.5"/>
-  <!-- Engine exhaust glow right -->
-  <ellipse cx="1050" cy="490" rx="72" ry="72" fill="none" stroke="#00FFD1" stroke-width="6" opacity="0.12">
-    <animate attributeName="r" values="72;80;72" dur="1.6s" repeatCount="indefinite" begin="0.8s"/>
-    <animate attributeName="opacity" values="0.12;0.22;0.12" dur="1.6s" repeatCount="indefinite" begin="0.8s"/>
+  <circle cx="1082" cy="468" r="13" fill="white" stroke="#2563EB" stroke-width="1.6"/>
+  <ellipse cx="1082" cy="468" rx="68" ry="68" fill="none" stroke="#3B82F6" stroke-width="4" opacity="0.1">
+    <animate attributeName="r" values="68;76;68" dur="2s" repeatCount="indefinite" begin="1s"/>
+    <animate attributeName="opacity" values="0.1;0.18;0.1" dur="2s" repeatCount="indefinite" begin="1s"/>
   </ellipse>
 
-  <!-- Wingtip nav lights -->
-  <g filter="url(#hud_glow)">
-    <circle cx="113" cy="400" r="7" fill="#FF3366">
-      <animate attributeName="opacity" values="0.4;1;0.4" dur="1.1s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="1287" cy="400" r="7" fill="#33FF99">
-      <animate attributeName="opacity" values="0.4;1;0.4" dur="1.1s" repeatCount="indefinite" begin="0.55s"/>
-    </circle>
-  </g>
+  <!-- Nav lights -->
+  <circle cx="94" cy="382" r="6" fill="#EF4444">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="1306" cy="382" r="6" fill="#22C55E">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.2s" repeatCount="indefinite" begin="0.6s"/>
+  </circle>
 
-  <!-- HUD crosshair overlay (center) -->
-  <g stroke="#00FFD1" stroke-width="0.8" opacity="0.2" filter="url(#hud_glow)">
-    <line x1="660" y1="300" x2="660" y2="310"/>
-    <line x1="650" y1="300" x2="750" y2="300"/>
-    <line x1="740" y1="300" x2="740" y2="310"/>
-    <line x1="660" y1="500" x2="660" y2="490"/>
-    <line x1="650" y1="500" x2="750" y2="500"/>
-    <line x1="740" y1="500" x2="740" y2="490"/>
+  <!-- Centre crosshair -->
+  <g stroke="#2563EB" stroke-width="0.7" opacity="0.25">
+    <line x1="660" y1="270" x2="740" y2="270"/>
+    <line x1="700" y1="250" x2="700" y2="290"/>
+    <circle cx="700" cy="270" r="20" fill="none"/>
   </g>
-
-  <!-- Altitude/speed bracket lines (HUD style) -->
-  <g stroke="#00FFD1" stroke-width="0.7" opacity="0.18">
-    <line x1="50" y1="300" x2="50" y2="600"/>
-    <line x1="50" y1="300" x2="65" y2="300"/>
-    <line x1="50" y1="600" x2="65" y2="600"/>
-    <line x1="1350" y1="300" x2="1350" y2="600"/>
-    <line x1="1350" y1="300" x2="1335" y2="300"/>
-    <line x1="1350" y1="600" x2="1335" y2="600"/>
-  </g>
-
-  <!-- Subtle grid -->
-  <g stroke="#0A2A50" stroke-width="0.5" opacity="0.4">
-    <line x1="0" y1="200" x2="1400" y2="200"/>
-    <line x1="0" y1="400" x2="1400" y2="400"/>
-    <line x1="0" y1="600" x2="1400" y2="600"/>
-    <line x1="0" y1="800" x2="1400" y2="800"/>
-    <line x1="200" y1="0" x2="200" y2="900"/>
-    <line x1="400" y1="0" x2="400" y2="900"/>
-    <line x1="600" y1="0" x2="600" y2="900"/>
-    <line x1="800" y1="0" x2="800" y2="900"/>
-    <line x1="1000" y1="0" x2="1000" y2="900"/>
-    <line x1="1200" y1="0" x2="1200" y2="900"/>
-  </g>
-
-  <!-- Horizon line -->
-  <line x1="0" y1="450" x2="1400" y2="450" stroke="#00FFD1" stroke-width="0.6" opacity="0.12"/>
 </svg>
 """
 
 b64_svg = base64.b64encode(svg_bg.encode()).decode()
 
 # ─────────────────────────────────────────────
-# GLOBAL STYLES
+# CSS
 # ─────────────────────────────────────────────
 st.markdown(f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {{
-  --bg:         #020C1B;
-  --surface:    #051224;
-  --surface2:   #071A32;
-  --border:     rgba(0,255,209,0.12);
-  --border2:    rgba(0,255,209,0.22);
-  --teal:       #00FFD1;
-  --teal-dim:   rgba(0,255,209,0.65);
-  --teal-glow:  rgba(0,255,209,0.08);
-  --teal-glow2: rgba(0,255,209,0.15);
-  --blue:       #0A84FF;
-  --blue-lt:    rgba(10,132,255,0.12);
-  --red:        #FF3B5C;
-  --red-lt:     rgba(255,59,92,0.12);
-  --gold:       #FFD60A;
-  --gold-lt:    rgba(255,214,10,0.1);
-  --green:      #30D158;
-  --green-lt:   rgba(48,209,88,0.1);
-  --text:       #E8F4F2;
-  --text-dim:   rgba(232,244,242,0.55);
-  --text-muted: rgba(232,244,242,0.3);
-  --mono:       'Share Tech Mono', monospace;
-  --display:    'Syne', sans-serif;
-  --body:       'Space Grotesk', sans-serif;
-  --radius:     14px;
-  --radius-lg:  22px;
-  --shadow:     0 0 40px rgba(0,255,209,0.05);
-  --shadow-lg:  0 8px 60px rgba(0,255,209,0.08);
+  --white:     #FFFFFF;
+  --bg:        #F0F4FB;
+  --surface:   #FFFFFF;
+  --surface2:  #EEF3FF;
+  --border:    #DDE5F4;
+  --border2:   #C7D6F0;
+
+  --blue:      #2563EB;
+  --blue-lt:   #EEF3FF;
+  --blue-mid:  #DBEAFE;
+  --blue-dk:   #1D4ED8;
+
+  --coral:     #F05438;
+  --coral-lt:  #FFF1EE;
+
+  --teal:      #0E9580;
+  --teal-lt:   #ECFDF5;
+
+  --gold:      #D97706;
+  --gold-lt:   #FFFBEB;
+
+  --ink:       #111827;
+  --ink2:      #374151;
+  --ink3:      #6B7280;
+  --ink4:      #9CA3AF;
+
+  --shadow-sm: 0 1px 4px rgba(37,99,235,0.07), 0 2px 12px rgba(37,99,235,0.05);
+  --shadow-md: 0 4px 20px rgba(37,99,235,0.10);
+  --shadow-lg: 0 12px 40px rgba(37,99,235,0.14);
+
+  --radius:    16px;
+  --radius-lg: 24px;
+  --mono:      'JetBrains Mono', monospace;
+  --display:   'DM Serif Display', serif;
+  --body:      'DM Sans', sans-serif;
 }}
 
-*, *::before, *::after {{ box-sizing: border-box; margin: 0; }}
+*, *::before, *::after {{ box-sizing: border-box; }}
 
 html, body,
 [data-testid="stAppViewContainer"],
 [data-testid="stApp"] {{
   background: var(--bg) !important;
   font-family: var(--body) !important;
-  color: var(--text) !important;
+  color: var(--ink) !important;
 }}
 
-/* ── COCKPIT BACKGROUND ── */
 [data-testid="stAppViewContainer"]::before {{
   content: "";
   position: fixed; top: 0; left: 0;
@@ -249,328 +212,291 @@ html, body,
   z-index: 0; pointer-events: none;
   background-image: url("data:image/svg+xml;base64,{b64_svg}");
   background-repeat: no-repeat;
-  background-position: center 40%;
-  background-size: 90% auto;
-  opacity: 0.22;
-}}
-
-/* Scanline overlay */
-[data-testid="stAppViewContainer"]::after {{
-  content: "";
-  position: fixed; top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: 1; pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,255,209,0.012) 2px,
-    rgba(0,255,209,0.012) 4px
-  );
+  background-position: center 38%;
+  background-size: 88% auto;
+  opacity: 0.15;
 }}
 
 [data-testid="stMainBlockContainer"] {{
-  padding-top: 1.5rem !important;
-  max-width: 1340px !important;
+  padding-top: 0 !important;
+  max-width: 1360px !important;
   position: relative;
   z-index: 10;
+  animation: fadein 0.35s ease;
+}}
+@keyframes fadein {{
+  from {{ opacity: 0; transform: translateY(6px); }}
+  to   {{ opacity: 1; transform: translateY(0); }}
 }}
 
 #MainMenu, footer, header {{ visibility: hidden; }}
 [data-testid="stDecoration"] {{ display: none; }}
 [data-testid="collapsedControl"] {{ display: none; }}
 
-/* ── TYPOGRAPHY ── */
 h1, h2, h3, h4, h5 {{
   font-family: var(--display) !important;
-  color: var(--text) !important;
+  color: var(--ink) !important;
 }}
 p, li, span, div, label {{
   font-family: var(--body) !important;
 }}
 
-/* ── RADIO NAV ── */
+/* ── NAV BAR ── */
 div[data-testid="stRadio"] > div[role="radiogroup"] {{
   display: flex;
   flex-direction: row;
-  gap: 6px;
-  background: var(--surface);
+  gap: 4px;
+  background: var(--white);
   padding: 5px;
   border-radius: 50px;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   flex-wrap: wrap;
   justify-content: center;
-  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
 }}
 div[data-testid="stRadio"] label {{
   background: transparent;
   padding: 8px 22px !important;
-  border-radius: 30px !important;
+  border-radius: 40px !important;
   border: none !important;
   cursor: pointer;
-  transition: all 0.25s ease !important;
+  transition: all 0.2s ease !important;
   font-family: var(--mono) !important;
-  font-size: 0.72rem !important;
-  letter-spacing: 0.12em !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
-  color: var(--text-dim) !important;
+  color: var(--ink3) !important;
   box-shadow: none !important;
 }}
 div[data-testid="stRadio"] label:hover {{
-  color: var(--teal) !important;
-  background: var(--teal-glow) !important;
+  color: var(--blue) !important;
+  background: var(--blue-lt) !important;
 }}
 div[data-testid="stRadio"] label[data-checked="true"] {{
-  background: linear-gradient(135deg, rgba(0,255,209,0.15), rgba(0,255,209,0.08)) !important;
-  border: none !important;
-  box-shadow: 0 0 20px rgba(0,255,209,0.15), inset 0 0 12px rgba(0,255,209,0.05) !important;
+  background: var(--blue) !important;
+  box-shadow: 0 2px 12px rgba(37,99,235,0.28) !important;
 }}
 div[data-testid="stRadio"] label[data-checked="true"] * {{
-  color: var(--teal) !important;
+  color: white !important;
   font-weight: 600 !important;
 }}
 div[data-testid="stRadio"] label > div:first-child {{ display: none !important; }}
 
 /* ── METRICS ── */
 [data-testid="stMetric"] {{
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
+  background: var(--white) !important;
+  border: 1.5px solid var(--border) !important;
   border-radius: var(--radius) !important;
-  padding: 1.2rem 1.4rem !important;
-  border-top: 2px solid var(--teal) !important;
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(0,255,209,0.06) !important;
-  backdrop-filter: blur(8px) !important;
+  padding: 1.4rem 1.6rem 1.2rem !important;
+  box-shadow: var(--shadow-sm) !important;
   position: relative;
   overflow: hidden;
 }}
-[data-testid="stMetric"]::before {{
+[data-testid="stMetric"]::after {{
   content: "";
-  position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--teal-dim), transparent);
-  opacity: 0.4;
+  position: absolute;
+  left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--blue);
+  border-radius: 16px 0 0 16px;
 }}
 [data-testid="stMetricValue"] {{
   font-family: var(--display) !important;
-  font-size: 1.9rem !important;
-  font-weight: 800 !important;
-  color: var(--teal) !important;
+  font-size: 2rem !important;
+  font-weight: 400 !important;
+  color: var(--ink) !important;
 }}
 [data-testid="stMetricLabel"] {{
   font-family: var(--mono) !important;
   font-size: 0.58rem !important;
-  letter-spacing: 0.18em !important;
+  letter-spacing: 0.15em !important;
   text-transform: uppercase !important;
-  color: var(--text-muted) !important;
+  color: var(--ink4) !important;
 }}
 [data-testid="stMetricDelta"] {{
   font-family: var(--mono) !important;
   font-size: 0.62rem !important;
 }}
 
-/* ── SELECT BOX ── */
+/* ── SELECT ── */
 [data-baseweb="select"] {{
   border-radius: var(--radius) !important;
   border-color: var(--border) !important;
-  background: var(--surface) !important;
+  background: var(--white) !important;
   font-family: var(--body) !important;
-  color: var(--text) !important;
 }}
-[data-baseweb="select"] * {{ color: var(--text) !important; }}
+[data-baseweb="select"] * {{ color: var(--ink) !important; }}
 
-/* ── SLIDERS ── */
-[data-testid="stSlider"] [data-baseweb="slider"] {{
-  --track-fill: var(--teal) !important;
-}}
+/* ── SLIDER ── */
 [data-testid="stSlider"] [role="slider"] {{
-  background: var(--teal) !important;
-  border-color: var(--bg) !important;
-  box-shadow: 0 0 12px rgba(0,255,209,0.5) !important;
+  background: var(--blue) !important;
+  border-color: white !important;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.2) !important;
 }}
 
-/* ── CONTAINER BORDERS ── */
+/* ── BORDERED CONTAINER ── */
 [data-testid="stVerticalBlockBorderWrapper"] > div {{
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
+  background: var(--white) !important;
+  border: 1.5px solid var(--border) !important;
   border-radius: var(--radius-lg) !important;
-  backdrop-filter: blur(12px) !important;
+  box-shadow: var(--shadow-sm) !important;
 }}
 
 /* ── DATAFRAME ── */
 [data-testid="stDataFrame"] {{
-  border: 1px solid var(--border) !important;
+  border: 1.5px solid var(--border) !important;
   border-radius: var(--radius) !important;
+  overflow: hidden !important;
 }}
 
-/* ── SHARED COMPONENTS ── */
-.alert-box {{
-  border-radius: var(--radius);
-  padding: 1.2rem 1.5rem;
-  border: 1px solid;
-  border-left: 3px solid;
-  margin: 1rem 0;
-  backdrop-filter: blur(8px);
-}}
-.alert-critical {{
-  background: var(--red-lt);
-  border-color: rgba(255,59,92,0.25);
-  border-left-color: var(--red);
-}}
-.alert-warning {{
-  background: var(--gold-lt);
-  border-color: rgba(255,214,10,0.2);
-  border-left-color: var(--gold);
-}}
-.alert-good {{
-  background: var(--green-lt);
-  border-color: rgba(48,209,88,0.2);
-  border-left-color: var(--green);
-}}
-
+/* ── COMPONENTS ── */
 .card {{
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--white);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.8rem 2rem;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-sm);
   margin-bottom: 1.2rem;
-  backdrop-filter: blur(12px);
   position: relative;
-  overflow: hidden;
 }}
-.card::before {{
-  content: "";
-  position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,255,209,0.3), transparent);
-}}
-.card-accent {{
-  background: linear-gradient(135deg, var(--surface2), var(--surface));
-  border: 1px solid var(--border2);
+.card-blue {{
+  background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 55%, #3B82F6 100%);
   border-radius: var(--radius-lg);
   padding: 1.8rem 2rem;
   box-shadow: var(--shadow-lg);
   margin-bottom: 1.2rem;
-  position: relative;
-  overflow: hidden;
 }}
-.card-accent::after {{
-  content: "";
-  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,255,209,0.2), transparent);
+.alert-box {{
+  border-radius: var(--radius);
+  padding: 1.2rem 1.5rem;
+  border: 1.5px solid;
+  margin: 1rem 0;
 }}
+.alert-critical {{ background: var(--coral-lt); border-color: rgba(240,84,56,0.3); }}
+.alert-warning  {{ background: var(--gold-lt);  border-color: rgba(217,119,6,0.3); }}
+.alert-good     {{ background: var(--teal-lt);  border-color: rgba(14,149,128,0.3); }}
 
 .rule {{
   display: flex; align-items: center; gap: 1rem;
-  margin: 2.5rem 0 2rem;
+  margin: 2.4rem 0 1.8rem;
 }}
-.rule-line {{
-  flex: 1; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border2), transparent);
-}}
+.rule-line  {{ flex: 1; height: 1px; background: var(--border2); }}
 .rule-label {{
   font-family: var(--mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--teal-dim);
+  font-size: 0.58rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--blue);
   white-space: nowrap;
 }}
 
-.pill-grid {{ display: flex; flex-wrap: wrap; gap: 7px; margin-top: 1rem; }}
+.pill-grid {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1rem; }}
 .pill {{
-  background: var(--teal-glow);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 11px;
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  color: var(--teal-dim);
-  letter-spacing: 0.05em;
+  background: var(--blue-lt);
+  border: 1px solid var(--blue-mid);
+  border-radius: 8px; padding: 4px 12px;
+  font-family: var(--mono); font-size: 0.62rem;
+  color: var(--blue); letter-spacing: 0.04em; font-weight: 500;
 }}
 
-/* ── HERO PULSE DOT ── */
-.hero-tag-dot {{
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--teal);
-  animation: pulse-dot 1.8s ease-in-out infinite;
-  box-shadow: 0 0 8px var(--teal);
+.live-dot {{
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #4ADE80; display: inline-block;
+  animation: blink 1.6s ease-in-out infinite;
+  box-shadow: 0 0 6px #4ADE80;
 }}
-@keyframes pulse-dot {{
-  0%, 100% {{ transform: scale(1); opacity: 1; box-shadow: 0 0 8px var(--teal); }}
-  50% {{ transform: scale(1.5); opacity: 0.6; box-shadow: 0 0 16px var(--teal); }}
-}}
-
-/* ── GLITCH TITLE EFFECT ── */
-@keyframes flicker {{
-  0%, 99% {{ opacity: 1; }}
-  100% {{ opacity: 0.9; }}
+@keyframes blink {{
+  0%, 100% {{ opacity: 1; }} 50% {{ opacity: 0.35; }}
 }}
 </style>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
-# PLOT DEFAULTS
+# PLOT THEME
 # ─────────────────────────────────────────────
 PLOT_LAYOUT = dict(
     paper_bgcolor='rgba(0,0,0,0)',
     plot_bgcolor='rgba(0,0,0,0)',
-    font=dict(family='Space Grotesk, sans-serif', color='rgba(232,244,242,0.7)'),
-    margin=dict(l=24, r=24, t=48, b=40),
+    font=dict(family='DM Sans, sans-serif', color='#374151'),
+    margin=dict(l=24, r=24, t=52, b=40),
     xaxis=dict(
-        gridcolor='rgba(0,255,209,0.06)',
-        linecolor='rgba(0,255,209,0.1)',
-        tickfont=dict(size=10, color='rgba(232,244,242,0.4)', family='Share Tech Mono'),
+        gridcolor='rgba(37,99,235,0.07)',
+        linecolor='rgba(37,99,235,0.15)',
+        tickfont=dict(size=10, color='#9CA3AF', family='JetBrains Mono'),
         zeroline=False,
     ),
     yaxis=dict(
-        gridcolor='rgba(0,255,209,0.06)',
-        linecolor='rgba(0,255,209,0.1)',
-        tickfont=dict(size=10, color='rgba(232,244,242,0.4)', family='Share Tech Mono'),
+        gridcolor='rgba(37,99,235,0.07)',
+        linecolor='rgba(37,99,235,0.15)',
+        tickfont=dict(size=10, color='#9CA3AF', family='JetBrains Mono'),
         zeroline=False,
     ),
-    colorway=['#00FFD1', '#0A84FF', '#FF3B5C', '#FFD60A', '#30D158'],
+    colorway=['#2563EB', '#F05438', '#0E9580', '#D97706', '#7C3AED'],
 )
+BAR_COLORS = ['#2563EB', '#3B82F6', '#93C5FD', '#BFDBFE']
 
 # ─────────────────────────────────────────────
-# TOP HEADER
+# HEADER BANNER
 # ─────────────────────────────────────────────
 st.markdown("""
-<div style="padding: 0.5rem 0 1.8rem; text-align: center; position: relative;">
-  <div style="
-    display: inline-block;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.35em;
-    color: rgba(0,255,209,0.5);
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    border: 1px solid rgba(0,255,209,0.15);
-    padding: 3px 14px;
-    border-radius: 20px;
-  ">v2.0 · Active · NASA C-MAPSS</div>
-  <div style="
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    font-weight: 800;
-    color: #E8F4F2;
-    letter-spacing: -0.02em;
-    line-height: 1;
-  ">AERO<span style="color: #00FFD1;">MIND</span></div>
-  <div style="
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.22em;
-    color: rgba(0,255,209,0.45);
-    text-transform: uppercase;
-    margin-top: 5px;
-  ">Engine Intelligence Platform</div>
+<div style="
+  background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 55%, #3B82F6 100%);
+  border-radius: 0 0 32px 32px;
+  padding: 2.2rem 3rem 2rem;
+  margin: -1rem -1rem 2rem -1rem;
+  position: relative; overflow: hidden;
+  box-shadow: 0 8px 40px rgba(37,99,235,0.25);
+">
+  <div style="position:absolute;top:-60px;right:-60px;width:260px;height:260px;border-radius:50%;
+    background:rgba(255,255,255,0.05);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-80px;right:80px;width:180px;height:180px;border-radius:50%;
+    background:rgba(255,255,255,0.04);pointer-events:none;"></div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:8px;
+        background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);
+        border-radius:20px;padding:4px 14px;
+        font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+        letter-spacing:0.14em;color:rgba(255,255,255,0.85);
+        text-transform:uppercase;margin-bottom:0.8rem;">
+        <span class="live-dot"></span> Live Monitoring Active
+      </div>
+      <div style="font-family:'DM Serif Display',serif;
+        font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:400;
+        color:white;line-height:1.1;letter-spacing:-0.01em;">
+        ✈ AERO<em style="font-style:italic;opacity:0.85;">MIND</em>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;
+        letter-spacing:0.2em;color:rgba(255,255,255,0.5);
+        text-transform:uppercase;margin-top:5px;">
+        Engine Intelligence Platform
+      </div>
+    </div>
+    <div style="display:flex;gap:2.5rem;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.8rem;color:white;">8.96</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:0.15em;color:rgba(255,255,255,0.45);text-transform:uppercase;">RMSE</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.8rem;color:white;">95.3%</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:0.15em;color:rgba(255,255,255,0.45);text-transform:uppercase;">R² Score</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.8rem;color:white;">4</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:0.15em;color:rgba(255,255,255,0.45);text-transform:uppercase;">ML Models</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.8rem;color:white;">$2M+</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:0.15em;color:rgba(255,255,255,0.45);text-transform:uppercase;">Savings/yr</div>
+      </div>
+    </div>
+  </div>
 </div>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
 # NAVIGATION
 # ─────────────────────────────────────────────
-col_nav1, col_nav2, col_nav3 = st.columns([1, 6, 1])
-with col_nav2:
+c_l, c_mid, c_r = st.columns([1, 5, 1])
+with c_mid:
     page = st.radio(
         "Navigate",
         ["Home", "RUL Prediction", "Model Performance", "Business Impact", "About"],
@@ -596,138 +522,147 @@ def maintenance_cost(rul, prevented=True):
 # HOME
 # ═══════════════════════════════════════════
 if page == "Home":
-    # Hero
-    st.markdown("""
-    <div style="
-      background: linear-gradient(135deg, rgba(5,18,36,0.95) 0%, rgba(7,26,50,0.9) 100%);
-      border: 1px solid rgba(0,255,209,0.18);
-      border-radius: 24px;
-      padding: 3.5rem 3.5rem 3rem;
-      margin-bottom: 2rem;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 80px rgba(0,255,209,0.06), 0 20px 60px rgba(0,0,0,0.4);
-    ">
-      <!-- Corner accent -->
-      <div style="position:absolute;top:0;left:0;width:120px;height:120px;
-        border-top:2px solid rgba(0,255,209,0.3);border-left:2px solid rgba(0,255,209,0.3);
-        border-radius:24px 0 0 0;pointer-events:none;"></div>
-      <div style="position:absolute;bottom:0;right:0;width:80px;height:80px;
-        border-bottom:1px solid rgba(0,255,209,0.15);border-right:1px solid rgba(0,255,209,0.15);
-        border-radius:0 0 24px 0;pointer-events:none;"></div>
 
-      <div style="
-        display: inline-flex; align-items: center; gap: 8px;
-        background: rgba(0,255,209,0.08);
-        border: 1px solid rgba(0,255,209,0.2);
-        border-radius: 30px;
-        padding: 5px 16px 5px 10px;
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 0.6rem; letter-spacing: 0.16em;
-        color: #00FFD1; margin-bottom: 1.5rem;
-        text-transform: uppercase;
-      ">
-        <span class="hero-tag-dot"></span>Live Monitoring Active
-      </div>
+    col_hero, col_info = st.columns([1.5, 1], gap="large")
 
-      <h1 style="
-        font-family: 'Syne', sans-serif !important;
-        font-size: clamp(2.4rem, 5vw, 4rem) !important;
-        font-weight: 800 !important;
-        color: #E8F4F2 !important;
-        line-height: 1.05 !important;
-        margin: 0 0 0.6rem !important;
-        letter-spacing: -0.02em;
-      ">Aircraft Engine<br>
-      <span style="color: #00FFD1; font-style: italic;">Health Intelligence</span></h1>
-
-      <p style="
-        font-family: 'Space Grotesk', sans-serif !important;
-        font-size: 1rem !important;
-        font-weight: 300 !important;
-        color: rgba(232,244,242,0.55) !important;
-        max-width: 500px !important;
-        line-height: 1.75 !important;
-        margin-bottom: 2.5rem !important;
-      ">Predicting Remaining Useful Life of turbofan engines using deep learning —
-      50% beyond industry benchmarks on NASA C-MAPSS data.</p>
-
-      <div style="display: flex; gap: 3rem; flex-wrap: wrap;">
-        <div>
-          <div style="font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:#00FFD1;line-height:1;text-shadow:0 0 20px rgba(0,255,209,0.4);">8.96</div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(232,244,242,0.3);margin-top:6px;">RMSE (cycles)</div>
+    with col_hero:
+        st.markdown("""
+        <div class="card" style="padding:2.6rem 2.8rem;border-left:5px solid #2563EB;">
+          <p style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+            letter-spacing:0.22em;text-transform:uppercase;color:#2563EB;margin-bottom:0.8rem;">
+            Predictive Maintenance · NASA C-MAPSS
+          </p>
+          <h1 style="font-family:'DM Serif Display',serif!important;
+            font-size:clamp(2.2rem,4vw,3.4rem)!important;font-weight:400!important;
+            color:#111827!important;line-height:1.1!important;margin-bottom:1rem!important;
+            letter-spacing:-0.01em;">
+            Aircraft Engine<br>
+            <span style="color:#2563EB;font-style:italic;">Health Intelligence</span>
+          </h1>
+          <p style="font-size:1rem;font-weight:300;color:#6B7280;line-height:1.75;
+            margin-bottom:0;max-width:440px;">
+            Deep learning models predicting Remaining Useful Life of turbofan engines —
+            50% beyond industry benchmarks on the NASA C-MAPSS dataset.
+          </p>
         </div>
-        <div>
-          <div style="font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:#00FFD1;line-height:1;text-shadow:0 0 20px rgba(0,255,209,0.4);">95.3%</div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(232,244,242,0.3);margin-top:6px;">R² Accuracy</div>
-        </div>
-        <div>
-          <div style="font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:#00FFD1;line-height:1;text-shadow:0 0 20px rgba(0,255,209,0.4);">4</div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(232,244,242,0.3);margin-top:6px;">ML Models</div>
-        </div>
-        <div>
-          <div style="font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:#00FFD1;line-height:1;text-shadow:0 0 20px rgba(0,255,209,0.4);">$2M+</div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(232,244,242,0.3);margin-top:6px;">Annual Savings</div>
-        </div>
-      </div>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
 
-    c1, c2, c3, c4 = st.columns(4)
-    with c1: st.metric("Models Trained", "4", help="RF, XGBoost, LightGBM, LSTM")
-    with c2: st.metric("Features Engineered", "117", delta="+106 engineered")
-    with c3: st.metric("Training Engines", "80", help="16,561 training samples")
-    with c4: st.metric("Validation R²", "95.3%", delta="50% better than target")
+    with col_info:
+        st.markdown("""
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="card" style="border-top:4px solid #F05438;">
+            <p style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;
+              letter-spacing:0.2em;text-transform:uppercase;color:#9CA3AF;margin-bottom:0.3rem;">Best Model</p>
+            <div style="font-family:'DM Serif Display',serif;font-size:2rem;color:#111827;">LSTM</div>
+            <p style="font-size:0.82rem;color:#6B7280;margin-top:0.2rem;">RMSE 8.96 · R² 0.9528</p>
+          </div>
+          <div class="card" style="border-top:4px solid #0E9580;">
+            <p style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;
+              letter-spacing:0.2em;text-transform:uppercase;color:#9CA3AF;margin-bottom:0.3rem;">Industry Target</p>
+            <div style="font-family:'DM Serif Display',serif;font-size:2rem;color:#111827;">18 RMSE</div>
+            <p style="font-size:0.82rem;color:#0E9580;margin-top:0.2rem;">We beat it by 50% ↗</p>
+          </div>
+          <div class="card" style="border-top:4px solid #D97706;">
+            <p style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;
+              letter-spacing:0.2em;text-transform:uppercase;color:#9CA3AF;margin-bottom:0.3rem;">Features</p>
+            <div style="font-family:'DM Serif Display',serif;font-size:2rem;color:#111827;">117</div>
+            <p style="font-size:0.82rem;color:#6B7280;margin-top:0.2rem;">+106 engineered from 11 raw</p>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown("""<div class="rule"><div class="rule-line"></div><span class="rule-label">Model Comparison</span><div class="rule-line"></div></div>""", unsafe_allow_html=True)
+    st.markdown("""<div class="rule"><div class="rule-line"></div><span class="rule-label">Model Comparison — All Four Models vs Industry Target</span><div class="rule-line"></div></div>""", unsafe_allow_html=True)
 
-    fig = go.Figure(go.Bar(
-        x=['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'],
-        y=[8.96, 9.41, 9.52, 9.85],
-        marker=dict(
-            color=['#00FFD1', 'rgba(0,255,209,0.6)', 'rgba(0,255,209,0.4)', 'rgba(0,255,209,0.25)'],
-            cornerradius=8,
-            line=dict(color='rgba(0,255,209,0.3)', width=1)
-        ),
-        text=[8.96, 9.41, 9.52, 9.85], textposition='outside',
-        textfont=dict(family='Share Tech Mono', size=12, color='rgba(232,244,242,0.7)'),
-        hovertemplate='<b>%{x}</b><br>RMSE: %{y} cycles<extra></extra>'
-    ))
-    fig.add_hline(y=18, line_dash="dot", line_color="#FF3B5C", line_width=1.5,
-        annotation_text="Industry Target: 18 cycles",
-        annotation_font=dict(color='#FF3B5C', size=10, family='Share Tech Mono'))
-    fig.update_layout(
-        **PLOT_LAYOUT,
-        title=dict(text="Validation RMSE — All Models", font=dict(family='Syne', size=17, color='#E8F4F2')),
-        yaxis_title="RMSE (cycles)", showlegend=False, height=360
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    col_chart1, col_chart2 = st.columns([2, 1], gap="large")
+
+    with col_chart1:
+        fig = go.Figure()
+        fig.add_trace(go.Bar(
+            x=['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'],
+            y=[8.96, 9.41, 9.52, 9.85],
+            marker=dict(color=BAR_COLORS, cornerradius=10,
+                        line=dict(color='white', width=1.5)),
+            text=[8.96, 9.41, 9.52, 9.85], textposition='outside',
+            textfont=dict(family='JetBrains Mono', size=12, color='#374151'),
+            hovertemplate='<b>%{x}</b><br>RMSE: %{y} cycles<extra></extra>'
+        ))
+        fig.add_hline(y=18, line_dash="dot", line_color="#F05438", line_width=2,
+            annotation_text="Industry Target: 18 cycles",
+            annotation_font=dict(color='#F05438', size=10, family='JetBrains Mono'))
+        fig.update_layout(
+            **PLOT_LAYOUT,
+            title=dict(text="Validation RMSE — Lower is Better",
+                       font=dict(family='DM Serif Display', size=18, color='#111827')),
+            yaxis_title="RMSE (cycles)", showlegend=False, height=360
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+    with col_chart2:
+        c1, c2 = st.columns(2)
+        with c1: st.metric("Models", "4", help="RF, XGBoost, LightGBM, LSTM")
+        with c2: st.metric("R²", "95.3%", delta="+50%")
+        c3, c4 = st.columns(2)
+        with c3: st.metric("Engines", "80")
+        with c4: st.metric("Samples", "16,561")
+
+        st.markdown("""
+        <div class="card" style="margin-top:0.4rem;background:#EEF3FF;border-color:#BFDBFE;">
+          <p style="font-family:'JetBrains Mono',monospace;font-size:0.56rem;
+            letter-spacing:0.18em;text-transform:uppercase;color:#2563EB;margin-bottom:0.6rem;">How It Works</p>
+          <ol style="font-size:0.84rem;color:#374151;line-height:1.9;padding-left:1.1rem;margin:0;">
+            <li>Raw sensor data ingested</li>
+            <li>117 features engineered</li>
+            <li>4 ML models trained</li>
+            <li>RUL predicted in real time</li>
+            <li>Maintenance alerts triggered</li>
+          </ol>
+        </div>
+        """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════
 # RUL PREDICTION
 # ═══════════════════════════════════════════
 elif page == "RUL Prediction":
     st.markdown("""
-    <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,255,209,0.6);margin-bottom:0.4rem;display:block;">Inference Console</span>
-    <h2 style="font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:#E8F4F2;line-height:1.05;margin-bottom:0.4rem;letter-spacing:-0.01em;">RUL Prediction</h2>
-    <p style="font-size:0.95rem;font-weight:300;color:rgba(232,244,242,0.5);line-height:1.7;margin-bottom:2rem;">Adjust sensor readings to compute the engine's Remaining Useful Life in real time.</p>
+    <div style="margin-bottom:0.4rem;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+        letter-spacing:0.28em;text-transform:uppercase;color:#2563EB;">Inference Console</span>
+    </div>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:2.6rem;font-weight:400;
+      color:#111827;line-height:1.05;margin-bottom:0.4rem;">RUL Prediction</h2>
+    <p style="font-size:0.96rem;font-weight:300;color:#6B7280;line-height:1.7;
+      margin-bottom:1.8rem;max-width:580px;">
+      Adjust sensor readings below to compute the engine's Remaining Useful Life in real time.
+    </p>
     """, unsafe_allow_html=True)
 
-    chosen = st.selectbox("Select Active ML Model", ['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'])
+    top_l, top_r = st.columns([2, 1], gap="medium")
+    with top_l:
+        chosen = st.selectbox("Select Active ML Model", ['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'])
 
     st.markdown("""<div class="rule"><div class="rule-line"></div><span class="rule-label">Input Parameters</span><div class="rule-line"></div></div>""", unsafe_allow_html=True)
 
-    col_sliders, col_result = st.columns([1.1, 1], gap="large")
+    col_sliders, col_result = st.columns([1.15, 1], gap="large")
 
     with col_sliders:
         with st.container(border=True):
-            st.markdown("<p style=\"font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;color:#00FFD1;margin-bottom:1.2rem;opacity:0.8;\">Sensor Dashboard</p>", unsafe_allow_html=True)
+            st.markdown("""<p style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;
+              letter-spacing:0.2em;text-transform:uppercase;color:#2563EB;
+              margin-bottom:1.2rem;padding-bottom:0.8rem;border-bottom:1px solid #DDE5F4;">
+              Sensor Dashboard</p>""", unsafe_allow_html=True)
 
-            input_mode = st.radio("Control Interface", ["🎛️ Simple Controls", "⚙️ Advanced Sensors (Engineers)"], horizontal=True)
-            st.markdown("<hr style='margin:0.5rem 0 1rem 0; border-color: rgba(0,255,209,0.1);'>", unsafe_allow_html=True)
+            input_mode = st.radio(
+                "Control Interface",
+                ["🎛️ Simple Controls", "⚙️ Advanced Sensors (Engineers)"],
+                horizontal=True
+            )
+            st.markdown("<div style='margin:0.4rem 0 1rem;height:1px;background:#EEF3FF;'></div>", unsafe_allow_html=True)
 
             if input_mode == "🎛️ Simple Controls":
-                scenario = st.selectbox("Flight Scenario Presets", ["✈️ Healthy Engine (Nominal)", "⚠️ Moderate Wear (Mid-Life)", "🚨 Impending Failure (Critical)"])
+                scenario = st.selectbox(
+                    "Flight Scenario Presets",
+                    ["✈️ Healthy Engine (Nominal)", "⚠️ Moderate Wear (Mid-Life)", "🚨 Impending Failure (Critical)"]
+                )
                 if "Healthy" in scenario:    def_t, def_p, def_r = 10, 10, 10
                 elif "Moderate" in scenario: def_t, def_p, def_r = 45, 50, 40
                 else:                        def_t, def_p, def_r = 85, 90, 85
@@ -749,65 +684,53 @@ elif page == "RUL Prediction":
                 s12 = st.slider("LPT Outlet Temp [T50] (°R)", 518.0, 524.0, 521.0, 0.5)
 
                 baseline = 100
-                base_rul = int(max(0, min(125, baseline - (s2 - 642.5) * 12 - (s3 - 1590) / 4 - (s4 - 1410) / 3)))
+                base_rul = int(max(0, min(125, baseline
+                    - (s2 - 642.5) * 12
+                    - (s3 - 1590) / 4
+                    - (s4 - 1410) / 3)))
 
     with col_result:
         rul_pred = max(0, min(125, base_rul))
         label, kind = rul_status(rul_pred)
         cost = maintenance_cost(rul_pred)
 
-        color_map = {
-            "critical": "#FF3B5C",
-            "warning":  "#FFD60A",
-            "good":     "#00FFD1"
-        }
-        bg_map = {
-            "critical": "rgba(255,59,92,0.07)",
-            "warning":  "rgba(255,214,10,0.07)",
-            "good":     "rgba(0,255,209,0.05)"
-        }
-        border_map = {
-            "critical": "rgba(255,59,92,0.3)",
-            "warning":  "rgba(255,214,10,0.25)",
-            "good":     "rgba(0,255,209,0.25)"
-        }
-        glow_map = {
-            "critical": "0 0 40px rgba(255,59,92,0.12)",
-            "warning":  "0 0 40px rgba(255,214,10,0.1)",
-            "good":     "0 0 40px rgba(0,255,209,0.1)"
-        }
+        color_map = {"critical": "#F05438", "warning": "#D97706", "good": "#0E9580"}
+        bg_map    = {"critical": "#FFF1EE", "warning": "#FFFBEB", "good": "#ECFDF5"}
+        bdr_map   = {"critical": "rgba(240,84,56,0.25)", "warning": "rgba(217,119,6,0.2)", "good": "rgba(14,149,128,0.2)"}
 
         st.markdown(f"""
         <div style="
           background:{bg_map[kind]};
-          border:1px solid {border_map[kind]};
-          border-radius:20px;padding:2.5rem 2rem;text-align:center;
-          box-shadow:{glow_map[kind]};
+          border:2px solid {bdr_map[kind]};
+          border-radius:24px;padding:2.8rem 2rem 2rem;
+          text-align:center;
+          box-shadow:0 8px 32px {bdr_map[kind]};
           position:relative;overflow:hidden;
         ">
-          <div style="position:absolute;top:0;left:0;right:0;height:2px;
-            background:linear-gradient(90deg,transparent,{color_map[kind]},transparent);
-            opacity:0.6;"></div>
-          <p style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.28em;
-             text-transform:uppercase;color:rgba(232,244,242,0.35);margin-bottom:0.6rem;">Remaining Useful Life</p>
-          <div style="font-family:'Syne',sans-serif;font-size:5.8rem;font-weight:800;
-              color:{color_map[kind]};line-height:1;letter-spacing:-0.04em;
-              text-shadow:0 0 40px {color_map[kind]}55;">{rul_pred}</div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.22em;
-              color:rgba(232,244,242,0.3);margin-bottom:1.4rem;">CYCLES REMAINING · {chosen}</div>
+          <div style="position:absolute;top:0;left:0;right:0;height:5px;
+            background:{color_map[kind]};border-radius:24px 24px 0 0;"></div>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+             letter-spacing:0.28em;text-transform:uppercase;
+             color:rgba(0,0,0,0.3);margin-bottom:0.5rem;">Remaining Useful Life</p>
+          <div style="font-family:'DM Serif Display',serif;font-size:6rem;
+              font-weight:400;color:{color_map[kind]};line-height:1;
+              letter-spacing:-0.04em;">{rul_pred}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;
+              letter-spacing:0.2em;color:rgba(0,0,0,0.28);margin-bottom:1.4rem;">
+            CYCLES REMAINING · {chosen}
+          </div>
           <span style="
             display:inline-flex;align-items:center;gap:7px;
-            border-radius:20px;padding:6px 16px;
-            font-family:'Share Tech Mono',monospace;font-size:0.62rem;
-            letter-spacing:0.1em;font-weight:500;
-            background:{bg_map[kind]};color:{color_map[kind]};
-            border:1px solid {border_map[kind]};
+            border-radius:30px;padding:7px 18px;
+            font-family:'JetBrains Mono',monospace;
+            font-size:0.65rem;letter-spacing:0.1em;font-weight:600;
+            background:white;color:{color_map[kind]};
+            border:1.5px solid {bdr_map[kind]};
+            box-shadow:0 2px 8px {bdr_map[kind]};
           ">
-            <span style="width:6px;height:6px;border-radius:50%;
-              background:{color_map[kind]};
-              box-shadow:0 0 8px {color_map[kind]};
-              animation:pulse-dot 1.5s ease-in-out infinite;">
-            </span>{label}
+            <span style="width:7px;height:7px;border-radius:50%;
+              background:{color_map[kind]};"></span>
+            {label}
           </span>
         </div>
         """, unsafe_allow_html=True)
@@ -816,42 +739,47 @@ elif page == "RUL Prediction":
 
         if kind == "critical":
             st.markdown(f"""<div class="alert-box alert-critical">
-                <h4 style="color:#FF3B5C!important;font-family:'Syne',sans-serif!important;font-size:1rem!important;margin:0 0 0.4rem!important;">🔴 Immediate Maintenance Required</h4>
-                <p style="color:rgba(255,100,120,0.85)!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.55!important;"><b>Action:</b> Ground and inspect within 5 flight cycles.</p>
-                <p style="color:rgba(255,100,120,0.85)!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.55!important;"><b>Scheduled maintenance cost:</b> ${cost:,} — vs $500,000+ unscheduled.</p>
+                <h4 style="color:#F05438!important;font-family:'DM Serif Display',serif!important;font-size:1rem!important;margin:0 0 0.5rem!important;">🔴 Immediate Maintenance Required</h4>
+                <p style="color:#7F1D1D!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.6!important;"><b>Action:</b> Ground and inspect within 5 flight cycles.</p>
+                <p style="color:#7F1D1D!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.6!important;"><b>Scheduled maintenance cost:</b> ${cost:,} — vs $500,000+ unscheduled.</p>
             </div>""", unsafe_allow_html=True)
         elif kind == "warning":
             st.markdown(f"""<div class="alert-box alert-warning">
-                <h4 style="color:#FFD60A!important;font-family:'Syne',sans-serif!important;font-size:1rem!important;margin:0 0 0.4rem!important;">⚠️ Maintenance Recommended</h4>
-                <p style="color:rgba(255,214,10,0.8)!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.55!important;"><b>Action:</b> Schedule preventive maintenance within 30 cycles.</p>
-                <p style="color:rgba(255,214,10,0.8)!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.55!important;"><b>Estimated cost:</b> ${cost:,}</p>
+                <h4 style="color:#D97706!important;font-family:'DM Serif Display',serif!important;font-size:1rem!important;margin:0 0 0.5rem!important;">⚠️ Maintenance Recommended</h4>
+                <p style="color:#78350F!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.6!important;"><b>Action:</b> Schedule preventive maintenance within 30 cycles.</p>
+                <p style="color:#78350F!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.6!important;"><b>Estimated cost:</b> ${cost:,}</p>
             </div>""", unsafe_allow_html=True)
         else:
             st.markdown("""<div class="alert-box alert-good">
-                <h4 style="color:#00FFD1!important;font-family:'Syne',sans-serif!important;font-size:1rem!important;margin:0 0 0.4rem!important;">✅ Engine Nominal</h4>
-                <p style="color:rgba(0,255,209,0.75)!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.55!important;"><b>Status:</b> No immediate action required.</p>
-                <p style="color:rgba(0,255,209,0.75)!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.55!important;">Continue standard monitoring intervals.</p>
+                <h4 style="color:#0E9580!important;font-family:'DM Serif Display',serif!important;font-size:1rem!important;margin:0 0 0.5rem!important;">✅ Engine Nominal</h4>
+                <p style="color:#064E3B!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.6!important;"><b>Status:</b> No immediate action required.</p>
+                <p style="color:#064E3B!important;font-size:0.84rem!important;margin:0.2rem 0!important;line-height:1.6!important;">Continue standard monitoring intervals.</p>
             </div>""", unsafe_allow_html=True)
 
         fig_g = go.Figure(go.Indicator(
             mode="gauge+number", value=rul_pred, domain={'x': [0, 1], 'y': [0, 1]},
-            title={'text': "RUL Health Index", 'font': {'family': 'Syne', 'size': 13, 'color': 'rgba(232,244,242,0.7)'}},
-            number={'font': {'family': 'Syne', 'size': 30, 'color': color_map[kind]}, 'suffix': ' cyc'},
+            title={'text': "RUL Health Index",
+                   'font': {'family': 'DM Serif Display', 'size': 14, 'color': '#374151'}},
+            number={'font': {'family': 'DM Serif Display', 'size': 30,
+                             'color': color_map[kind]}, 'suffix': ' cyc'},
             gauge={
                 'axis': {
                     'range': [0, 125],
-                    'tickfont': {'size': 9, 'color': 'rgba(232,244,242,0.3)', 'family': 'Share Tech Mono'},
-                    'tickcolor': 'rgba(0,255,209,0.15)'
+                    'tickfont': {'size': 9, 'color': '#9CA3AF', 'family': 'JetBrains Mono'},
+                    'tickcolor': 'rgba(37,99,235,0.2)'
                 },
-                'bar': {'color': color_map[kind], 'thickness': 0.2},
-                'bgcolor': 'rgba(0,0,0,0)',
-                'bordercolor': 'rgba(0,255,209,0.12)',
+                'bar': {'color': color_map[kind], 'thickness': 0.22},
+                'bgcolor': 'rgba(255,255,255,0.8)',
+                'bordercolor': 'rgba(37,99,235,0.1)',
                 'steps': [
-                    {'range': [0, 30],   'color': 'rgba(255,59,92,0.12)'},
-                    {'range': [30, 60],  'color': 'rgba(255,214,10,0.08)'},
-                    {'range': [60, 125], 'color': 'rgba(0,255,209,0.05)'}
+                    {'range': [0, 30],   'color': 'rgba(240,84,56,0.1)'},
+                    {'range': [30, 60],  'color': 'rgba(217,119,6,0.08)'},
+                    {'range': [60, 125], 'color': 'rgba(14,149,128,0.07)'}
                 ],
-                'threshold': {'line': {'color': '#FF3B5C', 'width': 2}, 'thickness': 0.8, 'value': 30}
+                'threshold': {
+                    'line': {'color': '#F05438', 'width': 2},
+                    'thickness': 0.8, 'value': 30
+                }
             }
         ))
         fig_g.update_layout(**PLOT_LAYOUT, height=240)
@@ -862,9 +790,16 @@ elif page == "RUL Prediction":
 # ═══════════════════════════════════════════
 elif page == "Model Performance":
     st.markdown("""
-    <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,255,209,0.6);margin-bottom:0.4rem;display:block;">Validation Results</span>
-    <h2 style="font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:#E8F4F2;line-height:1.05;margin-bottom:0.4rem;letter-spacing:-0.01em;">Model Performance</h2>
-    <p style="font-size:0.95rem;font-weight:300;color:rgba(232,244,242,0.5);line-height:1.7;margin-bottom:2rem;">Comprehensive comparison of all four trained models against the NASA C-MAPSS FD001 validation set.</p>
+    <div style="margin-bottom:0.4rem;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+        letter-spacing:0.28em;text-transform:uppercase;color:#2563EB;">Validation Results</span>
+    </div>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:2.6rem;font-weight:400;
+      color:#111827;line-height:1.05;margin-bottom:0.4rem;">Model Performance</h2>
+    <p style="font-size:0.96rem;font-weight:300;color:#6B7280;line-height:1.7;
+      margin-bottom:1.8rem;max-width:600px;">
+      Comprehensive comparison of all four trained models against the NASA C-MAPSS FD001 validation set.
+    </p>
     """, unsafe_allow_html=True)
 
     perf = {
@@ -885,36 +820,44 @@ elif page == "Model Performance":
 
     st.markdown("""<div class="rule"><div class="rule-line"></div><span class="rule-label">Charts</span><div class="rule-line"></div></div>""", unsafe_allow_html=True)
 
-    bar_colors = ['#00FFD1', 'rgba(0,255,209,0.6)', 'rgba(0,255,209,0.4)', 'rgba(0,255,209,0.22)']
-
     col1, col2 = st.columns(2, gap="medium")
     with col1:
         fig_r = go.Figure(go.Bar(
             x=df_perf['Model'], y=df_perf['RMSE'],
-            marker=dict(color=bar_colors, cornerradius=8, line=dict(color='rgba(0,255,209,0.2)', width=1)),
+            marker=dict(color=BAR_COLORS, cornerradius=10, line=dict(color='white', width=1.5)),
             text=df_perf['RMSE'], textposition='outside',
-            textfont=dict(family='Share Tech Mono', size=11, color='rgba(232,244,242,0.6)'),
+            textfont=dict(family='JetBrains Mono', size=11, color='#374151'),
             hovertemplate='<b>%{x}</b><br>RMSE: %{y:.2f}<extra></extra>'
         ))
-        fig_r.add_hline(y=18, line_dash="dot", line_color="#FF3B5C", line_width=1.5,
-            annotation_text="Target 18", annotation_font=dict(color='#FF3B5C', size=10, family='Share Tech Mono'))
-        fig_r.update_layout(**PLOT_LAYOUT, title=dict(text="RMSE — Lower is Better", font=dict(family='Syne', size=15, color='#E8F4F2')),
-            yaxis_title="RMSE (cycles)", showlegend=False, height=320)
+        fig_r.add_hline(y=18, line_dash="dot", line_color="#F05438", line_width=1.8,
+            annotation_text="Target 18",
+            annotation_font=dict(color='#F05438', size=10, family='JetBrains Mono'))
+        fig_r.update_layout(
+            **PLOT_LAYOUT,
+            title=dict(text="RMSE — Lower is Better",
+                       font=dict(family='DM Serif Display', size=17, color='#111827')),
+            yaxis_title="RMSE (cycles)", showlegend=False, height=320
+        )
         st.plotly_chart(fig_r, use_container_width=True)
 
     with col2:
         fig_r2 = go.Figure(go.Bar(
             x=df_perf['Model'], y=df_perf['R²'],
-            marker=dict(color=bar_colors, cornerradius=8, line=dict(color='rgba(0,255,209,0.2)', width=1)),
+            marker=dict(color=BAR_COLORS, cornerradius=10, line=dict(color='white', width=1.5)),
             text=[f"{v:.4f}" for v in df_perf['R²']], textposition='outside',
-            textfont=dict(family='Share Tech Mono', size=11, color='rgba(232,244,242,0.6)'),
+            textfont=dict(family='JetBrains Mono', size=11, color='#374151'),
             hovertemplate='<b>%{x}</b><br>R²: %{y:.4f}<extra></extra>'
         ))
-        fig_r2.update_layout(**PLOT_LAYOUT, title=dict(text="R² Score — Higher is Better", font=dict(family='Syne', size=15, color='#E8F4F2')),
-            yaxis_title="R² Score", showlegend=False, height=320)
+        fig_r2.update_layout(
+            **PLOT_LAYOUT,
+            title=dict(text="R² Score — Higher is Better",
+                       font=dict(family='DM Serif Display', size=17, color='#111827')),
+            yaxis_title="R² Score", showlegend=False, height=320
+        )
         fig_r2.update_yaxes(range=[0.93, 0.96])
         st.plotly_chart(fig_r2, use_container_width=True)
 
+    # ── RADAR — solid rgba strings, no string surgery ──
     categories = ['RMSE (inv)', 'MAE (inv)', 'R² Score', 'Speed', 'Explainability']
     radar_vals = {
         'LSTM':          [0.95, 0.90, 0.95, 0.5, 0.3],
@@ -922,27 +865,47 @@ elif page == "Model Performance":
         'LightGBM':      [0.90, 0.93, 0.93, 0.9, 0.9],
         'Random Forest': [0.87, 0.96, 0.92, 0.8, 0.9]
     }
-    radar_colors = ['#00FFD1', '#0A84FF', '#FFD60A', 'rgba(232,244,242,0.4)']
+    line_colors = ['#2563EB', '#F05438', '#0E9580', '#D97706']
+    fill_colors = [
+        'rgba(37,99,235,0.08)',
+        'rgba(240,84,56,0.08)',
+        'rgba(14,149,128,0.08)',
+        'rgba(217,119,6,0.08)',
+    ]
 
     fig_radar = go.Figure()
-    for (model, vals), col in zip(radar_vals.items(), radar_colors):
+    for (model, vals), lc, fc in zip(radar_vals.items(), line_colors, fill_colors):
         fig_radar.add_trace(go.Scatterpolar(
-            r=vals + [vals[0]], theta=categories + [categories[0]],
-            fill='toself', name=model,
-            line=dict(color=col, width=2),
-            fillcolor=col.replace(')', ',0.06)').replace('rgb', 'rgba') if col.startswith('rgb') else col + '10',
-            opacity=0.9
+            r=vals + [vals[0]],
+            theta=categories + [categories[0]],
+            fill='toself',
+            name=model,
+            line=dict(color=lc, width=2),
+            fillcolor=fc,
         ))
     fig_radar.update_layout(
         **PLOT_LAYOUT,
-        title=dict(text="Multi-Dimensional Model Comparison", font=dict(family='Syne', size=15, color='#E8F4F2')),
+        title=dict(text="Multi-Dimensional Model Comparison",
+                   font=dict(family='DM Serif Display', size=17, color='#111827')),
         polar=dict(
-            bgcolor='rgba(0,0,0,0)',
-            radialaxis=dict(visible=True, range=[0, 1], gridcolor='rgba(0,255,209,0.08)', tickfont=dict(size=9, family='Share Tech Mono', color='rgba(232,244,242,0.3)')),
-            angularaxis=dict(gridcolor='rgba(0,255,209,0.08)', tickfont=dict(size=10, color='rgba(232,244,242,0.6)', family='Space Grotesk'))
+            bgcolor='rgba(255,255,255,0.8)',
+            radialaxis=dict(
+                visible=True, range=[0, 1],
+                gridcolor='rgba(37,99,235,0.1)',
+                tickfont=dict(size=9, family='JetBrains Mono', color='#9CA3AF')
+            ),
+            angularaxis=dict(
+                gridcolor='rgba(37,99,235,0.1)',
+                tickfont=dict(size=11, color='#374151', family='DM Sans')
+            )
         ),
         showlegend=True, height=420,
-        legend=dict(font=dict(family='Share Tech Mono', size=10, color='rgba(232,244,242,0.7)'), bgcolor='rgba(5,18,36,0.7)', bordercolor='rgba(0,255,209,0.15)', borderwidth=1)
+        legend=dict(
+            font=dict(family='JetBrains Mono', size=10, color='#374151'),
+            bgcolor='rgba(255,255,255,0.9)',
+            bordercolor='rgba(37,99,235,0.15)',
+            borderwidth=1
+        )
     )
     st.plotly_chart(fig_radar, use_container_width=True)
 
@@ -954,20 +917,31 @@ elif page == "Model Performance":
 # ═══════════════════════════════════════════
 elif page == "Business Impact":
     st.markdown("""
-    <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,255,209,0.6);margin-bottom:0.4rem;display:block;">Financial Intelligence</span>
-    <h2 style="font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:#E8F4F2;line-height:1.05;margin-bottom:0.4rem;letter-spacing:-0.01em;">Business Impact & ROI</h2>
-    <p style="font-size:0.95rem;font-weight:300;color:rgba(232,244,242,0.5);line-height:1.7;margin-bottom:2rem;">Quantified financial value of deploying the AeroMind predictive maintenance system across your fleet.</p>
+    <div style="margin-bottom:0.4rem;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+        letter-spacing:0.28em;text-transform:uppercase;color:#2563EB;">Financial Intelligence</span>
+    </div>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:2.6rem;font-weight:400;
+      color:#111827;line-height:1.05;margin-bottom:0.4rem;">Business Impact & ROI</h2>
+    <p style="font-size:0.96rem;font-weight:300;color:#6B7280;line-height:1.7;
+      margin-bottom:1.8rem;max-width:580px;">
+      Quantified financial value of deploying the AeroMind predictive maintenance system across your fleet.
+    </p>
     """, unsafe_allow_html=True)
 
     st.markdown("""<div class="rule"><div class="rule-line"></div><span class="rule-label">ROI Calculator</span><div class="rule-line"></div></div>""", unsafe_allow_html=True)
 
-    col_ctrl, col_chart = st.columns([1, 1.4], gap="large")
+    col_ctrl, col_chart = st.columns([1, 1.5], gap="large")
 
     with col_ctrl:
-        st.markdown("""<div class="card"><p style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:#00FFD1;opacity:0.7;margin-bottom:1.2rem;">Fleet Parameters</p>""", unsafe_allow_html=True)
-        fleet_size    = st.slider("Fleet Size (engines)", 50, 500, 100, 10)
-        failure_rate  = st.slider("Annual Failure Rate (%)", 1.0, 10.0, 5.0, 0.5)
-        prevention_rt = st.slider("ML Prevention Rate (%)", 70.0, 95.0, 90.0, 5.0)
+        with st.container(border=True):
+            st.markdown("""<p style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;
+              letter-spacing:0.2em;text-transform:uppercase;color:#2563EB;
+              margin-bottom:1.2rem;padding-bottom:0.8rem;border-bottom:1px solid #DDE5F4;">
+              Fleet Parameters</p>""", unsafe_allow_html=True)
+            fleet_size    = st.slider("Fleet Size (engines)", 50, 500, 100, 10)
+            failure_rate  = st.slider("Annual Failure Rate (%)", 1.0, 10.0, 5.0, 0.5)
+            prevention_rt = st.slider("ML Prevention Rate (%)", 70.0, 95.0, 90.0, 5.0)
 
         failures_wo = fleet_size * (failure_rate / 100)
         prevented   = failures_wo * (prevention_rt / 100)
@@ -979,30 +953,36 @@ elif page == "Business Impact":
         ann_maint   = 50000
         roi1        = ((savings - ann_maint - dev_cost) / dev_cost) * 100
         payback     = (dev_cost / max(savings - ann_maint, 1)) * 12
-        st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown(f"""
-        <div class="card-accent">
-          <p style="font-family:'Share Tech Mono',monospace;font-size:0.56rem;letter-spacing:0.24em;text-transform:uppercase;color:rgba(0,255,209,0.55);margin-bottom:1rem;">Results</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+        <div class="card-blue">
+          <p style="font-family:'JetBrains Mono',monospace;font-size:0.56rem;
+            letter-spacing:0.22em;text-transform:uppercase;
+            color:rgba(255,255,255,0.5);margin-bottom:1.2rem;">Projected Results</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;">
             <div>
-              <div style="font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:rgba(0,255,209,0.4);letter-spacing:0.14em;margin-bottom:5px;">NET SAVINGS</div>
-              <div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#E8F4F2;text-shadow:0 0 20px rgba(0,255,209,0.2);">${savings/1e6:.1f}M</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;
+                color:rgba(255,255,255,0.45);letter-spacing:0.14em;margin-bottom:5px;">NET SAVINGS</div>
+              <div style="font-family:'DM Serif Display',serif;font-size:2rem;color:white;">${savings/1e6:.1f}M</div>
             </div>
             <div>
-              <div style="font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:rgba(0,255,209,0.4);letter-spacing:0.14em;margin-bottom:5px;">ROI Y1</div>
-              <div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#00FFD1;text-shadow:0 0 20px rgba(0,255,209,0.3);">{roi1:.0f}%</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;
+                color:rgba(255,255,255,0.45);letter-spacing:0.14em;margin-bottom:5px;">ROI YEAR 1</div>
+              <div style="font-family:'DM Serif Display',serif;font-size:2rem;color:#86EFAC;">{roi1:.0f}%</div>
             </div>
             <div>
-              <div style="font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:rgba(0,255,209,0.4);letter-spacing:0.14em;margin-bottom:5px;">PAYBACK</div>
-              <div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#E8F4F2;">{payback:.1f} mo</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;
+                color:rgba(255,255,255,0.45);letter-spacing:0.14em;margin-bottom:5px;">PAYBACK</div>
+              <div style="font-family:'DM Serif Display',serif;font-size:2rem;color:white;">{payback:.1f} mo</div>
             </div>
             <div>
-              <div style="font-family:'Share Tech Mono',monospace;font-size:0.54rem;color:rgba(0,255,209,0.4);letter-spacing:0.14em;margin-bottom:5px;">PREVENTED</div>
-              <div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#00FFD1;">{prevented:.1f}/yr</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;
+                color:rgba(255,255,255,0.45);letter-spacing:0.14em;margin-bottom:5px;">PREVENTED</div>
+              <div style="font-family:'DM Serif Display',serif;font-size:2rem;color:#86EFAC;">{prevented:.1f}/yr</div>
             </div>
           </div>
-        </div>""", unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
 
     c1, c2, c3, c4 = st.columns(4)
     with c1: st.metric("Unscheduled Failure", "$500,000", help="Cost per catastrophic failure")
@@ -1018,31 +998,34 @@ elif page == "Business Impact":
         fig_roi.add_trace(go.Scatter(
             x=years, y=[v/1e6 for v in cum_sav],
             mode='lines+markers', name='Cumulative Savings',
-            line=dict(color='#00FFD1', width=3),
-            marker=dict(size=9, color='#00FFD1', line=dict(width=2, color=PLOT_LAYOUT['paper_bgcolor'])),
-            fill='tozeroy', fillcolor='rgba(0,255,209,0.06)',
+            line=dict(color='#2563EB', width=3),
+            marker=dict(size=9, color='#2563EB', line=dict(width=2.5, color='white')),
+            fill='tozeroy', fillcolor='rgba(37,99,235,0.07)',
             hovertemplate='Year %{x}<br>$%{y:.2f}M cumulative<extra></extra>'
         ))
-        fig_roi.add_hline(y=0, line_dash="dot", line_color="#FF3B5C", line_width=1.5,
-            annotation_text="Break-even", annotation_font=dict(color='#FF3B5C', size=10, family='Share Tech Mono'))
+        fig_roi.add_hline(y=0, line_dash="dot", line_color="#F05438", line_width=1.8,
+            annotation_text="Break-even",
+            annotation_font=dict(color='#F05438', size=10, family='JetBrains Mono'))
         fig_roi.update_layout(
             **PLOT_LAYOUT,
-            title=dict(text="5-Year Cumulative Savings Projection", font=dict(family='Syne', size=15, color='#E8F4F2')),
-            xaxis_title="Year", yaxis_title="Savings ($M)", height=340
+            title=dict(text="5-Year Cumulative Savings Projection",
+                       font=dict(family='DM Serif Display', size=17, color='#111827')),
+            xaxis_title="Year", yaxis_title="Savings ($M)", height=320
         )
         st.plotly_chart(fig_roi, use_container_width=True)
 
         fig_cmp = go.Figure(go.Bar(
             x=['Without ML', 'With ML'],
             y=[cost_wo/1e6, cost_w/1e6],
-            marker=dict(color=['#FF3B5C', '#00FFD1'], cornerradius=10, opacity=0.85),
+            marker=dict(color=['#F05438', '#2563EB'], cornerradius=12),
             text=[f"${cost_wo/1e6:.1f}M", f"${cost_w/1e6:.1f}M"],
             textposition='outside',
-            textfont=dict(family='Share Tech Mono', size=12, color='rgba(232,244,242,0.7)')
+            textfont=dict(family='JetBrains Mono', size=13, color='#374151')
         ))
         fig_cmp.update_layout(
             **PLOT_LAYOUT,
-            title=dict(text="Annual Maintenance Cost Comparison", font=dict(family='Syne', size=15, color='#E8F4F2')),
+            title=dict(text="Annual Maintenance Cost Comparison",
+                       font=dict(family='DM Serif Display', size=17, color='#111827')),
             yaxis_title="Annual Cost ($M)", showlegend=False, height=280
         )
         st.plotly_chart(fig_cmp, use_container_width=True)
@@ -1052,49 +1035,75 @@ elif page == "Business Impact":
 # ═══════════════════════════════════════════
 elif page == "About":
     st.markdown("""
-    <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,255,209,0.6);margin-bottom:0.4rem;display:block;">Project Documentation</span>
-    <h2 style="font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:#E8F4F2;line-height:1.05;margin-bottom:0.4rem;letter-spacing:-0.01em;">About AeroMind</h2>
-    <p style="font-size:0.95rem;font-weight:300;color:rgba(232,244,242,0.5);line-height:1.7;margin-bottom:2rem;">An end-to-end machine learning system for aircraft engine predictive maintenance, built on the NASA C-MAPSS turbofan degradation dataset.</p>
+    <div style="margin-bottom:0.4rem;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+        letter-spacing:0.28em;text-transform:uppercase;color:#2563EB;">Project Documentation</span>
+    </div>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:2.6rem;font-weight:400;
+      color:#111827;line-height:1.05;margin-bottom:0.4rem;">About AeroMind</h2>
+    <p style="font-size:0.96rem;font-weight:300;color:#6B7280;line-height:1.7;
+      margin-bottom:1.8rem;max-width:600px;">
+      An end-to-end machine learning system for aircraft engine predictive maintenance,
+      built on the NASA C-MAPSS turbofan degradation dataset.
+    </p>
     """, unsafe_allow_html=True)
 
     col1, col2 = st.columns([1.2, 1], gap="large")
     with col1:
         st.markdown("""
         <div class="card">
-          <p style="font-family:'Share Tech Mono',monospace;font-size:0.56rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(0,255,209,0.6);margin-bottom:0.75rem;">Technical Stack</p>
-          <h3 style="font-family:'Syne',sans-serif!important;font-size:1.15rem!important;font-weight:700!important;color:#E8F4F2!important;margin-bottom:1rem!important;">Technologies Used</h3>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:0.56rem;
+            letter-spacing:0.2em;text-transform:uppercase;color:#2563EB;margin-bottom:0.8rem;">Technical Stack</p>
+          <h3 style="font-family:'DM Serif Display',serif!important;font-size:1.2rem!important;
+            font-weight:400!important;color:#111827!important;margin-bottom:1rem!important;">Technologies Used</h3>
           <div class="pill-grid">
-            <span class="pill">Python 3.11</span><span class="pill">TensorFlow / Keras</span>
-            <span class="pill">XGBoost</span><span class="pill">LightGBM</span>
-            <span class="pill">Scikit-learn</span><span class="pill">Optuna</span>
-            <span class="pill">SHAP</span><span class="pill">Pandas</span>
-            <span class="pill">NumPy</span><span class="pill">Streamlit</span>
+            <span class="pill">Python 3.11</span>
+            <span class="pill">TensorFlow / Keras</span>
+            <span class="pill">XGBoost</span>
+            <span class="pill">LightGBM</span>
+            <span class="pill">Scikit-learn</span>
+            <span class="pill">Optuna</span>
+            <span class="pill">SHAP</span>
+            <span class="pill">Pandas</span>
+            <span class="pill">NumPy</span>
+            <span class="pill">Streamlit</span>
             <span class="pill">Plotly</span>
           </div>
         </div>
         """, unsafe_allow_html=True)
         st.markdown("""
         <div class="card">
-          <p style="font-family:'Share Tech Mono',monospace;font-size:0.56rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(0,255,209,0.6);margin-bottom:0.75rem;">Dataset</p>
-          <h3 style="font-family:'Syne',sans-serif!important;font-size:1.15rem!important;font-weight:700!important;color:#E8F4F2!important;margin-bottom:0.75rem!important;">NASA C-MAPSS</h3>
-          <p style="font-size:0.86rem;color:rgba(232,244,242,0.45);line-height:1.7;font-weight:300;">Turbofan Engine Degradation Simulation. 100 training engines, 100 test engines, 26 original features spanning 21 sensor channels and 3 operational settings.</p>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:0.56rem;
+            letter-spacing:0.2em;text-transform:uppercase;color:#2563EB;margin-bottom:0.8rem;">Dataset</p>
+          <h3 style="font-family:'DM Serif Display',serif!important;font-size:1.2rem!important;
+            font-weight:400!important;color:#111827!important;margin-bottom:0.8rem!important;">NASA C-MAPSS</h3>
+          <p style="font-size:0.88rem;color:#6B7280;line-height:1.75;font-weight:300;">
+            Turbofan Engine Degradation Simulation. 100 training engines, 100 test engines,
+            26 original features spanning 21 sensor channels and 3 operational settings.
+          </p>
         </div>
         """, unsafe_allow_html=True)
 
     with col2:
         st.markdown("""
-        <div class="card-accent" style="padding:2rem;">
-          <p style="font-family:'Share Tech Mono',monospace;font-size:0.56rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(0,255,209,0.5);margin-bottom:0.75rem;">Author</p>
-          <h3 style="font-family:'Syne',sans-serif!important;font-size:1.5rem!important;font-weight:800!important;color:#E8F4F2!important;margin-bottom:0.5rem!important;">Vivek M D</h3>
-          <p style="font-size:0.86rem;color:rgba(232,244,242,0.4);font-weight:300;margin-bottom:0;line-height:1.7;">BE Computer Science Graduate · Data Science & AI/ML Specialist · Aviation Technology Enthusiast</p>
+        <div class="card-blue" style="margin-bottom:1.2rem;">
+          <p style="font-family:'JetBrains Mono',monospace;font-size:0.56rem;
+            letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:0.8rem;">Author</p>
+          <h3 style="font-family:'DM Serif Display',serif;font-size:1.6rem;font-weight:400;
+            color:white;margin-bottom:0.5rem;">Vivek M D</h3>
+          <p style="font-size:0.86rem;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.75;">
+            BE Computer Science Graduate · Data Science & AI/ML Specialist · Aviation Technology Enthusiast
+          </p>
         </div>
         """, unsafe_allow_html=True)
-        st.markdown("""<div class="card"><p style="font-family:'Share Tech Mono',monospace;font-size:0.56rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(0,255,209,0.6);margin-bottom:0.8rem;">Project Stats</p>""", unsafe_allow_html=True)
-        c1_, c2_ = st.columns(2)
-        with c1_:
+        st.markdown("""<div class="card"><p style="font-family:'JetBrains Mono',monospace;font-size:0.56rem;
+          letter-spacing:0.2em;text-transform:uppercase;color:#2563EB;margin-bottom:0.8rem;">Project Stats</p>""",
+          unsafe_allow_html=True)
+        ca, cb = st.columns(2)
+        with ca:
             st.metric("Lines of Code", "2,500+")
             st.metric("Models Trained", "4")
-        with c2_:
+        with cb:
             st.metric("Notebooks", "6")
             st.metric("Visualizations", "12+")
         st.markdown("</div>", unsafe_allow_html=True)
@@ -1104,19 +1113,18 @@ elif page == "About":
 # ─────────────────────────────────────────────
 st.markdown("""
 <div style="
-  margin-top: 4rem;
-  padding: 1.4rem 0 0.5rem;
-  border-top: 1px solid rgba(0,255,209,0.08);
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 0.5rem;
+  margin-top:4rem;padding:1.4rem 0 0.5rem;
+  border-top:1.5px solid #DDE5F4;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:0.5rem;
 ">
-  <p style="font-size:0.8rem;color:rgba(232,244,242,0.3);font-weight:300;font-family:'Space Grotesk',sans-serif;">
-    <strong style="color:rgba(232,244,242,0.7);font-weight:600;">AeroMind</strong>
+  <p style="font-size:0.8rem;color:#9CA3AF;font-weight:300;font-family:'DM Sans',sans-serif;">
+    <strong style="color:#111827;font-weight:600;">AeroMind</strong>
     &nbsp;·&nbsp; Aircraft Engine Predictive Maintenance
     &nbsp;·&nbsp; Built with ❤️ by
-    <strong style="color:rgba(232,244,242,0.7);font-weight:600;">Vivek M D</strong>
+    <strong style="color:#111827;font-weight:600;">Vivek M D</strong>
   </p>
-  <p style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:rgba(0,255,209,0.25);letter-spacing:0.12em;">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:#D1D5DB;letter-spacing:0.1em;">
     NASA C-MAPSS · Streamlit · v2.0 · 2026
   </p>
 </div>
