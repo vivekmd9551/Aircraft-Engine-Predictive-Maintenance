@@ -416,9 +416,9 @@ if "Healthy" in scenario:def_t, def_p, def_r = 10, 10, 10
 elif "Moderate" in scenario: def_t, def_p, def_r = 45, 50, 40
 else:def_t, def_p, def_r = 85, 90, 85
 
-heat_val= st.slider("Overall Engine Heat [T24 / T50]", 0, 100, def_t, 1, format="%d%% wear")
-press_val = st.slider("Compressor Pressure Level [P30 / Ps30]", 0, 100, def_p, 1, format="%d%% wear")
-rpm_val = st.slider("Fan & Core Speed Stress [NF / NC]", 0, 100, def_r, 1, format="%d%% wear")
+                heat_val = st.slider("Overall Engine Heat [T24 / T50]", 0, 100, def_t, 1, format="%d%% wear")
+                press_val = st.slider("Compressor Pressure Level [P30 / Ps30]", 0, 100, def_p, 1, format="%d%% wear")
+                rpm_val = st.slider("Fan & Core Speed Stress [NF / NC]", 0, 100, def_r, 1, format="%d%% wear")
 
 baseline = 125
 total_wear = (heat_val + press_val + rpm_val) / 300
