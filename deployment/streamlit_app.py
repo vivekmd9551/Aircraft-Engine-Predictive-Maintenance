@@ -24,39 +24,13 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS & AIRCRAFT BACKGROUND (FIXED)
+# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND
 # ─────────────────────────────────────────────
-import base64
-
-# Boeing 737 Centered SVG with Scimitar Winglets
-svg_code = """
-<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-    <g stroke="#C8892A" stroke-width="2.5" fill="none" stroke-linecap="round">
-        <path d="M 585 240 L 600 80 L 615 240 Z" fill="rgba(200,137,42,0.05)" />
-        <path d="M 480 400 L 140 370 Q 100 365 105 315 L 115 315 Q 115 355 155 365 L 480 370 Z" fill="rgba(200,137,42,0.05)" />
-        <path d="M 720 400 L 1060 370 Q 1100 365 1095 315 L 1085 315 Q 1085 355 1045 365 L 720 370 Z" fill="rgba(200,137,42,0.05)" />
-        <ellipse cx="600" cy="380" rx="120" ry="120" fill="#FAF8F4" />
-        <ellipse cx="600" cy="380" rx="110" ry="110" opacity="0.2" />
-        <path d="M 520 340 Q 600 305 680 340 L 665 385 Q 600 365 535 385 Z" fill="rgba(200,137,42,0.1)" />
-        <g transform="translate(320, 440)">
-            <circle cx="0" cy="0" r="58" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
-            <circle cx="0" cy="0" r="15" fill="#C8892A" />
-        </g>
-        <g transform="translate(880, 440)">
-            <circle cx="0" cy="0" r="58" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
-            <circle cx="0" cy="0" r="15" fill="#C8892A" />
-        </g>
-    </g>
-</svg>
-"""
-
-b64_svg = base64.b64encode(svg_code.encode()).decode()
-
-st.markdown(f"""
+st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
-:root {{
+:root {
     --ivory:     #FAF8F4;
     --cream:     #F3EFE7;
     --warm-100:  #EDE7D9;
@@ -77,76 +51,121 @@ st.markdown(f"""
     --shadow-lg: 0 16px 56px rgba(28,28,30,0.14);
     --radius:    18px;
     --radius-sm: 10px;
-}}
+}
 
-*, *::before, *::after {{ box-sizing: border-box; }}
+*, *::before, *::after { box-sizing: border-box; }
 
-html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {{
+html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     background: var(--ivory) !important;
     font-family: 'Outfit', sans-serif !important;
-}}
+}
 
-[data-testid="stMainBlockContainer"] {{
+[data-testid="stMainBlockContainer"] {
     padding-top: 2rem !important;
     max-width: 1300px !important;
     position: relative;
     z-index: 10; 
-}}
+}
 
-#MainMenu, footer, header {{ visibility: hidden; }}
-[data-testid="stDecoration"] {{ display: none; }}
-[data-testid="collapsedControl"] {{ display: none; }} 
+#MainMenu, footer, header { visibility: hidden; }
+[data-testid="stDecoration"] { display: none; }
+[data-testid="collapsedControl"] { display: none; } 
 
-h1, h2, h3, h4, h5 {{ font-family: 'Playfair Display', serif !important; color: var(--charcoal) !important; }}
-p, li, span, div, label {{ font-family: 'Outfit', sans-serif !important; }}
+h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif !important; color: var(--charcoal) !important; }
+p, li, span, div, label { font-family: 'Outfit', sans-serif !important; }
 
-/* BACKGROUND AIRCRAFT STYLING */
-.aircraft-bg {{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    background-image: url("data:image/svg+xml;base64,{b64_svg}");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 80%;
-    opacity: 0.12;
-    pointer-events: none;
-}}
+/* FIX: Ensure background is strictly behind and centered */
+.aircraft-bg-container { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100vw; 
+    height: 100vh; 
+    z-index: -1; 
+    pointer-events: none; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    overflow: hidden; 
+    opacity: 0.15; 
+}
+
+.aircraft-bg-container svg { 
+    width: 95%; /* Increased size */
+    max-width: 1400px;
+    height: auto; 
+}
 
 /* Radio Button Styling */
-div[data-testid="stRadio"] > div[role="radiogroup"] {{
+div[data-testid="stRadio"] > div[role="radiogroup"] {
     display: flex; flex-direction: row; gap: 12px; background: transparent; padding: 0; flex-wrap: wrap; justify-content: center;
-}}
-div[data-testid="stRadio"] label {{
+}
+div[data-testid="stRadio"] label {
     background: #FFFFFF; padding: 10px 24px !important; border-radius: 30px !important; border: 1px solid var(--warm-200) !important;
     cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; font-family: 'IBM Plex Mono', monospace !important;
     font-size: 0.75rem !important; letter-spacing: 0.1em !important; text-transform: uppercase !important; color: var(--slate) !important;
     box-shadow: var(--shadow-sm); margin-bottom: 5px;
-}}
-div[data-testid="stRadio"] label:hover {{ border-color: var(--amber) !important; transform: translateY(-2px); box-shadow: var(--shadow-md); }}
-div[data-testid="stRadio"] label[data-checked="true"] {{ background: var(--charcoal) !important; border-color: var(--charcoal) !important; }}
-div[data-testid="stRadio"] label[data-checked="true"] * {{ color: var(--amber-lt) !important; font-weight: 600 !important; }}
-div[data-testid="stRadio"] label > div:first-child {{ display: none !important; }}
+}
+div[data-testid="stRadio"] label:hover { border-color: var(--amber) !important; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+div[data-testid="stRadio"] label[data-checked="true"] { background: var(--charcoal) !important; border-color: var(--charcoal) !important; }
+div[data-testid="stRadio"] label[data-checked="true"] * { color: var(--amber-lt) !important; font-weight: 600 !important; }
+div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 
-[data-testid="stMetric"] {{
+[data-testid="stMetric"] {
     background: #FFFFFF !important; border: 1px solid var(--warm-100) !important; border-radius: var(--radius) !important;
     padding: 1.3rem 1.5rem !important; border-top: 3px solid var(--amber) !important; box-shadow: var(--shadow-sm) !important;
-}}
+}
 
-.alert-box {{ border-radius: var(--radius-sm); padding: 1.2rem 1.4rem; border-left: 4px solid; margin: 1rem 0; }}
-.card {{ background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: var(--radius); padding: 1.8rem 2rem; box-shadow: var(--shadow-sm); margin-bottom: 1.2rem; }}
-.hero {{ background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: 24px; padding: 3.5rem 3.5rem 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; box-shadow: var(--shadow-lg); }}
+.card { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: var(--radius); padding: 1.8rem 2rem; box-shadow: var(--shadow-sm); margin-bottom: 1.2rem; }
+.hero { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: 24px; padding: 3.5rem 3.5rem 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; box-shadow: var(--shadow-lg); }
 
-body::before {{
+body::before {
     content: ''; position: fixed; inset: 0; z-index: -2; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     opacity: 0.4;
-}}
+}
 </style>
-<div class="aircraft-bg"></div>
+
+<div class="aircraft-bg-container">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#C8892A" stroke-width="2.5" fill="none" stroke-linecap="round">
+            <path d="M 585 240 L 600 70 L 615 240 Z" fill="rgba(200,137,42,0.05)" />
+            
+            <path d="M 480 400 L 120 375 L 105 300 L 115 300 L 135 365 L 480 375 Z" fill="rgba(200,137,42,0.05)" />
+            
+            <path d="M 720 400 L 1080 375 L 1095 300 L 1085 300 L 1065 365 L 720 375 Z" fill="rgba(200,137,42,0.05)" />
+            
+            <ellipse cx="600" cy="380" rx="125" ry="125" fill="#FAF8F4" />
+            <ellipse cx="600" cy="380" rx="115" ry="115" opacity="0.2" />
+            
+            <path d="M 520 340 Q 600 305 680 340 L 665 385 Q 600 365 535 385 Z" fill="rgba(200,137,42,0.1)" />
+            
+            <g transform="translate(310, 450)">
+                <circle cx="0" cy="0" r="62" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
+                <g stroke="#C8892A" stroke-width="2">
+                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.15s" repeatCount="indefinite" />
+                    <line x1="0" y1="-55" x2="0" y2="55" />
+                    <line x1="-55" y1="0" x2="55" y2="0" />
+                    <line x1="-40" y1="-40" x2="40" y2="40" />
+                    <line x1="-40" y1="40" x2="40" y2="-40" />
+                </g>
+                <circle cx="0" cy="0" r="18" fill="#C8892A" />
+            </g>
+            
+            <g transform="translate(890, 450)">
+                <circle cx="0" cy="0" r="62" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
+                <g stroke="#C8892A" stroke-width="2">
+                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.15s" repeatCount="indefinite" />
+                    <line x1="0" y1="-55" x2="0" y2="55" />
+                    <line x1="-55" y1="0" x2="55" y2="0" />
+                    <line x1="-40" y1="-40" x2="40" y2="40" />
+                    <line x1="-40" y1="40" x2="40" y2="-40" />
+                </g>
+                <circle cx="0" cy="0" r="18" fill="#C8892A" />
+            </g>
+        </g>
+    </svg>
+</div>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
