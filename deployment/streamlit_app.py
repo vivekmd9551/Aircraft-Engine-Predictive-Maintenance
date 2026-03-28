@@ -16,11 +16,7 @@ warnings.filterwarnings('ignore')
 # ─────────────────────────────────────────────
 # PAGE CONFIG
 # ─────────────────────────────────────────────
-st.set_page_config(page_title="AeroMind — Engine Health Intelligence",
-    page_icon="✈️",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+st.set_page_config(page_title="AeroMind — Engine Health Intelligence",page_icon="✈️",layout="wide",initial_sidebar_state="collapsed")
 
 # ─────────────────────────────────────────────
 # GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND
