@@ -255,17 +255,17 @@ label_visibility="collapsed"
 st.markdown("<br>", unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
-# HELPERS
+# HELPERS (Cleaned of Non-Breaking Spaces)
 # ─────────────────────────────────────────────
 def rul_status(rul):
-if rul < 30: return "CRITICAL", "critical"
-elif rul < 60: return "WARNING","warning"
-else:return "NOMINAL","good"
+    if rul < 30: return "CRITICAL", "critical"
+    elif rul < 60: return "WARNING", "warning"
+    else: return "NOMINAL", "good"
 
 def maintenance_cost(rul, prevented=True):
-if rul < 30: return 50000 if prevented else 500000
-elif rul < 60: return 50000
-return 0
+    if rul < 30: return 50000 if prevented else 500000
+    elif rul < 60: return 50000
+    return 0
 
 # ═══════════════════════════════════════════
 # HOME
