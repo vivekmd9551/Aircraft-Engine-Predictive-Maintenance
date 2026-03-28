@@ -24,55 +24,43 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (FINAL REPAIR)
+# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (ENCODED FIX)
 # ─────────────────────────────────────────────
+import base64
 
-# We define the aircraft separately to avoid string parsing errors in Streamlit
-aircraft_html = """
-<div class="aircraft-bg-container">
-    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-        <g stroke="#C8892A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            
-            <path d="M 585 260 L 600 50 L 615 260 Z" fill="rgba(200,137,42,0.05)" />
-            <path d="M 585 260 Q 600 270 615 260" /> 
-
-            <path d="M 480 380 L 120 355 L 110 300 L 120 300 L 140 345 L 480 355 Z" fill="rgba(200,137,42,0.05)" />
-            <path d="M 720 380 L 1080 355 L 1090 300 L 1080 300 L 1060 345 L 720 355 Z" fill="rgba(200,137,42,0.05)" />
-
-            <path d="M 315 365 L 315 400 M 325 365 L 325 400" opacity="0.6" /> 
-            <path d="M 875 365 L 875 400 M 885 365 L 885 400" opacity="0.6" /> 
-
-            <ellipse cx="600" cy="380" rx="125" ry="125" fill="#FAF8F4" />
-            <ellipse cx="600" cy="380" rx="115" ry="115" opacity="0.2" />
-            <path d="M 530 330 Q 600 300 670 330 L 655 370 Q 600 350 545 370 Z" fill="rgba(200,137,42,0.15)" />
-
-            <g transform="translate(320, 440)">
-                <circle cx="0" cy="0" r="62" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
-                <g stroke="#C8892A" stroke-width="2">
-                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
-                    <line x1="0" y1="-55" x2="0" y2="55" />
-                    <line x1="-55" y1="0" x2="55" y2="0" />
-                    <line x1="-40" y1="-40" x2="40" y2="40" />
-                    <line x1="-40" y1="40" x2="40" y2="-40" />
-                </g>
-                <circle cx="0" cy="0" r="18" fill="#C8892A" />
-            </g>
-            
-            <g transform="translate(880, 440)">
-                <circle cx="0" cy="0" r="62" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
-                <g stroke="#C8892A" stroke-width="2">
-                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
-                    <line x1="0" y1="-55" x2="0" y2="55" />
-                    <line x1="-55" y1="0" x2="55" y2="0" />
-                    <line x1="-40" y1="-40" x2="40" y2="40" />
-                    <line x1="-40" y1="40" x2="40" y2="-40" />
-                </g>
-                <circle cx="0" cy="0" r="18" fill="#C8892A" />
+# Boeing 737 Sharp Specs: Scimitar Winglets, Connected Tail, Pylons, Cockpit
+svg_icon = """
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#C8892A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 585 260 L 600 50 L 615 260 Z" fill="rgba(200,137,42,0.05)" />
+        <path d="M 480 380 L 120 355 L 105 280 L 115 280 L 135 345 L 480 355 Z" fill="rgba(200,137,42,0.05)" />
+        <path d="M 720 380 L 1080 355 L 1095 280 L 1085 280 L 1065 345 L 720 355 Z" fill="rgba(200,137,42,0.05)" />
+        <path d="M 315 365 L 315 400 M 325 365 L 325 400" opacity="0.6" /> 
+        <path d="M 875 365 L 875 400 M 885 365 L 885 400" opacity="0.6" /> 
+        <ellipse cx="600" cy="380" rx="125" ry="125" fill="#FAF8F4" />
+        <path d="M 530 330 Q 600 300 670 330 L 655 370 Q 600 350 545 370 Z" fill="rgba(200,137,42,0.15)" />
+        <g transform="translate(320, 440)">
+            <circle cx="0" cy="0" r="62" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
+            <g stroke="#C8892A" stroke-width="2">
+                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
+                <line x1="0" y1="-55" x2="0" y2="55" /><line x1="-55" y1="0" x2="55" y2="0" />
+                <line x1="-40" y1="-40" x2="40" y2="40" /><line x1="-40" y1="40" x2="40" y2="-40" />
             </g>
         </g>
-    </svg>
-</div>
+        <g transform="translate(880, 440)">
+            <circle cx="0" cy="0" r="62" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
+            <g stroke="#C8892A" stroke-width="2">
+                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
+                <line x1="0" y1="-55" x2="0" y2="55" /><line x1="-55" y1="0" x2="55" y2="0" />
+                <line x1="-40" y1="-40" x2="40" y2="40" /><line x1="-40" y1="40" x2="40" y2="-40" />
+            </g>
+        </g>
+    </g>
+</svg>
 """
+
+# Encode to Base64 to bypass Streamlit's markdown parser
+b64_svg = base64.b64encode(svg_icon.encode()).decode()
 
 st.markdown(f"""
 <style>
@@ -82,45 +70,36 @@ st.markdown(f"""
     --ivory:     #FAF8F4;
     --amber:     #C8892A;
     --charcoal:  #1C1C1E;
-    --warm-100:  #EDE7D9;
-    --warm-200:  #D9CEBC;
 }}
 
-html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {{
+/* THE FIX: Inject SVG via CSS pseudo-element to prevent code spilling */
+[data-testid="stAppViewContainer"]::before {{
+    content: "";
+    position: fixed;
+    top: 0; left: 0; 
+    width: 100vw; height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;base64,{b64_svg}");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 98% auto;
+    opacity: 0.15;
+}}
+
+html, body, [data-testid="stAppViewContainer"] {{
     background: var(--ivory) !important;
-    font-family: 'Outfit', sans-serif !important;
 }}
 
 [data-testid="stMainBlockContainer"] {{
-    padding-top: 2rem !important;
-    max-width: 1300px !important;
     position: relative;
-    z-index: 10; 
+    z-index: 10;
+    max-width: 1300px !important;
 }}
 
 #MainMenu, footer, header, [data-testid="stDecoration"] {{ visibility: hidden; display: none; }}
-
-.aircraft-bg-container {{ 
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100vw; height: 100vh; 
-    z-index: 0; 
-    pointer-events: none; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    overflow: hidden; 
-    opacity: 0.15; 
-}}
-
-.aircraft-bg-container svg {{ 
-    width: 95%; 
-    max-width: 1500px;
-}}
 </style>
-{aircraft_html}
 """, unsafe_allow_html=True)
-
 
 # ─────────────────────────────────────────────
 # TOP NAVIGATION BAR
