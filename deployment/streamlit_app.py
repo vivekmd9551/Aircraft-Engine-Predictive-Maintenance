@@ -24,13 +24,23 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (REALISTIC GEAR & BLADES)
+# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (CLEAN FLIGHT + LIGHTS)
 # ─────────────────────────────────────────────
 import base64
 
-# Boeing 737 Specs: Heavy Strut Gear, Wide-Diameter Fan Blades, Connected Tail
+# Boeing 737 Specs: Sharp Scimitar Wings, Blinking Nav Lights, Proportional Engines
 svg_icon = """
 <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <filter id="glow-red" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+        <filter id="glow-green" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+    </defs>
     <g stroke="#C8892A" fill="none" stroke-linecap="round" stroke-linejoin="round">
         
         <path d="M 585 260 L 600 50 L 615 260 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
@@ -38,58 +48,49 @@ svg_icon = """
         <path d="M 480 380 L 120 355 L 110 310 L 115 310 L 130 350 L 480 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
         <path d="M 720 380 L 1080 355 L 1090 310 L 1085 310 L 1070 350 L 720 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
 
-        <g stroke-width="4" opacity="0.9">
-            <line x1="600" y1="505" x2="600" y2="540" />
-            <ellipse cx="590" cy="545" rx="10" ry="6" fill="#C8892A" /> 
-            <ellipse cx="610" cy="545" rx="10" ry="6" fill="#C8892A" />
-        </g>
-        <g stroke-width="5" opacity="0.9">
-            <path d="M 450 380 L 450 515 L 440 515" /> 
-            <ellipse cx="435" cy="525" rx="14" ry="9" fill="#C8892A" />
-            <ellipse cx="465" cy="525" rx="14" ry="9" fill="#C8892A" />
-        </g>
-        <g stroke-width="5" opacity="0.9">
-            <path d="M 750 380 L 750 515 L 760 515" />
-            <ellipse cx="735" cy="525" rx="14" ry="9" fill="#C8892A" />
-            <ellipse cx="765" cy="525" rx="14" ry="9" fill="#C8892A" />
-        </g>
+        <circle cx="112" cy="310" r="4" fill="#B84A2E" filter="url(#glow-red)">
+            <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="1088" cy="310" r="4" fill="#1E7A6E" filter="url(#glow-green)">
+            <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="0.75s" />
+        </circle>
 
-        <path d="M 310 360 L 310 405 M 330 360 L 330 405" stroke-width="4" stroke="rgba(200,137,42,1)" /> 
-        <path d="M 870 360 L 870 405 M 890 360 L 890 405" stroke-width="4" stroke="rgba(200,137,42,1)" /> 
+        <path d="M 315 365 L 315 400 M 325 365 L 325 400" stroke-width="3" stroke="rgba(200,137,42,0.8)" /> 
+        <path d="M 875 365 L 875 400 M 885 365 L 885 400" stroke-width="3" stroke="rgba(200,137,42,0.8)" /> 
 
         <ellipse cx="600" cy="380" rx="125" ry="125" stroke-width="3" fill="#FAF8F4" />
         <path d="M 530 330 Q 600 300 670 330 L 655 370 Q 600 350 545 370 Z" stroke-width="2" fill="rgba(200,137,42,0.15)" />
 
-        <g transform="translate(320, 450)">
-            <circle cx="0" cy="0" r="75" stroke-width="10" stroke="rgba(200,137,42,0.8)" fill="#FAF8F4" />
+        <g transform="translate(320, 440)">
+            <circle cx="0" cy="0" r="62" stroke-width="8" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
             <g>
-                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
-                <path d="M 0 0 L -15 -68 L 15 -68 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -15 68 L 15 68 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -68 -15 L -68 15 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 68 -15 L 68 15 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -48 -48 L -35 -60 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 48 48 L 35 60 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -48 48 L -60 35 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 48 -48 L 60 -35 Z" fill="#C8892A" opacity="0.95" />
+                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
+                <path d="M 0 0 L -12 -58 L 12 -58 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L -12 58 L 12 58 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L -58 -12 L -58 12 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L 58 -12 L 58 12 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L -42 -42 L -30 -52 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L 42 42 L 30 52 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L -42 42 L -52 30 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L 42 -42 L 52 -30 Z" fill="#C8892A" opacity="0.9" />
             </g>
-            <circle cx="0" cy="0" r="22" fill="#C8892A" /> 
+            <circle cx="0" cy="0" r="18" fill="#C8892A" />
         </g>
         
-        <g transform="translate(880, 450)">
-            <circle cx="0" cy="0" r="75" stroke-width="10" stroke="rgba(200,137,42,0.8)" fill="#FAF8F4" />
+        <g transform="translate(880, 440)">
+            <circle cx="0" cy="0" r="62" stroke-width="8" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
             <g>
-                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
-                <path d="M 0 0 L -15 -68 L 15 -68 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -15 68 L 15 68 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -68 -15 L -68 15 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 68 -15 L 68 15 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -48 -48 L -35 -60 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 48 48 L 35 60 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -48 48 L -60 35 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 48 -48 L 60 -35 Z" fill="#C8892A" opacity="0.95" />
+                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
+                <path d="M 0 0 L -12 -58 L 12 -58 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L -12 58 L 12 58 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L -58 -12 L -58 12 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L 58 -12 L 58 12 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L -42 -42 L -30 -52 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L 42 42 L 30 52 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L -42 42 L -52 30 Z" fill="#C8892A" opacity="0.9" />
+                <path d="M 0 0 L 42 -42 L 52 -30 Z" fill="#C8892A" opacity="0.9" />
             </g>
-            <circle cx="0" cy="0" r="22" fill="#C8892A" />
+            <circle cx="0" cy="0" r="18" fill="#C8892A" />
         </g>
     </g>
 </svg>
@@ -117,7 +118,7 @@ st.markdown(f"""
     background-image: url("data:image/svg+xml;base64,{b64_svg}");
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 92% auto;
+    background-size: 85% auto;
     opacity: 0.18;
 }}
 
@@ -134,7 +135,6 @@ html, body, [data-testid="stAppViewContainer"] {{
 #MainMenu, footer, header, [data-testid="stDecoration"] {{ visibility: hidden; display: none; }}
 </style>
 """, unsafe_allow_html=True)
-
 
 # ─────────────────────────────────────────────
 # TOP NAVIGATION BAR
