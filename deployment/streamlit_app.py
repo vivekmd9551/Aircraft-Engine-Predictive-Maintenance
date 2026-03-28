@@ -24,21 +24,31 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (PROPORTIONAL ENGINES + BRIGHT NAV)
+# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (MAX GLOW + ENGINE BUMP)
 # ─────────────────────────────────────────────
 import base64
 
-# Boeing 737 Specs: Streamlined Engines, High-Intensity Nav Lights, Sharp Scimitar Wings
+# Boeing 737 Specs: +8% Engine Scale, Ultra-High Intensity Nav Blooms
 svg_icon = """
 <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
     <defs>
-        <filter id="glow-red-bright" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        <filter id="ultra-glow-red" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur stdDeviation="15" result="blur1" />
+            <feGaussianBlur stdDeviation="5" result="blur2" />
+            <feMerge>
+                <feMergeNode in="blur1" />
+                <feMergeNode in="blur2" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
         </filter>
-        <filter id="glow-green-bright" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        <filter id="ultra-glow-green" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur stdDeviation="15" result="blur1" />
+            <feGaussianBlur stdDeviation="5" result="blur2" />
+            <feMerge>
+                <feMergeNode in="blur1" />
+                <feMergeNode in="blur2" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
         </filter>
     </defs>
     <g stroke="#C8892A" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -48,49 +58,53 @@ svg_icon = """
         <path d="M 480 380 L 120 355 L 110 310 L 115 310 L 130 350 L 480 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
         <path d="M 720 380 L 1080 355 L 1090 310 L 1085 310 L 1070 350 L 720 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
 
-        <circle cx="112" cy="310" r="6" fill="#FF2400" filter="url(#glow-red-bright)">
-            <animate attributeName="opacity" values="0.2;1;0.2" dur="1.2s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="1088" cy="310" r="6" fill="#00FF7F" filter="url(#glow-green-bright)">
-            <animate attributeName="opacity" values="0.2;1;0.2" dur="1.2s" repeatCount="indefinite" begin="0.6s" />
-        </circle>
+        <g filter="url(#ultra-glow-red)">
+            <circle cx="112" cy="310" r="8" fill="#FF0000">
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite" />
+            </circle>
+        </g>
+        <g filter="url(#ultra-glow-green)">
+            <circle cx="1088" cy="310" r="8" fill="#00FF00">
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite" begin="0.5s" />
+            </circle>
+        </g>
 
-        <path d="M 318 365 L 318 400 M 322 365 L 322 400" stroke-width="2.5" stroke="rgba(200,137,42,0.8)" /> 
-        <path d="M 878 365 L 878 400 M 882 365 L 882 400" stroke-width="2.5" stroke="rgba(200,137,42,0.8)" /> 
+        <path d="M 317 365 L 317 400 M 323 365 L 323 400" stroke-width="2.5" stroke="rgba(200,137,42,0.8)" /> 
+        <path d="M 877 365 L 877 400 M 883 365 L 883 400" stroke-width="2.5" stroke="rgba(200,137,42,0.8)" /> 
 
         <ellipse cx="600" cy="380" rx="125" ry="125" stroke-width="3" fill="#FAF8F4" />
         <path d="M 530 330 Q 600 300 670 330 L 655 370 Q 600 350 545 370 Z" stroke-width="2" fill="rgba(200,137,42,0.15)" />
 
-        <g transform="translate(320, 435)">
-            <circle cx="0" cy="0" r="54" stroke-width="7" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
+        <g transform="translate(320, 438)">
+            <circle cx="0" cy="0" r="58.5" stroke-width="9" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
             <g>
-                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
-                <path d="M 0 0 L -10 -50 L 10 -50 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -10 50 L 10 50 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -50 -10 L -50 10 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 50 -10 L 50 10 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -35 -35 L -25 -45 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 35 35 L 25 45 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -35 45 L -45 35 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 35 -45 L 45 -35 Z" fill="#C8892A" opacity="0.95" />
+                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
+                <path d="M 0 0 L -12 -54 L 12 -54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -12 54 L 12 54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -54 -12 L -54 12 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 54 -12 L 54 12 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -38 -38 L -28 -48 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 38 48 L 28 48 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -38 48 L -48 38 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 38 -48 L 48 -38 Z" fill="#C8892A" opacity="0.95" />
             </g>
-            <circle cx="0" cy="0" r="16" fill="#C8892A" />
+            <circle cx="0" cy="0" r="18" fill="#C8892A" />
         </g>
         
-        <g transform="translate(880, 435)">
-            <circle cx="0" cy="0" r="54" stroke-width="7" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
+        <g transform="translate(880, 438)">
+            <circle cx="0" cy="0" r="58.5" stroke-width="9" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
             <g>
-                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
-                <path d="M 0 0 L -10 -50 L 10 -50 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -10 50 L 10 50 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -50 -10 L -50 10 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 50 -10 L 50 10 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -35 -35 L -25 -45 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 35 35 L 25 45 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L -35 45 L -45 35 Z" fill="#C8892A" opacity="0.95" />
-                <path d="M 0 0 L 35 -45 L 45 -35 Z" fill="#C8892A" opacity="0.95" />
+                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
+                <path d="M 0 0 L -12 -54 L 12 -54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -12 54 L 12 54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -54 -12 L -54 12 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 54 -12 L 54 12 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -38 -38 L -28 -48 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 38 48 L 28 48 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -38 48 L -48 38 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 38 -48 L 48 -38 Z" fill="#C8892A" opacity="0.95" />
             </g>
-            <circle cx="0" cy="0" r="16" fill="#C8892A" />
+            <circle cx="0" cy="0" r="18" fill="#C8892A" />
         </g>
     </g>
 </svg>
