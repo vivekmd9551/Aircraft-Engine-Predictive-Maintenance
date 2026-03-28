@@ -339,11 +339,11 @@ fig.add_hline(y=18, line_dash="dot", line_color="#F05438", line_width=2,
 annotation_text="Industry Target: 18 cycles",
 annotation_font=dict(color='#F05438', size=10, family='JetBrains Mono'))
 fig.update_layout(
-**PLOT_LAYOUT,
-title=dict(text="Validation RMSE — Lower is Better",
- font=dict(family='DM Serif Display', size=18, color='#111827')),
-yaxis_title="RMSE (cycles)", showlegend=False, height=360
-)
+            **PLOT_LAYOUT,
+            title=dict(text="Validation RMSE — Lower is Better",
+                       font=dict(family='DM Serif Display', size=18, color='#111827')),
+            yaxis_title="RMSE (cycles)", showlegend=False, height=360
+        )
 st.plotly_chart(fig, use_container_width=True)
 
 with col_chart2:
