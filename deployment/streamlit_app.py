@@ -159,12 +159,7 @@ st.markdown("""
 
 col_nav1, col_nav2, col_nav3 = st.columns([1, 8, 1])
 with col_nav2:
-    page = st.radio(
-        "Navigate",
-        ["Home", "RUL Prediction", "Model Performance", "Business Impact", "About"],
-        horizontal=True,
-        label_visibility="collapsed"
-    )
+    page = st.radio("Navigate",["Home", "RUL Prediction", "Model Performance", "Business Impact", "About"],horizontal=True,label_visibility="collapsed")
 st.markdown("<br>", unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
