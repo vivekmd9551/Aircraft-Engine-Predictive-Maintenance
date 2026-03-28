@@ -26,125 +26,48 @@ st.set_page_config(
 # BACKGROUND SVG  — light, fine technical linework
 # ─────────────────────────────────────────────
 svg_bg = """
-<svg viewBox="0 0 1400 860" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="wl" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#2563EB" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#2563EB" stop-opacity="0.35"/>
-    </linearGradient>
-    <linearGradient id="wr" x1="100%" y1="0%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#2563EB" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#2563EB" stop-opacity="0.35"/>
-    </linearGradient>
-  </defs>
-
-  <!-- Blueprint grid -->
-  <g stroke="#DBEAFE" stroke-width="0.6" opacity="0.9">
-    <line x1="0" y1="150" x2="1400" y2="150"/>
-    <line x1="0" y1="300" x2="1400" y2="300"/>
-    <line x1="0" y1="450" x2="1400" y2="450"/>
-    <line x1="0" y1="600" x2="1400" y2="600"/>
-    <line x1="0" y1="750" x2="1400" y2="750"/>
-    <line x1="175" y1="0" x2="175" y2="860"/>
-    <line x1="350" y1="0" x2="350" y2="860"/>
-    <line x1="525" y1="0" x2="525" y2="860"/>
-    <line x1="700" y1="0" x2="700" y2="860"/>
-    <line x1="875" y1="0" x2="875" y2="860"/>
-    <line x1="1050" y1="0" x2="1050" y2="860"/>
-    <line x1="1225" y1="0" x2="1225" y2="860"/>
-  </g>
-
-  <!-- Fuselage body -->
-  <path d="M 685 90 L 700 55 L 715 90 L 724 460 L 700 488 L 676 460 Z"
-        stroke="#2563EB" stroke-width="1.8" fill="rgba(37,99,235,0.04)"/>
-  <line x1="700" y1="55" x2="700" y2="110" stroke="#2563EB" stroke-width="0.8" opacity="0.5"/>
-  <ellipse cx="700" cy="155" rx="14" ry="9" stroke="#2563EB" stroke-width="1.2" fill="rgba(37,99,235,0.08)"/>
-
-  <!-- Left wing -->
-  <path d="M 684 370 L 100 408 L 92 382 L 96 380 L 112 400 L 682 355 Z"
-        stroke="#2563EB" stroke-width="1.6" fill="url(#wl)" opacity="0.6"/>
-  <!-- Right wing -->
-  <path d="M 716 370 L 1300 408 L 1308 382 L 1304 380 L 1288 400 L 718 355 Z"
-        stroke="#2563EB" stroke-width="1.6" fill="url(#wr)" opacity="0.6"/>
-
-  <!-- Wing tics -->
-  <g stroke="#2563EB" stroke-width="0.9" opacity="0.4">
-    <line x1="220" y1="404" x2="220" y2="393"/>
-    <line x1="340" y1="401" x2="340" y2="390"/>
-    <line x1="460" y1="398" x2="460" y2="388"/>
-    <line x1="580" y1="394" x2="580" y2="385"/>
-    <line x1="1180" y1="404" x2="1180" y2="393"/>
-    <line x1="1060" y1="401" x2="1060" y2="390"/>
-    <line x1="940" y1="398" x2="940" y2="388"/>
-    <line x1="820" y1="394" x2="820" y2="385"/>
-  </g>
-
-  <!-- Stabilisers -->
-  <path d="M 678 464 L 490 482 L 488 472 L 677 452 Z"
-        stroke="#2563EB" stroke-width="1.1" fill="rgba(37,99,235,0.04)" opacity="0.55"/>
-  <path d="M 722 464 L 910 482 L 912 472 L 723 452 Z"
-        stroke="#2563EB" stroke-width="1.1" fill="rgba(37,99,235,0.04)" opacity="0.55"/>
-
-  <!-- Left engine -->
-  <ellipse cx="318" cy="468" rx="64" ry="64"
-           stroke="#2563EB" stroke-width="2.2" fill="rgba(255,255,255,0.6)"/>
-  <ellipse cx="318" cy="468" rx="46" ry="46"
-           stroke="#2563EB" stroke-width="0.9" fill="none" opacity="0.35"/>
-  <g>
-    <animateTransform attributeName="transform" type="rotate"
-      from="0 318 468" to="360 318 468" dur="0.09s" repeatCount="indefinite"/>
-    <polygon points="318,406 310,462 318,464 326,462" fill="#2563EB" opacity="0.85"/>
-    <polygon points="318,530 326,474 318,472 310,474" fill="#2563EB" opacity="0.85"/>
-    <polygon points="254,468 310,460 310,468 310,476" fill="#2563EB" opacity="0.85"/>
-    <polygon points="382,468 326,476 326,468 326,460" fill="#2563EB" opacity="0.85"/>
-    <polygon points="272,422 310,462 316,456 312,450" fill="#2563EB" opacity="0.6"/>
-    <polygon points="364,514 326,474 320,480 324,486" fill="#2563EB" opacity="0.6"/>
-    <polygon points="272,514 312,474 318,480 314,486" fill="#2563EB" opacity="0.6"/>
-    <polygon points="364,422 324,462 318,456 322,450" fill="#2563EB" opacity="0.6"/>
-  </g>
-  <circle cx="318" cy="468" r="13" fill="white" stroke="#2563EB" stroke-width="1.6"/>
-  <ellipse cx="318" cy="468" rx="68" ry="68" fill="none" stroke="#3B82F6" stroke-width="4" opacity="0.1">
-    <animate attributeName="r" values="68;76;68" dur="2s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0.1;0.18;0.1" dur="2s" repeatCount="indefinite"/>
-  </ellipse>
-
-  <!-- Right engine -->
-  <ellipse cx="1082" cy="468" rx="64" ry="64"
-           stroke="#2563EB" stroke-width="2.2" fill="rgba(255,255,255,0.6)"/>
-  <ellipse cx="1082" cy="468" rx="46" ry="46"
-           stroke="#2563EB" stroke-width="0.9" fill="none" opacity="0.35"/>
-  <g>
-    <animateTransform attributeName="transform" type="rotate"
-      from="0 1082 468" to="360 1082 468" dur="0.09s" repeatCount="indefinite"/>
-    <polygon points="1082,406 1074,462 1082,464 1090,462" fill="#2563EB" opacity="0.85"/>
-    <polygon points="1082,530 1090,474 1082,472 1074,474" fill="#2563EB" opacity="0.85"/>
-    <polygon points="1018,468 1074,460 1074,468 1074,476" fill="#2563EB" opacity="0.85"/>
-    <polygon points="1146,468 1090,476 1090,468 1090,460" fill="#2563EB" opacity="0.85"/>
-    <polygon points="1036,422 1074,462 1080,456 1076,450" fill="#2563EB" opacity="0.6"/>
-    <polygon points="1128,514 1090,474 1084,480 1088,486" fill="#2563EB" opacity="0.6"/>
-    <polygon points="1036,514 1076,474 1082,480 1078,486" fill="#2563EB" opacity="0.6"/>
-    <polygon points="1128,422 1088,462 1082,456 1086,450" fill="#2563EB" opacity="0.6"/>
-  </g>
-  <circle cx="1082" cy="468" r="13" fill="white" stroke="#2563EB" stroke-width="1.6"/>
-  <ellipse cx="1082" cy="468" rx="68" ry="68" fill="none" stroke="#3B82F6" stroke-width="4" opacity="0.1">
-    <animate attributeName="r" values="68;76;68" dur="2s" repeatCount="indefinite" begin="1s"/>
-    <animate attributeName="opacity" values="0.1;0.18;0.1" dur="2s" repeatCount="indefinite" begin="1s"/>
-  </ellipse>
-
-  <!-- Nav lights -->
-  <circle cx="94" cy="382" r="6" fill="#EF4444">
-    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.2s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="1306" cy="382" r="6" fill="#22C55E">
-    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.2s" repeatCount="indefinite" begin="0.6s"/>
-  </circle>
-
-  <!-- Centre crosshair -->
-  <g stroke="#2563EB" stroke-width="0.7" opacity="0.25">
-    <line x1="660" y1="270" x2="740" y2="270"/>
-    <line x1="700" y1="250" x2="700" y2="290"/>
-    <circle cx="700" cy="270" r="20" fill="none"/>
-  </g>
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <filter id="ultra-glow-red" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur stdDeviation="15" result="blur1" />
+            <feGaussianBlur stdDeviation="5" result="blur2" />
+            <feMerge><feMergeNode in="blur1" /><feMergeNode in="blur2" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        <filter id="ultra-glow-green" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur stdDeviation="15" result="blur1" />
+            <feGaussianBlur stdDeviation="5" result="blur2" />
+            <feMerge><feMergeNode in="blur1" /><feMergeNode in="blur2" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+    </defs>
+    <g stroke="#C8892A" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 585 260 L 600 50 L 615 260 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
+        <path d="M 480 380 L 120 355 L 110 310 L 115 310 L 130 350 L 480 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
+        <path d="M 720 380 L 1080 355 L 1090 310 L 1085 310 L 1070 350 L 720 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
+        <g filter="url(#ultra-glow-red)"><circle cx="112" cy="310" r="8" fill="#FF0000"><animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite" /></circle></g>
+        <g filter="url(#ultra-glow-green)"><circle cx="1088" cy="310" r="8" fill="#00FF00"><animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite" begin="0.5s" /></circle></g>
+        <ellipse cx="600" cy="380" rx="125" ry="125" stroke-width="3" fill="#FAF8F4" />
+        <path d="M 530 330 Q 600 300 670 330 L 655 370 Q 600 350 545 370 Z" stroke-width="2" fill="rgba(200,137,42,0.15)" />
+        <g transform="translate(320, 438)">
+            <circle cx="0" cy="0" r="58.5" stroke-width="9" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
+            <g><animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
+                <path d="M 0 0 L -12 -54 L 12 -54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -12 54 L 12 54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -54 -12 L -54 12 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 54 -12 L 54 12 Z" fill="#C8892A" opacity="0.95" />
+            </g>
+            <circle cx="0" cy="0" r="18" fill="#C8892A" />
+        </g>
+        <g transform="translate(880, 438)">
+            <circle cx="0" cy="0" r="58.5" stroke-width="9" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
+            <g><animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
+                <path d="M 0 0 L -12 -54 L 12 -54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -12 54 L 12 54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -54 -12 L -54 12 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 54 -12 L 54 12 Z" fill="#C8892A" opacity="0.95" />
+            </g>
+            <circle cx="0" cy="0" r="18" fill="#C8892A" />
+        </g>
+    </g>
 </svg>
 """
 
@@ -205,17 +128,13 @@ html, body,
   color: var(--ink) !important;
 }}
 
-[data-testid="stAppViewContainer"]::before {{
-  content: "";
-  position: fixed; top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: 0; pointer-events: none;
-  background-image: url("data:image/svg+xml;base64,{b64_svg}");
-  background-repeat: no-repeat;
-  background-position: center 38%;
-  background-size: 88% auto;
-  opacity: 0.15;
-}}
+[data-testid="stAppViewContainer"]::before {
+    content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml;base64,{b64_svg}");
+    background-repeat: no-repeat; background-position: center center;
+    background-size: 85% auto; opacity: 0.18;
+}
 
 [data-testid="stMainBlockContainer"] {{
   padding-top: 0 !important;
