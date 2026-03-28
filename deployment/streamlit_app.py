@@ -149,7 +149,46 @@ body::before {
 .aircraft-bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; display: flex; justify-content: center; align-items: center; overflow: hidden; opacity: 0.15; }
 .aircraft-bg-container svg { width: 100%; min-width: 1200px; height: auto; }
 </style>
-<div class="aircraft-bg-container"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><g stroke="#C8892A" stroke-width="2" fill="none"><path d="M 590 180 L 600 30 L 610 180 Z" fill="rgba(200,137,42,0.05)" /><path d="M 480 340 L 50 280 L 50 260 L 480 300 Z" fill="rgba(200,137,42,0.05)" /><path d="M 720 340 L 1150 280 L 1150 260 L 720 300 Z" fill="rgba(200,137,42,0.05)" /><ellipse cx="600" cy="300" rx="120" ry="120" fill="#FAF8F4" /><ellipse cx="600" cy="300" rx="110" ry="110" opacity="0.3" /><path d="M 510 260 Q 600 230 690 260 L 675 300 Q 600 280 525 300 Z" fill="rgba(200,137,42,0.15)" /><line x1="600" y1="245" x2="600" y2="290" /><line x1="555" y1="252" x2="565" y2="294" /><line x1="645" y1="252" x2="635" y2="294" /><g transform="translate(300, 390)"><path d="M -10 -60 L 10 -60 L 5 -90 L -5 -90 Z" fill="rgba(200,137,42,0.3)" /><circle cx="0" cy="0" r="55" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" /><circle cx="0" cy="0" r="48" stroke-width="1" stroke="#C8892A" /><g stroke="#C8892A" stroke-width="1.5"><animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.25s" repeatCount="indefinite" /><line x1="0" y1="-48" x2="0" y2="48" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(30)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(60)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(90)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(120)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(150)" /></g><circle cx="0" cy="0" r="14" fill="#C8892A" opacity="0.8" /></g><g transform="translate(900, 390)"><path d="M -10 -60 L 10 -60 L 5 -90 L -5 -90 Z" fill="rgba(200,137,42,0.3)" /><circle cx="0" cy="0" r="55" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" /><circle cx="0" cy="0" r="48" stroke-width="1" stroke="#C8892A" /><g stroke="#C8892A" stroke-width="1.5"><animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.25s" repeatCount="indefinite" /><line x1="0" y1="-48" x2="0" y2="48" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(30)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(60)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(90)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(120)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(150)" /></g><circle cx="0" cy="0" r="14" fill="#C8892A" opacity="0.8" /></g></g></svg></div>
+<div class="aircraft-bg-container">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#C8892A" stroke-width="2" fill="none">
+            <path d="M 590 220 L 600 70 L 610 220 Z" fill="rgba(200,137,42,0.05)" />
+            
+            <path d="M 480 380 L 120 340 Q 80 335 85 300 L 95 300 Q 95 330 130 335 L 480 340 Z" fill="rgba(200,137,42,0.05)" />
+            
+            <path d="M 720 380 L 1080 340 Q 1120 335 1115 300 L 1105 300 Q 1105 330 1070 335 L 720 340 Z" fill="rgba(200,137,42,0.05)" />
+            
+            <ellipse cx="600" cy="340" rx="120" ry="120" fill="#FAF8F4" />
+            <ellipse cx="600" cy="340" rx="110" ry="110" opacity="0.3" />
+            
+            <path d="M 510 300 Q 600 270 690 300 L 675 340 Q 600 320 525 340 Z" fill="rgba(200,137,42,0.15)" />
+            
+            <g transform="translate(320, 430)">
+                <circle cx="0" cy="0" r="55" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
+                <g stroke="#C8892A" stroke-width="1.5">
+                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.25s" repeatCount="indefinite" />
+                    <line x1="0" y1="-48" x2="0" y2="48" />
+                    <line x1="0" y1="-48" x2="0" y2="48" transform="rotate(45)" />
+                    <line x1="0" y1="-48" x2="0" y2="48" transform="rotate(90)" />
+                    <line x1="0" y1="-48" x2="0" y2="48" transform="rotate(135)" />
+                </g>
+                <circle cx="0" cy="0" r="14" fill="#C8892A" opacity="0.8" />
+            </g>
+            
+            <g transform="translate(880, 430)">
+                <circle cx="0" cy="0" r="55" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
+                <g stroke="#C8892A" stroke-width="1.5">
+                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.25s" repeatCount="indefinite" />
+                    <line x1="0" y1="-48" x2="0" y2="48" />
+                    <line x1="0" y1="-48" x2="0" y2="48" transform="rotate(45)" />
+                    <line x1="0" y1="-48" x2="0" y2="48" transform="rotate(90)" />
+                    <line x1="0" y1="-48" x2="0" y2="48" transform="rotate(135)" />
+                </g>
+                <circle cx="0" cy="0" r="14" fill="#C8892A" opacity="0.8" />
+            </g>
+        </g>
+    </svg>
+</div>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
