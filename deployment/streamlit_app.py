@@ -25,7 +25,7 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND
+# GLOBAL CSS
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -148,61 +148,66 @@ body::before {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     opacity: 0.4;
 }
-
-.aircraft-bg-container {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 100vw; height: 100vh; z-index: 0; pointer-events: none;
-    display: flex; justify-content: center; align-items: center;
-    overflow: hidden; opacity: 0.15;
-}
-.aircraft-bg-container svg { width: 90%; max-width: 1200px; height: auto; }
-
-@keyframes blinkGreen { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
-@keyframes blinkRed   { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
-@keyframes strobe     { 0%,8%,100%{opacity:0} 4%{opacity:1} 50%,58%{opacity:0} 54%{opacity:1} }
-.light-green  { animation: blinkGreen 1.2s ease-in-out infinite; }
-.light-red    { animation: blinkRed   1.2s ease-in-out infinite 0.6s; }
-.light-strobe { animation: strobe 2s linear infinite; }
-
 </style>
 """, unsafe_allow_html=True)
 
+# ─────────────────────────────────────────────
+# AIRCRAFT BACKGROUND — injected into parent via JS
+# ─────────────────────────────────────────────
 components.html("""
 <!DOCTYPE html>
 <html>
 <head>
 <style>
-  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
-
-  @keyframes blinkGreen { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
-  @keyframes blinkRed   { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
-  @keyframes strobe     { 0%,8%,100%{opacity:0} 4%{opacity:1} 50%,58%{opacity:0} 54%{opacity:1} }
-  .light-green  { animation: blinkGreen 1.2s ease-in-out infinite; }
-  .light-red    { animation: blinkRed   1.2s ease-in-out infinite 0.6s; }
-  .light-strobe { animation: strobe 2s linear infinite; }
-
-  .aircraft-bg-container {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 100vw; height: 100vh;
-    display: flex; justify-content: center; align-items: center;
-    overflow: hidden; opacity: 0.15; pointer-events: none;
-  }
-  .aircraft-bg-container svg { width: 90%; max-width: 1200px; height: auto; }
+  html, body { margin:0; padding:0; background:transparent; overflow:hidden; width:100%; height:1px; }
 </style>
 </head>
 <body>
-<div class="aircraft-bg-container">
+<script>
+(function() {
+  // Remove any previous injection to avoid duplicates on rerun
+  var old = window.parent.document.getElementById('aeromind-aircraft-bg');
+  if (old) old.remove();
+
+  // Create style
+  var style = window.parent.document.createElement('style');
+  style.id = 'aeromind-aircraft-style';
+  style.textContent = `
+    @keyframes blinkGreen { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
+    @keyframes blinkRed   { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
+    @keyframes strobe     { 0%,8%,100%{opacity:0} 4%{opacity:1} 50%,58%{opacity:0} 54%{opacity:1} }
+    #aeromind-aircraft-bg {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100vw; height: 100vh;
+      z-index: 0; pointer-events: none;
+      display: flex; justify-content: center; align-items: center;
+      overflow: hidden; opacity: 0.15;
+    }
+    #aeromind-aircraft-bg svg { width: 90%; max-width: 1200px; height: auto; }
+    .ac-light-green { animation: blinkGreen 1.2s ease-in-out infinite; }
+    .ac-light-red   { animation: blinkRed   1.2s ease-in-out infinite 0.6s; }
+    .ac-light-strobe{ animation: strobe 2s linear infinite; }
+  `;
+  var oldStyle = window.parent.document.getElementById('aeromind-aircraft-style');
+  if (oldStyle) oldStyle.remove();
+  window.parent.document.head.appendChild(style);
+
+  // Create container
+  var div = window.parent.document.createElement('div');
+  div.id = 'aeromind-aircraft-bg';
+  div.innerHTML = `
 <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="greenLight" cx="50%" cy="50%" r="50%">
+    <radialGradient id="ac-greenLight" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#00FF88" stop-opacity="1"/>
       <stop offset="100%" stop-color="#00FF88" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="redLight" cx="50%" cy="50%" r="50%">
+    <radialGradient id="ac-redLight" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#FF3333" stop-opacity="1"/>
       <stop offset="100%" stop-color="#FF3333" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="whiteStrobe" cx="50%" cy="50%" r="50%">
+    <radialGradient id="ac-whiteStrobe" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
       <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
     </radialGradient>
@@ -286,25 +291,29 @@ components.html("""
     <path d="M 658 430 L 668 470 L 668 465 L 658 428 Z" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="0.8"/>
 
     <!-- NAV LIGHTS -->
-    <g class="light-red">
-      <circle cx="62" cy="390" r="10" fill="url(#redLight)" opacity="0.9"/>
+    <g class="ac-light-red">
+      <circle cx="62" cy="390" r="10" fill="url(#ac-redLight)" opacity="0.9"/>
       <circle cx="62" cy="390" r="4" fill="#FF3333" opacity="0.95"/>
     </g>
-    <g class="light-green">
-      <circle cx="1138" cy="390" r="10" fill="url(#greenLight)" opacity="0.9"/>
+    <g class="ac-light-green">
+      <circle cx="1138" cy="390" r="10" fill="url(#ac-greenLight)" opacity="0.9"/>
       <circle cx="1138" cy="390" r="4" fill="#00FF88" opacity="0.95"/>
     </g>
-    <g class="light-strobe">
-      <circle cx="600" cy="520" r="8" fill="url(#whiteStrobe)" opacity="0.9"/>
+    <g class="ac-light-strobe">
+      <circle cx="600" cy="520" r="8" fill="url(#ac-whiteStrobe)" opacity="0.9"/>
       <circle cx="600" cy="520" r="3" fill="#FFFFFF" opacity="1"/>
     </g>
 
   </g>
 </svg>
-</div>
+  `;
+
+  window.parent.document.body.appendChild(div);
+})();
+</script>
 </body>
 </html>
-""", height=0, scrolling=False)
+""", height=1, scrolling=False)
 
 # ─────────────────────────────────────────────
 # TOP NAVIGATION BAR
@@ -450,7 +459,7 @@ elif page == "RUL Prediction":
             rul_pred = int(base_rul * 0.94) - 2
         elif chosen == 'LightGBM':
             rul_pred = int(base_rul * 0.98) + 1
-        else: # LSTM (Champion baseline)
+        else:
             rul_pred = base_rul
             
         rul_pred = max(0, min(125, rul_pred))
