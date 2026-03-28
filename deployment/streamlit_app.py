@@ -24,7 +24,7 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND
+# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (FINAL FIX)
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -32,136 +32,105 @@ st.markdown("""
 
 :root {
     --ivory:     #FAF8F4;
-    --cream:     #F3EFE7;
+    --amber:     #C8892A;
+    --charcoal:  #1C1C1E;
     --warm-100:  #EDE7D9;
     --warm-200:  #D9CEBC;
-    --amber:     #C8892A;
-    --amber-lt:  #E8A83E;
-    --amber-dim: #F0D49A;
-    --charcoal:  #1C1C1E;
-    --slate:     #3A3A3C;
-    --mid:       #6C6C70;
-    --muted:     #9A9A9E;
-    --rust:      #B84A2E;
-    --rust-lt:   #FCEAE6;
-    --teal:      #1E7A6E;
-    --teal-lt:   #E3F4F1;
-    --shadow-sm: 0 2px 12px rgba(28,28,30,0.07);
-    --shadow-md: 0 6px 28px rgba(28,28,30,0.10);
-    --shadow-lg: 0 16px 56px rgba(28,28,30,0.14);
     --radius:    18px;
-    --radius-sm: 10px;
 }
 
-*, *::before, *::after { box-sizing: border-box; }
-
-html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
+/* Page Reset */
+html, body, [data-testid="stAppViewContainer"] {
     background: var(--ivory) !important;
     font-family: 'Outfit', sans-serif !important;
 }
 
 [data-testid="stMainBlockContainer"] {
-    padding-top: 2rem !important;
-    max-width: 1300px !important;
     position: relative;
-    z-index: 10; 
+    z-index: 100; /* High z-index to stay above background */
+    padding-top: 2rem !important;
+    max-width: 1350px !important;
 }
 
-#MainMenu, footer, header { visibility: hidden; }
-[data-testid="stDecoration"] { display: none; }
-[data-testid="collapsedControl"] { display: none; } 
+#MainMenu, footer, header, [data-testid="stDecoration"] { visibility: hidden; display: none; }
 
-h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif !important; color: var(--charcoal) !important; }
-p, li, span, div, label { font-family: 'Outfit', sans-serif !important; }
-
-/* FIX: Ensure background is strictly behind and centered */
-.aircraft-bg-container { 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100vw; 
-    height: 100vh; 
-    z-index: -1; 
-    pointer-events: none; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    overflow: hidden; 
-    opacity: 0.15; 
+/* AIRCRAFT BACKGROUND - Centered & Large */
+.aircraft-viewport {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1; /* Strictly behind */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0.18;
 }
 
-.aircraft-bg-container svg { 
-    width: 95%; /* Increased size */
-    max-width: 1400px;
-    height: auto; 
+.aircraft-viewport svg {
+    width: 98%;
+    max-width: 1500px;
+    height: auto;
 }
 
-/* Radio Button Styling */
+/* Component Styling */
 div[data-testid="stRadio"] > div[role="radiogroup"] {
-    display: flex; flex-direction: row; gap: 12px; background: transparent; padding: 0; flex-wrap: wrap; justify-content: center;
+    display: flex; flex-direction: row; gap: 12px; justify-content: center;
 }
 div[data-testid="stRadio"] label {
-    background: #FFFFFF; padding: 10px 24px !important; border-radius: 30px !important; border: 1px solid var(--warm-200) !important;
-    cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; font-family: 'IBM Plex Mono', monospace !important;
-    font-size: 0.75rem !important; letter-spacing: 0.1em !important; text-transform: uppercase !important; color: var(--slate) !important;
-    box-shadow: var(--shadow-sm); margin-bottom: 5px;
+    background: #FFFFFF; padding: 10px 24px !important; border-radius: 30px !important;
+    border: 1px solid var(--warm-200) !important; font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.75rem !important; text-transform: uppercase !important; color: #3A3A3C !important;
+    transition: 0.3s;
 }
-div[data-testid="stRadio"] label:hover { border-color: var(--amber) !important; transform: translateY(-2px); box-shadow: var(--shadow-md); }
-div[data-testid="stRadio"] label[data-checked="true"] { background: var(--charcoal) !important; border-color: var(--charcoal) !important; }
-div[data-testid="stRadio"] label[data-checked="true"] * { color: var(--amber-lt) !important; font-weight: 600 !important; }
-div[data-testid="stRadio"] label > div:first-child { display: none !important; }
+div[data-testid="stRadio"] label[data-checked="true"] { 
+    background: var(--charcoal) !important; border-color: var(--charcoal) !important; 
+}
+div[data-testid="stRadio"] label[data-checked="true"] * { color: #E8A83E !important; }
 
 [data-testid="stMetric"] {
-    background: #FFFFFF !important; border: 1px solid var(--warm-100) !important; border-radius: var(--radius) !important;
-    padding: 1.3rem 1.5rem !important; border-top: 3px solid var(--amber) !important; box-shadow: var(--shadow-sm) !important;
+    background: #FFFFFF !important; border: 1px solid var(--warm-100) !important; 
+    border-radius: var(--radius) !important; border-top: 3px solid var(--amber) !important;
 }
 
-.card { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: var(--radius); padding: 1.8rem 2rem; box-shadow: var(--shadow-sm); margin-bottom: 1.2rem; }
-.hero { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: 24px; padding: 3.5rem 3.5rem 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; box-shadow: var(--shadow-lg); }
-
-body::before {
-    content: ''; position: fixed; inset: 0; z-index: -2; pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    opacity: 0.4;
-}
+.card { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: var(--radius); padding: 1.8rem 2rem; margin-bottom: 1.2rem; }
+.hero { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: 24px; padding: 3.5rem; margin-bottom: 2rem; box-shadow: 0 16px 56px rgba(28,28,30,0.1); }
 </style>
 
-<div class="aircraft-bg-container">
+<div class="aircraft-viewport">
     <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-        <g stroke="#C8892A" stroke-width="2.5" fill="none" stroke-linecap="round">
-            <path d="M 585 240 L 600 70 L 615 240 Z" fill="rgba(200,137,42,0.05)" />
+        <g stroke="#C8892A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 585 240 L 600 50 L 615 240 Z" fill="rgba(200,137,42,0.05)" />
             
-            <path d="M 480 400 L 120 375 L 105 300 L 115 300 L 135 365 L 480 375 Z" fill="rgba(200,137,42,0.05)" />
+            <path d="M 480 400 L 80 370 L 65 280 L 75 280 L 95 360 L 480 375 Z" fill="rgba(200,137,42,0.05)" />
             
-            <path d="M 720 400 L 1080 375 L 1095 300 L 1085 300 L 1065 365 L 720 375 Z" fill="rgba(200,137,42,0.05)" />
+            <path d="M 720 400 L 1120 370 L 1135 280 L 1125 280 L 1105 360 L 720 375 Z" fill="rgba(200,137,42,0.05)" />
             
-            <ellipse cx="600" cy="380" rx="125" ry="125" fill="#FAF8F4" />
-            <ellipse cx="600" cy="380" rx="115" ry="115" opacity="0.2" />
+            <circle cx="600" cy="380" r="130" fill="#FAF8F4" />
+            <circle cx="600" cy="380" r="115" stroke-dasharray="10 5" opacity="0.2" />
             
-            <path d="M 520 340 Q 600 305 680 340 L 665 385 Q 600 365 535 385 Z" fill="rgba(200,137,42,0.1)" />
-            
-            <g transform="translate(310, 450)">
-                <circle cx="0" cy="0" r="62" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
-                <g stroke="#C8892A" stroke-width="2">
-                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.15s" repeatCount="indefinite" />
+            <g transform="translate(280, 460)">
+                <circle cx="0" cy="0" r="65" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
+                <g stroke="#C8892A" stroke-width="2.5">
+                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
                     <line x1="0" y1="-55" x2="0" y2="55" />
                     <line x1="-55" y1="0" x2="55" y2="0" />
                     <line x1="-40" y1="-40" x2="40" y2="40" />
                     <line x1="-40" y1="40" x2="40" y2="-40" />
                 </g>
-                <circle cx="0" cy="0" r="18" fill="#C8892A" />
+                <circle cx="0" cy="0" r="15" fill="#C8892A" />
             </g>
             
-            <g transform="translate(890, 450)">
-                <circle cx="0" cy="0" r="62" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
-                <g stroke="#C8892A" stroke-width="2">
-                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.15s" repeatCount="indefinite" />
+            <g transform="translate(920, 460)">
+                <circle cx="0" cy="0" r="65" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
+                <g stroke="#C8892A" stroke-width="2.5">
+                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
                     <line x1="0" y1="-55" x2="0" y2="55" />
                     <line x1="-55" y1="0" x2="55" y2="0" />
                     <line x1="-40" y1="-40" x2="40" y2="40" />
                     <line x1="-40" y1="40" x2="40" y2="-40" />
                 </g>
-                <circle cx="0" cy="0" r="18" fill="#C8892A" />
+                <circle cx="0" cy="0" r="15" fill="#C8892A" />
             </g>
         </g>
     </svg>
