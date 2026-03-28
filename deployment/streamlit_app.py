@@ -12,6 +12,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 import warnings
 warnings.filterwarnings('ignore')
+import streamlit.components.v1 as components
 
 # ─────────────────────────────────────────────
 # PAGE CONFIG
@@ -164,7 +165,32 @@ body::before {
 .light-strobe { animation: strobe 2s linear infinite; }
 
 </style>
+""", unsafe_allow_html=True)
 
+components.html("""
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+
+  @keyframes blinkGreen { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
+  @keyframes blinkRed   { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
+  @keyframes strobe     { 0%,8%,100%{opacity:0} 4%{opacity:1} 50%,58%{opacity:0} 54%{opacity:1} }
+  .light-green  { animation: blinkGreen 1.2s ease-in-out infinite; }
+  .light-red    { animation: blinkRed   1.2s ease-in-out infinite 0.6s; }
+  .light-strobe { animation: strobe 2s linear infinite; }
+
+  .aircraft-bg-container {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 100vw; height: 100vh;
+    display: flex; justify-content: center; align-items: center;
+    overflow: hidden; opacity: 0.15; pointer-events: none;
+  }
+  .aircraft-bg-container svg { width: 90%; max-width: 1200px; height: auto; }
+</style>
+</head>
+<body>
 <div class="aircraft-bg-container">
 <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -181,15 +207,12 @@ body::before {
       <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
     </radialGradient>
   </defs>
-
   <g stroke="#C8892A" stroke-width="2" fill="none">
 
     <!-- FUSELAGE -->
-    <path d="M 540 230 Q 530 300 535 420 L 545 500 Q 600 530 655 500 L 665 420 Q 670 300 660 230 Q 600 200 540 230 Z"
-          fill="rgba(200,137,42,0.06)" stroke="#C8892A" stroke-width="1.5"/>
+    <path d="M 540 230 Q 530 300 535 420 L 545 500 Q 600 530 655 500 L 665 420 Q 670 300 660 230 Q 600 200 540 230 Z" fill="rgba(200,137,42,0.06)" stroke="#C8892A" stroke-width="1.5"/>
     <path d="M 540 230 Q 600 160 660 230" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="1.5"/>
     <path d="M 555 210 Q 600 155 645 210 Q 600 185 555 210 Z" fill="rgba(200,137,42,0.2)" stroke="none"/>
-    <!-- Windows -->
     <rect x="575" y="270" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
     <rect x="588" y="270" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
     <rect x="601" y="270" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
@@ -199,26 +222,18 @@ body::before {
     <rect x="601" y="285" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
     <rect x="614" y="285" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
 
-    <!-- MAIN WINGS — swept tapered A320/B737 -->
-    <path d="M 543 310 L 60 385 L 80 400 L 543 340 Z"
-          fill="rgba(200,137,42,0.08)" stroke="#C8892A" stroke-width="1.5"/>
+    <!-- WINGS -->
+    <path d="M 543 310 L 60 385 L 80 400 L 543 340 Z" fill="rgba(200,137,42,0.08)" stroke="#C8892A" stroke-width="1.5"/>
     <path d="M 543 310 L 60 385" stroke="#C8892A" stroke-width="1" opacity="0.5"/>
     <path d="M 543 335 L 120 398" stroke="#C8892A" stroke-width="0.8" opacity="0.3" stroke-dasharray="4,4"/>
-
-    <path d="M 657 310 L 1140 385 L 1120 400 L 657 340 Z"
-          fill="rgba(200,137,42,0.08)" stroke="#C8892A" stroke-width="1.5"/>
+    <path d="M 657 310 L 1140 385 L 1120 400 L 657 340 Z" fill="rgba(200,137,42,0.08)" stroke="#C8892A" stroke-width="1.5"/>
     <path d="M 657 310 L 1140 385" stroke="#C8892A" stroke-width="1" opacity="0.5"/>
     <path d="M 657 335 L 1080 398" stroke="#C8892A" stroke-width="0.8" opacity="0.3" stroke-dasharray="4,4"/>
 
-    <!-- HORIZONTAL STABILIZER -->
-    <path d="M 547 490 L 390 530 L 400 542 L 547 505 Z"
-          fill="rgba(200,137,42,0.07)" stroke="#C8892A" stroke-width="1.2"/>
-    <path d="M 653 490 L 810 530 L 800 542 L 653 505 Z"
-          fill="rgba(200,137,42,0.07)" stroke="#C8892A" stroke-width="1.2"/>
-
-    <!-- VERTICAL STABILIZER -->
-    <path d="M 595 430 Q 590 380 600 340 Q 610 380 605 430 Z"
-          fill="rgba(200,137,42,0.12)" stroke="#C8892A" stroke-width="1.2"/>
+    <!-- STABILIZERS -->
+    <path d="M 547 490 L 390 530 L 400 542 L 547 505 Z" fill="rgba(200,137,42,0.07)" stroke="#C8892A" stroke-width="1.2"/>
+    <path d="M 653 490 L 810 530 L 800 542 L 653 505 Z" fill="rgba(200,137,42,0.07)" stroke="#C8892A" stroke-width="1.2"/>
+    <path d="M 595 430 Q 590 380 600 340 Q 610 380 605 430 Z" fill="rgba(200,137,42,0.12)" stroke="#C8892A" stroke-width="1.2"/>
 
     <!-- LEFT ENGINE -->
     <line x1="460" y1="345" x2="460" y2="370" stroke="#C8892A" stroke-width="1.5"/>
@@ -287,7 +302,9 @@ body::before {
   </g>
 </svg>
 </div>
-""", unsafe_allow_html=True)
+</body>
+</html>
+""", height=0, scrolling=False)
 
 # ─────────────────────────────────────────────
 # TOP NAVIGATION BAR
