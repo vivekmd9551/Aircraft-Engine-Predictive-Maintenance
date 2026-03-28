@@ -23,131 +23,53 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# BACKGROUND SVG  — light, fine technical linework
+# PREMIUM ANIMATED BACKGROUND SVG (Amber/Warm)
 # ─────────────────────────────────────────────
 svg_bg = """
-<svg viewBox="0 0 1400 860" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="wl" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#2563EB" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#2563EB" stop-opacity="0.35"/>
-    </linearGradient>
-    <linearGradient id="wr" x1="100%" y1="0%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#2563EB" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#2563EB" stop-opacity="0.35"/>
-    </linearGradient>
-  </defs>
-
-  <!-- Blueprint grid -->
-  <g stroke="#DBEAFE" stroke-width="0.6" opacity="0.9">
-    <line x1="0" y1="150" x2="1400" y2="150"/>
-    <line x1="0" y1="300" x2="1400" y2="300"/>
-    <line x1="0" y1="450" x2="1400" y2="450"/>
-    <line x1="0" y1="600" x2="1400" y2="600"/>
-    <line x1="0" y1="750" x2="1400" y2="750"/>
-    <line x1="175" y1="0" x2="175" y2="860"/>
-    <line x1="350" y1="0" x2="350" y2="860"/>
-    <line x1="525" y1="0" x2="525" y2="860"/>
-    <line x1="700" y1="0" x2="700" y2="860"/>
-    <line x1="875" y1="0" x2="875" y2="860"/>
-    <line x1="1050" y1="0" x2="1050" y2="860"/>
-    <line x1="1225" y1="0" x2="1225" y2="860"/>
-  </g>
-
-  <!-- Fuselage body -->
-  <path d="M 685 90 L 700 55 L 715 90 L 724 460 L 700 488 L 676 460 Z"
-        stroke="#2563EB" stroke-width="1.8" fill="rgba(37,99,235,0.04)"/>
-  <line x1="700" y1="55" x2="700" y2="110" stroke="#2563EB" stroke-width="0.8" opacity="0.5"/>
-  <ellipse cx="700" cy="155" rx="14" ry="9" stroke="#2563EB" stroke-width="1.2" fill="rgba(37,99,235,0.08)"/>
-
-  <!-- Left wing -->
-  <path d="M 684 370 L 100 408 L 92 382 L 96 380 L 112 400 L 682 355 Z"
-        stroke="#2563EB" stroke-width="1.6" fill="url(#wl)" opacity="0.6"/>
-  <!-- Right wing -->
-  <path d="M 716 370 L 1300 408 L 1308 382 L 1304 380 L 1288 400 L 718 355 Z"
-        stroke="#2563EB" stroke-width="1.6" fill="url(#wr)" opacity="0.6"/>
-
-  <!-- Wing tics -->
-  <g stroke="#2563EB" stroke-width="0.9" opacity="0.4">
-    <line x1="220" y1="404" x2="220" y2="393"/>
-    <line x1="340" y1="401" x2="340" y2="390"/>
-    <line x1="460" y1="398" x2="460" y2="388"/>
-    <line x1="580" y1="394" x2="580" y2="385"/>
-    <line x1="1180" y1="404" x2="1180" y2="393"/>
-    <line x1="1060" y1="401" x2="1060" y2="390"/>
-    <line x1="940" y1="398" x2="940" y2="388"/>
-    <line x1="820" y1="394" x2="820" y2="385"/>
-  </g>
-
-  <!-- Stabilisers -->
-  <path d="M 678 464 L 490 482 L 488 472 L 677 452 Z"
-        stroke="#2563EB" stroke-width="1.1" fill="rgba(37,99,235,0.04)" opacity="0.55"/>
-  <path d="M 722 464 L 910 482 L 912 472 L 723 452 Z"
-        stroke="#2563EB" stroke-width="1.1" fill="rgba(37,99,235,0.04)" opacity="0.55"/>
-
-  <!-- Left engine -->
-  <ellipse cx="318" cy="468" rx="64" ry="64"
-           stroke="#2563EB" stroke-width="2.2" fill="rgba(255,255,255,0.6)"/>
-  <ellipse cx="318" cy="468" rx="46" ry="46"
-           stroke="#2563EB" stroke-width="0.9" fill="none" opacity="0.35"/>
-  <g>
-    <animateTransform attributeName="transform" type="rotate"
-      from="0 318 468" to="360 318 468" dur="0.09s" repeatCount="indefinite"/>
-    <polygon points="318,406 310,462 318,464 326,462" fill="#2563EB" opacity="0.85"/>
-    <polygon points="318,530 326,474 318,472 310,474" fill="#2563EB" opacity="0.85"/>
-    <polygon points="254,468 310,460 310,468 310,476" fill="#2563EB" opacity="0.85"/>
-    <polygon points="382,468 326,476 326,468 326,460" fill="#2563EB" opacity="0.85"/>
-    <polygon points="272,422 310,462 316,456 312,450" fill="#2563EB" opacity="0.6"/>
-    <polygon points="364,514 326,474 320,480 324,486" fill="#2563EB" opacity="0.6"/>
-    <polygon points="272,514 312,474 318,480 314,486" fill="#2563EB" opacity="0.6"/>
-    <polygon points="364,422 324,462 318,456 322,450" fill="#2563EB" opacity="0.6"/>
-  </g>
-  <circle cx="318" cy="468" r="13" fill="white" stroke="#2563EB" stroke-width="1.6"/>
-  <ellipse cx="318" cy="468" rx="68" ry="68" fill="none" stroke="#3B82F6" stroke-width="4" opacity="0.1">
-    <animate attributeName="r" values="68;76;68" dur="2s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0.1;0.18;0.1" dur="2s" repeatCount="indefinite"/>
-  </ellipse>
-
-  <!-- Right engine -->
-  <ellipse cx="1082" cy="468" rx="64" ry="64"
-           stroke="#2563EB" stroke-width="2.2" fill="rgba(255,255,255,0.6)"/>
-  <ellipse cx="1082" cy="468" rx="46" ry="46"
-           stroke="#2563EB" stroke-width="0.9" fill="none" opacity="0.35"/>
-  <g>
-    <animateTransform attributeName="transform" type="rotate"
-      from="0 1082 468" to="360 1082 468" dur="0.09s" repeatCount="indefinite"/>
-    <polygon points="1082,406 1074,462 1082,464 1090,462" fill="#2563EB" opacity="0.85"/>
-    <polygon points="1082,530 1090,474 1082,472 1074,474" fill="#2563EB" opacity="0.85"/>
-    <polygon points="1018,468 1074,460 1074,468 1074,476" fill="#2563EB" opacity="0.85"/>
-    <polygon points="1146,468 1090,476 1090,468 1090,460" fill="#2563EB" opacity="0.85"/>
-    <polygon points="1036,422 1074,462 1080,456 1076,450" fill="#2563EB" opacity="0.6"/>
-    <polygon points="1128,514 1090,474 1084,480 1088,486" fill="#2563EB" opacity="0.6"/>
-    <polygon points="1036,514 1076,474 1082,480 1078,486" fill="#2563EB" opacity="0.6"/>
-    <polygon points="1128,422 1088,462 1082,456 1086,450" fill="#2563EB" opacity="0.6"/>
-  </g>
-  <circle cx="1082" cy="468" r="13" fill="white" stroke="#2563EB" stroke-width="1.6"/>
-  <ellipse cx="1082" cy="468" rx="68" ry="68" fill="none" stroke="#3B82F6" stroke-width="4" opacity="0.1">
-    <animate attributeName="r" values="68;76;68" dur="2s" repeatCount="indefinite" begin="1s"/>
-    <animate attributeName="opacity" values="0.1;0.18;0.1" dur="2s" repeatCount="indefinite" begin="1s"/>
-  </ellipse>
-
-  <!-- Nav lights -->
-  <circle cx="94" cy="382" r="6" fill="#EF4444">
-    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.2s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="1306" cy="382" r="6" fill="#22C55E">
-    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.2s" repeatCount="indefinite" begin="0.6s"/>
-  </circle>
-
-  <!-- Centre crosshair -->
-  <g stroke="#2563EB" stroke-width="0.7" opacity="0.25">
-    <line x1="660" y1="270" x2="740" y2="270"/>
-    <line x1="700" y1="250" x2="700" y2="290"/>
-    <circle cx="700" cy="270" r="20" fill="none"/>
-  </g>
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <filter id="ultra-glow-red" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur stdDeviation="15" result="blur1" />
+            <feGaussianBlur stdDeviation="5" result="blur2" />
+            <feMerge><feMergeNode in="blur1" /><feMergeNode in="blur2" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        <filter id="ultra-glow-green" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur stdDeviation="15" result="blur1" />
+            <feGaussianBlur stdDeviation="5" result="blur2" />
+            <feMerge><feMergeNode in="blur1" /><feMergeNode in="blur2" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+    </defs>
+    <g stroke="#C8892A" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 585 260 L 600 50 L 615 260 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
+        <path d="M 480 380 L 120 355 L 110 310 L 115 310 L 130 350 L 480 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
+        <path d="M 720 380 L 1080 355 L 1090 310 L 1085 310 L 1070 350 L 720 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
+        <g filter="url(#ultra-glow-red)"><circle cx="112" cy="310" r="8" fill="#FF0000"><animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite" /></circle></g>
+        <g filter="url(#ultra-glow-green)"><circle cx="1088" cy="310" r="8" fill="#00FF00"><animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite" begin="0.5s" /></circle></g>
+        <ellipse cx="600" cy="380" rx="125" ry="125" stroke-width="3" fill="#FAF8F4" />
+        <path d="M 530 330 Q 600 300 670 330 L 655 370 Q 600 350 545 370 Z" stroke-width="2" fill="rgba(200,137,42,0.15)" />
+        <g transform="translate(320, 438)">
+            <circle cx="0" cy="0" r="58.5" stroke-width="9" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
+            <g><animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
+                <path d="M 0 0 L -12 -54 L 12 -54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -12 54 L 12 54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -54 -12 L -54 12 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 54 -12 L 54 12 Z" fill="#C8892A" opacity="0.95" />
+            </g>
+            <circle cx="0" cy="0" r="18" fill="#C8892A" />
+        </g>
+        <g transform="translate(880, 438)">
+            <circle cx="0" cy="0" r="58.5" stroke-width="9" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
+            <g><animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
+                <path d="M 0 0 L -12 -54 L 12 -54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -12 54 L 12 54 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -54 -12 L -54 12 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 54 -12 L 54 12 Z" fill="#C8892A" opacity="0.95" />
+            </g>
+            <circle cx="0" cy="0" r="18" fill="#C8892A" />
+        </g>
+    </g>
 </svg>
 """
-
 b64_svg = base64.b64encode(svg_bg.encode()).decode()
 
 # ─────────────────────────────────────────────
@@ -158,253 +80,80 @@ st.markdown(f"""
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {{
-  --white:     #FFFFFF;
-  --bg:        #F0F4FB;
-  --surface:   #FFFFFF;
-  --surface2:  #EEF3FF;
-  --border:    #DDE5F4;
-  --border2:   #C7D6F0;
-
-  --blue:      #2563EB;
-  --blue-lt:   #EEF3FF;
-  --blue-mid:  #DBEAFE;
-  --blue-dk:   #1D4ED8;
-
-  --coral:     #F05438;
-  --coral-lt:  #FFF1EE;
-
-  --teal:      #0E9580;
-  --teal-lt:   #ECFDF5;
-
-  --gold:      #D97706;
-  --gold-lt:   #FFFBEB;
-
-  --ink:       #111827;
-  --ink2:      #374151;
-  --ink3:      #6B7280;
-  --ink4:      #9CA3AF;
-
-  --shadow-sm: 0 1px 4px rgba(37,99,235,0.07), 0 2px 12px rgba(37,99,235,0.05);
-  --shadow-md: 0 4px 20px rgba(37,99,235,0.10);
-  --shadow-lg: 0 12px 40px rgba(37,99,235,0.14);
-
-  --radius:    16px;
-  --radius-lg: 24px;
-  --mono:      'JetBrains Mono', monospace;
-  --display:   'DM Serif Display', serif;
-  --body:      'DM Sans', sans-serif;
+  --white:      #FFFFFF;
+  --bg:         #FAF8F4; /* Adjusted to Ivory for the Amber Background */
+  --surface:    #FFFFFF;
+  --blue:       #2563EB;
+  --border:     #DDE5F4;
+  --ink:        #111827;
+  --ink3:       #6B7280;
+  --radius:     16px;
+  --radius-lg:  24px;
+  --mono:       'JetBrains Mono', monospace;
+  --display:    'DM Serif Display', serif;
+  --body:       'DM Sans', sans-serif;
 }}
 
-*, *::before, *::after {{ box-sizing: border-box; }}
-
-html, body,
-[data-testid="stAppViewContainer"],
-[data-testid="stApp"] {{
-  background: var(--bg) !important;
-  font-family: var(--body) !important;
-  color: var(--ink) !important;
+html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {{
+  background: var(--bg) !important;
+  font-family: var(--body) !important;
+  color: var(--ink) !important;
 }}
 
+/* THE NEW ANIMATED AIRCRAFT BACKGROUND */
 [data-testid="stAppViewContainer"]::before {{
-  content: "";
-  position: fixed; top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: 0; pointer-events: none;
-  background-image: url("data:image/svg+xml;base64,{b64_svg}");
-  background-repeat: no-repeat;
-  background-position: center 38%;
-  background-size: 88% auto;
-  opacity: 0.15;
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;base64,{b64_svg}");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 85% auto;
+    opacity: 0.18;
 }}
 
 [data-testid="stMainBlockContainer"] {{
-  padding-top: 0 !important;
-  max-width: 1360px !important;
-  position: relative;
-  z-index: 10;
-  animation: fadein 0.35s ease;
+  padding-top: 0 !important;
+  max-width: 1360px !important;
+  position: relative;
+  z-index: 10;
+  animation: fadein 0.35s ease;
 }}
+
 @keyframes fadein {{
-  from {{ opacity: 0; transform: translateY(6px); }}
-  to   {{ opacity: 1; transform: translateY(0); }}
+  from {{ opacity: 0; transform: translateY(6px); }}
+  to   {{ opacity: 1; transform: translateY(0); }}
 }}
 
 #MainMenu, footer, header {{ visibility: hidden; }}
 [data-testid="stDecoration"] {{ display: none; }}
 [data-testid="collapsedControl"] {{ display: none; }}
 
-h1, h2, h3, h4, h5 {{
-  font-family: var(--display) !important;
-  color: var(--ink) !important;
-}}
-p, li, span, div, label {{
-  font-family: var(--body) !important;
-}}
+h1, h2, h3, h4, h5 {{ font-family: var(--display) !important; color: var(--ink) !important; }}
 
-/* ── NAV BAR ── */
-div[data-testid="stRadio"] > div[role="radiogroup"] {{
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-  background: var(--white);
-  padding: 5px;
-  border-radius: 50px;
-  border: 1.5px solid var(--border);
-  flex-wrap: wrap;
-  justify-content: center;
-  box-shadow: var(--shadow-sm);
-}}
-div[data-testid="stRadio"] label {{
-  background: transparent;
-  padding: 8px 22px !important;
-  border-radius: 40px !important;
-  border: none !important;
-  cursor: pointer;
-  transition: all 0.2s ease !important;
-  font-family: var(--mono) !important;
-  font-size: 0.7rem !important;
-  letter-spacing: 0.08em !important;
-  text-transform: uppercase !important;
-  color: var(--ink3) !important;
-  box-shadow: none !important;
-}}
-div[data-testid="stRadio"] label:hover {{
-  color: var(--blue) !important;
-  background: var(--blue-lt) !important;
-}}
-div[data-testid="stRadio"] label[data-checked="true"] {{
-  background: var(--blue) !important;
-  box-shadow: 0 2px 12px rgba(37,99,235,0.28) !important;
-}}
-div[data-testid="stRadio"] label[data-checked="true"] * {{
-  color: white !important;
-  font-weight: 600 !important;
-}}
-div[data-testid="stRadio"] label > div:first-child {{ display: none !important; }}
-
-/* ── METRICS ── */
+/* ── RE-STYLING THE COMPONENTS FOR THE NEW BG ── */
 [data-testid="stMetric"] {{
-  background: var(--white) !important;
-  border: 1.5px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  padding: 1.4rem 1.6rem 1.2rem !important;
-  box-shadow: var(--shadow-sm) !important;
-  position: relative;
-  overflow: hidden;
-}}
-[data-testid="stMetric"]::after {{
-  content: "";
-  position: absolute;
-  left: 0; top: 0; bottom: 0; width: 4px;
-  background: var(--blue);
-  border-radius: 16px 0 0 16px;
-}}
-[data-testid="stMetricValue"] {{
-  font-family: var(--display) !important;
-  font-size: 2rem !important;
-  font-weight: 400 !important;
-  color: var(--ink) !important;
-}}
-[data-testid="stMetricLabel"] {{
-  font-family: var(--mono) !important;
-  font-size: 0.58rem !important;
-  letter-spacing: 0.15em !important;
-  text-transform: uppercase !important;
-  color: var(--ink4) !important;
-}}
-[data-testid="stMetricDelta"] {{
-  font-family: var(--mono) !important;
-  font-size: 0.62rem !important;
+  background: var(--white) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
 }}
 
-/* ── SELECT ── */
-[data-baseweb="select"] {{
-  border-radius: var(--radius) !important;
-  border-color: var(--border) !important;
-  background: var(--white) !important;
-  font-family: var(--body) !important;
-}}
-[data-baseweb="select"] * {{ color: var(--ink) !important; }}
-
-/* ── SLIDER ── */
-[data-testid="stSlider"] [role="slider"] {{
-  background: var(--blue) !important;
-  border-color: white !important;
-  box-shadow: 0 0 0 3px rgba(37,99,235,0.2) !important;
-}}
-
-/* ── BORDERED CONTAINER ── */
-[data-testid="stVerticalBlockBorderWrapper"] > div {{
-  background: var(--white) !important;
-  border: 1.5px solid var(--border) !important;
-  border-radius: var(--radius-lg) !important;
-  box-shadow: var(--shadow-sm) !important;
-}}
-
-/* ── DATAFRAME ── */
-[data-testid="stDataFrame"] {{
-  border: 1.5px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  overflow: hidden !important;
-}}
-
-/* ── COMPONENTS ── */
 .card {{
-  background: var(--white);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.8rem 2rem;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 1.2rem;
-  position: relative;
-}}
-.card-blue {{
-  background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 55%, #3B82F6 100%);
-  border-radius: var(--radius-lg);
-  padding: 1.8rem 2rem;
-  box-shadow: var(--shadow-lg);
-  margin-bottom: 1.2rem;
-}}
-.alert-box {{
-  border-radius: var(--radius);
-  padding: 1.2rem 1.5rem;
-  border: 1.5px solid;
-  margin: 1rem 0;
-}}
-.alert-critical {{ background: var(--coral-lt); border-color: rgba(240,84,56,0.3); }}
-.alert-warning  {{ background: var(--gold-lt);  border-color: rgba(217,119,6,0.3); }}
-.alert-good     {{ background: var(--teal-lt);  border-color: rgba(14,149,128,0.3); }}
-
-.rule {{
-  display: flex; align-items: center; gap: 1rem;
-  margin: 2.4rem 0 1.8rem;
-}}
-.rule-line  {{ flex: 1; height: 1px; background: var(--border2); }}
-.rule-label {{
-  font-family: var(--mono);
-  font-size: 0.58rem; letter-spacing: 0.25em;
-  text-transform: uppercase; color: var(--blue);
-  white-space: nowrap;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  margin-bottom: 1.2rem;
 }}
 
-.pill-grid {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1rem; }}
-.pill {{
-  background: var(--blue-lt);
-  border: 1px solid var(--blue-mid);
-  border-radius: 8px; padding: 4px 12px;
-  font-family: var(--mono); font-size: 0.62rem;
-  color: var(--blue); letter-spacing: 0.04em; font-weight: 500;
-}}
-
-.live-dot {{
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #4ADE80; display: inline-block;
-  animation: blink 1.6s ease-in-out infinite;
-  box-shadow: 0 0 6px #4ADE80;
-}}
-@keyframes blink {{
-  0%, 100% {{ opacity: 1; }} 50% {{ opacity: 0.35; }}
-}}
+/* REST OF YOUR UI LOGIC BELOW (DO NOT DELETE) */
 </style>
 """, unsafe_allow_html=True)
 
