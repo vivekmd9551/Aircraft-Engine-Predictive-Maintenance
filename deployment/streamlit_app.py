@@ -1,3 +1,10 @@
+File "/mount/src/aircraft-engine-predictive-maintenance/deployment/streamlit_app.py", line 20
+      page_title="AeroMind — Engine Health Intelligence",
+  ^
+SyntaxError: invalid non-printable character U+00A0
+
+what does this mean?
+
 """
 ✈️ AeroMind — Aircraft Engine Predictive Maintenance
 Author: Vivek M D
@@ -16,7 +23,12 @@ warnings.filterwarnings('ignore')
 # ─────────────────────────────────────────────
 # PAGE CONFIG
 # ─────────────────────────────────────────────
-st.set_page_config(page_title="AeroMind — Engine Health Intelligence",page_icon="✈️",layout="wide",initial_sidebar_state="collapsed")
+st.set_page_config(
+    page_title="AeroMind — Engine Health Intelligence",
+    page_icon="✈️",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
 # ─────────────────────────────────────────────
 # GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND
@@ -159,7 +171,12 @@ st.markdown("""
 
 col_nav1, col_nav2, col_nav3 = st.columns([1, 8, 1])
 with col_nav2:
-    page = st.radio("Navigate",["Home", "RUL Prediction", "Model Performance", "Business Impact", "About"],horizontal=True,label_visibility="collapsed")
+    page = st.radio(
+        "Navigate",
+        ["Home", "RUL Prediction", "Model Performance", "Business Impact", "About"],
+        horizontal=True,
+        label_visibility="collapsed"
+    )
 st.markdown("<br>", unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
@@ -495,3 +512,5 @@ elif page == "About":
 # FOOTER
 # ─────────────────────────────────────────────
 st.markdown("""<div style="margin-top:4rem;padding-top:1.5rem;border-top:1px solid #EDE7D9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;"><p style="font-size:0.8rem;color:#9A9A9E;font-weight:300;font-family:'Outfit',sans-serif;"><strong style="color:#1C1C1E;font-weight:600;">AeroMind</strong> · Aircraft Engine Predictive Maintenance · Built with ❤️ by <strong style="color:#1C1C1E;font-weight:600;">Vivek M D</strong></p><p style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:#C8C8CA;letter-spacing:0.1em;">NASA C-MAPSS · Streamlit · v2.0 · 2026</p></div>""", unsafe_allow_html=True)
+
+i went to my original code you cant do anything i got to know 
