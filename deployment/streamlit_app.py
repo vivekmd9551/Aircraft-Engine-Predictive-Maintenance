@@ -12,7 +12,6 @@ import plotly.graph_objects as go
 from datetime import datetime
 import warnings
 warnings.filterwarnings('ignore')
-import streamlit.components.v1 as components
 
 # ─────────────────────────────────────────────
 # PAGE CONFIG
@@ -25,7 +24,7 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS
+# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -65,12 +64,12 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     padding-top: 2rem !important;
     max-width: 1300px !important;
     position: relative;
-    z-index: 10;
+    z-index: 10; 
 }
 
 #MainMenu, footer, header { visibility: hidden; }
 [data-testid="stDecoration"] { display: none; }
-[data-testid="collapsedControl"] { display: none; }
+[data-testid="collapsedControl"] { display: none; } 
 
 h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif !important; color: var(--charcoal) !important; }
 p, li, span, div, label { font-family: 'Outfit', sans-serif !important; }
@@ -141,179 +140,17 @@ div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 .pill-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 1rem; }
 .pill { background: var(--cream); border: 1px solid var(--warm-200); border-radius: 6px; padding: 4px 11px; font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: var(--slate); letter-spacing: 0.05em; }
 
-.roadmap-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--warm-100); }
-
 body::before {
     content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     opacity: 0.4;
 }
+
+.aircraft-bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; display: flex; justify-content: center; align-items: center; overflow: hidden; opacity: 0.15; }
+.aircraft-bg-container svg { width: 100%; min-width: 1200px; height: auto; }
 </style>
+<div class="aircraft-bg-container"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><g stroke="#C8892A" stroke-width="2" fill="none"><path d="M 590 180 L 600 30 L 610 180 Z" fill="rgba(200,137,42,0.05)" /><path d="M 480 340 L 50 280 L 50 260 L 480 300 Z" fill="rgba(200,137,42,0.05)" /><path d="M 720 340 L 1150 280 L 1150 260 L 720 300 Z" fill="rgba(200,137,42,0.05)" /><ellipse cx="600" cy="300" rx="120" ry="120" fill="#FAF8F4" /><ellipse cx="600" cy="300" rx="110" ry="110" opacity="0.3" /><path d="M 510 260 Q 600 230 690 260 L 675 300 Q 600 280 525 300 Z" fill="rgba(200,137,42,0.15)" /><line x1="600" y1="245" x2="600" y2="290" /><line x1="555" y1="252" x2="565" y2="294" /><line x1="645" y1="252" x2="635" y2="294" /><g transform="translate(300, 390)"><path d="M -10 -60 L 10 -60 L 5 -90 L -5 -90 Z" fill="rgba(200,137,42,0.3)" /><circle cx="0" cy="0" r="55" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" /><circle cx="0" cy="0" r="48" stroke-width="1" stroke="#C8892A" /><g stroke="#C8892A" stroke-width="1.5"><animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.25s" repeatCount="indefinite" /><line x1="0" y1="-48" x2="0" y2="48" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(30)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(60)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(90)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(120)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(150)" /></g><circle cx="0" cy="0" r="14" fill="#C8892A" opacity="0.8" /></g><g transform="translate(900, 390)"><path d="M -10 -60 L 10 -60 L 5 -90 L -5 -90 Z" fill="rgba(200,137,42,0.3)" /><circle cx="0" cy="0" r="55" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" /><circle cx="0" cy="0" r="48" stroke-width="1" stroke="#C8892A" /><g stroke="#C8892A" stroke-width="1.5"><animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.25s" repeatCount="indefinite" /><line x1="0" y1="-48" x2="0" y2="48" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(30)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(60)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(90)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(120)" /><line x1="0" y1="-48" x2="0" y2="48" transform="rotate(150)" /></g><circle cx="0" cy="0" r="14" fill="#C8892A" opacity="0.8" /></g></g></svg></div>
 """, unsafe_allow_html=True)
-
-# ─────────────────────────────────────────────
-# AIRCRAFT BACKGROUND — injected into parent via JS
-# ─────────────────────────────────────────────
-components.html("""
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-  html, body { margin:0; padding:0; background:transparent; overflow:hidden; width:100%; height:1px; }
-</style>
-</head>
-<body>
-<script>
-(function() {
-  // Remove any previous injection to avoid duplicates on rerun
-  var old = window.parent.document.getElementById('aeromind-aircraft-bg');
-  if (old) old.remove();
-
-  // Create style
-  var style = window.parent.document.createElement('style');
-  style.id = 'aeromind-aircraft-style';
-  style.textContent = `
-    @keyframes blinkGreen { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
-    @keyframes blinkRed   { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
-    @keyframes strobe     { 0%,8%,100%{opacity:0} 4%{opacity:1} 50%,58%{opacity:0} 54%{opacity:1} }
-    #aeromind-aircraft-bg {
-      position: fixed; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100vw; height: 100vh;
-      z-index: 0; pointer-events: none;
-      display: flex; justify-content: center; align-items: center;
-      overflow: hidden; opacity: 0.15;
-    }
-    #aeromind-aircraft-bg svg { width: 90%; max-width: 1200px; height: auto; }
-    .ac-light-green { animation: blinkGreen 1.2s ease-in-out infinite; }
-    .ac-light-red   { animation: blinkRed   1.2s ease-in-out infinite 0.6s; }
-    .ac-light-strobe{ animation: strobe 2s linear infinite; }
-  `;
-  var oldStyle = window.parent.document.getElementById('aeromind-aircraft-style');
-  if (oldStyle) oldStyle.remove();
-  window.parent.document.head.appendChild(style);
-
-  // Create container
-  var div = window.parent.document.createElement('div');
-  div.id = 'aeromind-aircraft-bg';
-  div.innerHTML = `
-<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <radialGradient id="ac-greenLight" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#00FF88" stop-opacity="1"/>
-      <stop offset="100%" stop-color="#00FF88" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="ac-redLight" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#FF3333" stop-opacity="1"/>
-      <stop offset="100%" stop-color="#FF3333" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="ac-whiteStrobe" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <g stroke="#C8892A" stroke-width="2" fill="none">
-
-    <!-- FUSELAGE -->
-    <path d="M 540 230 Q 530 300 535 420 L 545 500 Q 600 530 655 500 L 665 420 Q 670 300 660 230 Q 600 200 540 230 Z" fill="rgba(200,137,42,0.06)" stroke="#C8892A" stroke-width="1.5"/>
-    <path d="M 540 230 Q 600 160 660 230" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="1.5"/>
-    <path d="M 555 210 Q 600 155 645 210 Q 600 185 555 210 Z" fill="rgba(200,137,42,0.2)" stroke="none"/>
-    <rect x="575" y="270" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
-    <rect x="588" y="270" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
-    <rect x="601" y="270" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
-    <rect x="614" y="270" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
-    <rect x="575" y="285" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
-    <rect x="588" y="285" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
-    <rect x="601" y="285" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
-    <rect x="614" y="285" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
-
-    <!-- WINGS -->
-    <path d="M 543 310 L 60 385 L 80 400 L 543 340 Z" fill="rgba(200,137,42,0.08)" stroke="#C8892A" stroke-width="1.5"/>
-    <path d="M 543 310 L 60 385" stroke="#C8892A" stroke-width="1" opacity="0.5"/>
-    <path d="M 543 335 L 120 398" stroke="#C8892A" stroke-width="0.8" opacity="0.3" stroke-dasharray="4,4"/>
-    <path d="M 657 310 L 1140 385 L 1120 400 L 657 340 Z" fill="rgba(200,137,42,0.08)" stroke="#C8892A" stroke-width="1.5"/>
-    <path d="M 657 310 L 1140 385" stroke="#C8892A" stroke-width="1" opacity="0.5"/>
-    <path d="M 657 335 L 1080 398" stroke="#C8892A" stroke-width="0.8" opacity="0.3" stroke-dasharray="4,4"/>
-
-    <!-- STABILIZERS -->
-    <path d="M 547 490 L 390 530 L 400 542 L 547 505 Z" fill="rgba(200,137,42,0.07)" stroke="#C8892A" stroke-width="1.2"/>
-    <path d="M 653 490 L 810 530 L 800 542 L 653 505 Z" fill="rgba(200,137,42,0.07)" stroke="#C8892A" stroke-width="1.2"/>
-    <path d="M 595 430 Q 590 380 600 340 Q 610 380 605 430 Z" fill="rgba(200,137,42,0.12)" stroke="#C8892A" stroke-width="1.2"/>
-
-    <!-- LEFT ENGINE -->
-    <line x1="460" y1="345" x2="460" y2="370" stroke="#C8892A" stroke-width="1.5"/>
-    <ellipse cx="460" cy="390" rx="28" ry="10" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="1.5"/>
-    <ellipse cx="460" cy="390" rx="22" ry="7" fill="rgba(200,137,42,0.05)" stroke="#C8892A" stroke-width="1"/>
-    <path d="M 432 390 L 488 390" stroke="#C8892A" stroke-width="0.8" opacity="0.4"/>
-    <g>
-      <animateTransform attributeName="transform" type="rotate" from="0 460 390" to="360 460 390" dur="0.3s" repeatCount="indefinite"/>
-      <line x1="460" y1="383" x2="460" y2="397" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
-      <line x1="453" y1="390" x2="467" y2="390" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
-      <line x1="455" y1="385" x2="465" y2="395" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
-      <line x1="465" y1="385" x2="455" y2="395" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
-    </g>
-
-    <!-- RIGHT ENGINE -->
-    <line x1="740" y1="345" x2="740" y2="370" stroke="#C8892A" stroke-width="1.5"/>
-    <ellipse cx="740" cy="390" rx="28" ry="10" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="1.5"/>
-    <ellipse cx="740" cy="390" rx="22" ry="7" fill="rgba(200,137,42,0.05)" stroke="#C8892A" stroke-width="1"/>
-    <path d="M 712 390 L 768 390" stroke="#C8892A" stroke-width="0.8" opacity="0.4"/>
-    <g>
-      <animateTransform attributeName="transform" type="rotate" from="0 740 390" to="360 740 390" dur="0.3s" repeatCount="indefinite"/>
-      <line x1="740" y1="383" x2="740" y2="397" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
-      <line x1="733" y1="390" x2="747" y2="390" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
-      <line x1="735" y1="385" x2="745" y2="395" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
-      <line x1="745" y1="385" x2="735" y2="395" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
-    </g>
-
-    <!-- NOSE GEAR -->
-    <line x1="600" y1="440" x2="600" y2="490" stroke="#C8892A" stroke-width="2"/>
-    <line x1="589" y1="490" x2="611" y2="490" stroke="#C8892A" stroke-width="2"/>
-    <circle cx="591" cy="494" r="5" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
-    <circle cx="609" cy="494" r="5" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
-    <path d="M 593 440 L 583 460 L 583 455 L 593 438 Z" fill="rgba(200,137,42,0.12)" stroke="#C8892A" stroke-width="1"/>
-    <path d="M 607 440 L 617 460 L 617 455 L 607 438 Z" fill="rgba(200,137,42,0.12)" stroke="#C8892A" stroke-width="1"/>
-
-    <!-- LEFT MAIN GEAR -->
-    <line x1="555" y1="430" x2="548" y2="490" stroke="#C8892A" stroke-width="2"/>
-    <line x1="537" y1="490" x2="559" y2="490" stroke="#C8892A" stroke-width="2"/>
-    <circle cx="539" cy="494" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
-    <circle cx="557" cy="494" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
-    <path d="M 555 445 L 550 460 L 548 460" stroke="#C8892A" stroke-width="1" opacity="0.6"/>
-    <path d="M 542 430 L 532 470 L 532 465 L 542 428 Z" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="0.8"/>
-
-    <!-- RIGHT MAIN GEAR -->
-    <line x1="645" y1="430" x2="652" y2="490" stroke="#C8892A" stroke-width="2"/>
-    <line x1="641" y1="490" x2="663" y2="490" stroke="#C8892A" stroke-width="2"/>
-    <circle cx="643" cy="494" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
-    <circle cx="661" cy="494" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
-    <path d="M 645 445 L 650 460 L 652 460" stroke="#C8892A" stroke-width="1" opacity="0.6"/>
-    <path d="M 658 430 L 668 470 L 668 465 L 658 428 Z" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="0.8"/>
-
-    <!-- NAV LIGHTS -->
-    <g class="ac-light-red">
-      <circle cx="62" cy="390" r="10" fill="url(#ac-redLight)" opacity="0.9"/>
-      <circle cx="62" cy="390" r="4" fill="#FF3333" opacity="0.95"/>
-    </g>
-    <g class="ac-light-green">
-      <circle cx="1138" cy="390" r="10" fill="url(#ac-greenLight)" opacity="0.9"/>
-      <circle cx="1138" cy="390" r="4" fill="#00FF88" opacity="0.95"/>
-    </g>
-    <g class="ac-light-strobe">
-      <circle cx="600" cy="520" r="8" fill="url(#ac-whiteStrobe)" opacity="0.9"/>
-      <circle cx="600" cy="520" r="3" fill="#FFFFFF" opacity="1"/>
-    </g>
-
-  </g>
-</svg>
-  `;
-
-  window.parent.document.body.appendChild(div);
-})();
-</script>
-</body>
-</html>
-""", height=1, scrolling=False)
 
 # ─────────────────────────────────────────────
 # TOP NAVIGATION BAR
@@ -459,7 +296,7 @@ elif page == "RUL Prediction":
             rul_pred = int(base_rul * 0.94) - 2
         elif chosen == 'LightGBM':
             rul_pred = int(base_rul * 0.98) + 1
-        else:
+        else: # LSTM (Champion baseline)
             rul_pred = base_rul
             
         rul_pred = max(0, min(125, rul_pred))
