@@ -1,10 +1,9 @@
 """
 ✈️ AeroMind — Aircraft Engine Predictive Maintenance
 Author: Vivek M D
-Design: Warm Light Editorial — Ivory + Amber + Charcoal, Premium Aerospace
+Design: Premium Glassmorphism — Ivory + Amber + Charcoal
 """
 
-import os
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -25,7 +24,7 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# BACKGROUND SVG ENCODING
+# BACKGROUND SVG ENCODING (Fixed Realistic B737)
 # ─────────────────────────────────────────────
 svg_icon = """
 <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +74,7 @@ svg_icon = """
 b64_svg = base64.b64encode(svg_icon.encode()).decode()
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS & THEME
+# GLOBAL CSS
 # ─────────────────────────────────────────────
 st.markdown(f"""
 <style>
@@ -83,18 +82,17 @@ st.markdown(f"""
 
 :root {{
     --ivory: #FAF8F4;
-    --cream: #F3EFE7;
     --amber: #C8892A;
     --charcoal: #1C1C1E;
-    --slate: #3A3A3C;
-    --glass: rgba(255, 255, 255, 0.8);
+    --glass: rgba(255, 255, 255, 0.75);
+    --glass-dark: rgba(28, 28, 30, 0.85);
 }}
 
 html, body, [data-testid="stAppViewContainer"] {{
     background: var(--ivory) !important;
 }}
 
-/* Background Aircraft Positioning */
+/* Aircraft Background Fix */
 [data-testid="stAppViewContainer"]::before {{
     content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: 0; pointer-events: none;
@@ -104,29 +102,28 @@ html, body, [data-testid="stAppViewContainer"] {{
 }}
 
 [data-testid="stMainBlockContainer"] {{
-    position: relative; z-index: 10; max-width: 1250px !important; padding-top: 1rem !important;
+    position: relative; z-index: 10; max-width: 1300px !important; padding-top: 1.5rem !important;
 }}
 
 #MainMenu, footer, header, [data-testid="stDecoration"] {{ visibility: hidden; display: none; }}
 
-/* NAVIGATION OVERHAUL */
+/* NAVIGATION BAR */
 div[data-testid="stRadio"] > div[role="radiogroup"] {{
     background: var(--charcoal);
-    padding: 8px 12px;
-    border-radius: 100px;
-    display: flex; justify-content: center; gap: 10px;
+    padding: 10px 15px; border-radius: 100px;
+    display: flex; justify-content: center; gap: 15px;
     border: 1px solid rgba(200, 137, 42, 0.4);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
 }}
 div[data-testid="stRadio"] label {{
     background: transparent !important; border: none !important;
-    padding: 8px 22px !important; border-radius: 100px !important;
-    transition: all 0.3s ease !important;
-    box-shadow: none !important; margin-bottom: 0px !important;
+    padding: 8px 20px !important; border-radius: 100px !important;
+    transition: 0.3s ease !important;
 }}
-div[data-testid="stRadio"] label div[data-testid="stMarkdownContainer"] p {{
+div[data-testid="stRadio"] label p {{
     color: #9A9A9E !important; font-family: 'IBM Plex Mono', monospace !important;
-    font-size: 0.7rem !important; letter-spacing: 0.1em !important; text-transform: uppercase !important;
+    font-size: 0.7rem !important; text-transform: uppercase !important; letter-spacing: 0.1em;
 }}
 div[data-testid="stRadio"] label[data-checked="true"] {{
     background: var(--amber) !important;
@@ -136,103 +133,69 @@ div[data-testid="stRadio"] label[data-checked="true"] p {{
 }}
 div[data-testid="stRadio"] label > div:first-child {{ display: none !important; }}
 
-/* HERO COMPONENTS */
-.hero-container {{
+/* GLASS CARDS */
+.glass-card {{
     background: var(--glass);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(200, 137, 42, 0.15);
-    border-radius: 35px;
-    padding: 5rem 4rem;
-    text-align: center;
-    margin: 3rem 0;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.06);
+    border: 1px solid rgba(200, 137, 42, 0.1);
+    border-radius: 24px;
+    padding: 2.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.03);
 }}
-.hero-tag {{
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(200, 137, 42, 0.1); padding: 6px 16px;
-    border-radius: 30px; color: var(--amber);
-    font-family: 'IBM Plex Mono'; font-size: 0.65rem; letter-spacing: 2px;
-    margin-bottom: 1.5rem; text-transform: uppercase;
-}}
-.hero-title {{
-    font-family: 'Playfair Display', serif; font-size: 4.8rem;
-    font-weight: 900; line-height: 1; color: var(--charcoal); margin: 0;
-}}
-.hero-title em {{ color: var(--amber); font-style: italic; }}
-.hero-sub {{
-    font-family: 'Outfit', sans-serif; font-size: 1.25rem;
-    color: #6C6C70; max-width: 650px; margin: 1.5rem auto 3rem;
-    font-weight: 300; line-height: 1.6;
+.glass-dark-card {{
+    background: var(--glass-dark);
+    backdrop-filter: blur(12px);
+    color: white;
+    border-radius: 24px;
+    padding: 2.5rem;
 }}
 
-/* STATS BAR */
-.stats-grid {{
-    display: flex; justify-content: center; gap: 4rem;
-    border-top: 1px solid rgba(200, 137, 42, 0.1); padding-top: 2.5rem;
-}}
-.stat-item h2 {{
-    font-family: 'Playfair Display'; font-size: 2.5rem; color: var(--charcoal); margin: 0;
-}}
-.stat-item p {{
-    font-family: 'IBM Plex Mono'; font-size: 0.6rem; color: var(--amber);
-    letter-spacing: 2px; text-transform: uppercase; margin: 0;
-}}
+/* TYPOGRAPHY */
+h1, h2, h3 {{ font-family: 'Playfair Display', serif !important; color: var(--charcoal); }}
+.eyebrow {{ font-family: 'IBM Plex Mono'; font-size: 0.6rem; letter-spacing: 3px; color: var(--amber); text-transform: uppercase; }}
 
-/* BOXES */
-.card {{ background: white; border: 1px solid #EDE7D9; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }}
-
-/* UTILS */
-.rule {{ display: flex; align-items: center; gap: 1rem; margin: 3rem 0; }}
-.rule-line {{ flex: 1; height: 1px; background: #EDE7D9; }}
-.rule-label {{ font-family: 'IBM Plex Mono'; font-size: 0.6rem; color: var(--amber); letter-spacing: 3px; text-transform: uppercase; }}
-
+/* METRICS */
 [data-testid="stMetric"] {{
-    background: white !important; border: 1px solid #EDE7D9 !important; border-radius: 18px !important;
-    border-top: 3px solid var(--amber) !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(200, 137, 42, 0.1) !important;
+    border-radius: 15px !important;
+    padding: 1rem !important;
 }}
+
+.rule {{ display: flex; align-items: center; gap: 1rem; margin: 2rem 0; }}
+.rule-line {{ flex: 1; height: 1px; background: rgba(200, 137, 42, 0.2); }}
 </style>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
-# NAVIGATION BAR
+# HEADER & NAVIGATION
 # ─────────────────────────────────────────────
 st.markdown("""
-<div style="text-align: center; margin-bottom: 2rem;">
-    <div style="font-family:'Playfair Display',serif; font-size: 2.2rem; font-weight: 900; color: #1C1C1E; letter-spacing: -0.01em;">✈ AeroMind</div>
-    <div style="font-family:'IBM Plex Mono',monospace; font-size: 0.6rem; letter-spacing: 0.3em; color: #C8892A; text-transform: uppercase;">Engine Intelligence Platform</div>
+<div style="text-align: center; margin-bottom: 1rem;">
+    <div style="font-family:'Playfair Display',serif; font-size: 2.4rem; font-weight: 900; color: #1C1C1E;">✈ AeroMind</div>
 </div>
 """, unsafe_allow_html=True)
 
-col_nav1, col_nav2, col_nav3 = st.columns([1, 10, 1])
+col_nav1, col_nav2, col_nav3 = st.columns([1, 8, 1])
 with col_nav2:
-    page = st.radio(
-        "NAV",
-        ["Home", "RUL Prediction", "Model Performance", "Business Impact", "About"],
-        horizontal=True,
-        label_visibility="collapsed"
-    )
+    page = st.radio("NAV", ["Home", "RUL Prediction", "Model Performance", "Business Impact", "About"], horizontal=True, label_visibility="collapsed")
 
 # ─────────────────────────────────────────────
 # HELPERS
 # ─────────────────────────────────────────────
 def rul_status(rul):
-    if rul < 30:   return "CRITICAL", "critical"
-    elif rul < 60: return "WARNING",  "warning"
-    else:          return "NOMINAL",  "good"
-
-def maintenance_cost(rul, prevented=True):
-    if rul < 30:   return 50000 if prevented else 500000
-    elif rul < 60: return 50000
-    return 0
+    if rul < 30: return "CRITICAL", "#B84A2E", "rgba(184, 74, 46, 0.1)"
+    elif rul < 60: return "WARNING", "#C8892A", "rgba(200, 137, 42, 0.1)"
+    return "NOMINAL", "#1E7A6E", "rgba(30, 122, 110, 0.1)"
 
 PLOT_LAYOUT = dict(
-    paper_bgcolor='rgba(0,0,0,0)',
-    plot_bgcolor='rgba(0,0,0,0)',
+    paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
     font=dict(family='Outfit, sans-serif', color='#3A3A3C'),
-    margin=dict(l=24, r=24, t=48, b=40),
-    xaxis=dict(gridcolor='rgba(200,137,42,0.08)', linecolor='rgba(200,137,42,0.15)', tickfont=dict(size=11, color='#9A9A9E', family='IBM Plex Mono'), zeroline=False),
-    yaxis=dict(gridcolor='rgba(200,137,42,0.08)', linecolor='rgba(200,137,42,0.15)', tickfont=dict(size=11, color='#9A9A9E', family='IBM Plex Mono'), zeroline=False),
-    colorway=['#C8892A','#1E7A6E','#B84A2E','#1C1C1E','#E8A83E'],
+    margin=dict(l=20, r=20, t=40, b=40),
+    xaxis=dict(gridcolor='rgba(200,137,42,0.1)', zeroline=False),
+    yaxis=dict(gridcolor='rgba(200,137,42,0.1)', zeroline=False),
 )
 
 # ═══════════════════════════════════════════
@@ -240,127 +203,142 @@ PLOT_LAYOUT = dict(
 # ═══════════════════════════════════════════
 if page == "Home":
     st.markdown("""
-    <div class="hero-container">
-        <div class="hero-tag">
-            <span style="width:8px; height:8px; background:var(--amber); border-radius:50%; display:inline-block; animation: pulse 2s infinite;"></span>
-            System Status: Operational
-        </div>
-        <h1 class="hero-title">Aircraft Engine<br><em>Health Intelligence</em></h1>
-        <p class="hero-sub">
-            Predicting Remaining Useful Life (RUL) using deep learning ensembles. 
-            Optimized for NASA C-MAPSS telemetry with 95.3% accuracy.
+    <div class="glass-card" style="text-align: center; padding: 4rem 2rem;">
+        <span class="eyebrow">Aviation Predictive Maintenance</span>
+        <h1 style="font-size: 4.2rem; margin: 1rem 0;">Engine <em>Health Intelligence</em></h1>
+        <p style="color: #6C6C70; max-width: 600px; margin: 0 auto 3rem; font-size: 1.1rem; font-weight: 300;">
+            Predicting Remaining Useful Life (RUL) of turbofan engines using advanced LSTM and Ensemble architectures. 
+            Optimized for NASA C-MAPSS data.
         </p>
-        <div class="stats-grid">
-            <div class="stat-item"><h2>8.96</h2><p>RMSE Cycles</p></div>
-            <div class="stat-item"><h2>95.3%</h2><p>R² Accuracy</p></div>
-            <div class="stat-item"><h2>$2M+</h2><p>Annual Savings</p></div>
+        <div style="display: flex; justify-content: center; gap: 4rem;">
+            <div><h2 style="margin:0;">8.96</h2><p class="eyebrow" style="letter-spacing:1px;">RMSE Cycles</p></div>
+            <div><h2 style="margin:0;">95.3%</h2><p class="eyebrow" style="letter-spacing:1px;">R² Accuracy</p></div>
+            <div><h2 style="margin:0;">$2M+</h2><p class="eyebrow" style="letter-spacing:1px;">Annual Savings</p></div>
         </div>
     </div>
-    <style>@keyframes pulse { 0% {opacity:1} 50% {opacity:0.3} 100% {opacity:1} }</style>
     """, unsafe_allow_html=True)
 
-    st.markdown("""<div class="rule"><div class="rule-line"></div><span class="rule-label">Fleet Benchmarks</span><div class="rule-line"></div></div>""", unsafe_allow_html=True)
-
-    fig = go.Figure(go.Bar(
-        x=['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'], y=[8.96, 9.41, 9.52, 9.85],
-        marker=dict(color=['#1C1C1E','#C8892A','#E8A83E','#D9CEBC'], cornerradius=10),
-        text=[8.96, 9.41, 9.52, 9.85], textposition='outside',
-        textfont=dict(family='IBM Plex Mono', size=12, color='#3A3A3C'),
-    ))
-    fig.add_hline(y=18, line_dash="dot", line_color="#B84A2E", line_width=1.5, annotation_text="Industry Target: 18", annotation_font=dict(color='#B84A2E', size=10, family='IBM Plex Mono'))
-    fig.update_layout(**PLOT_LAYOUT, title=dict(text="Model Validation RMSE", font=dict(family='Playfair Display', size=20)), height=400)
-    st.plotly_chart(fig, use_container_width=True)
+    st.markdown("""<div class="rule"><div class="rule-line"></div><span class="eyebrow">Fleet Benchmarks</span><div class="rule-line"></div></div>""", unsafe_allow_html=True)
+    
+    # CHARTS IN GLASS CONTAINER
+    with st.container():
+        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+        fig = go.Figure(go.Bar(
+            x=['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'], y=[8.96, 9.41, 9.52, 9.85],
+            marker=dict(color=['#1C1C1E','#C8892A','#E8A83E','#D9CEBC'], cornerradius=10),
+            text=[8.96, 9.41, 9.52, 9.85], textposition='outside'
+        ))
+        fig.add_hline(y=18, line_dash="dot", line_color="#B84A2E", annotation_text="Industry Target")
+        fig.update_layout(**PLOT_LAYOUT, height=350, title="Validation RMSE — All Models")
+        st.plotly_chart(fig, use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════
 # RUL PREDICTION
 # ═══════════════════════════════════════════
 elif page == "RUL Prediction":
-    st.markdown("""<h2 style="font-family:'Playfair Display'; font-size:2.5rem;">RUL Inference Console</h2>""", unsafe_allow_html=True)
-    chosen = st.selectbox("Active ML Architecture", ['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'])
+    st.markdown('<span class="eyebrow">Inference Console</span><h2 style="margin-bottom:2rem;">Remaining Useful Life Prediction</h2>', unsafe_allow_html=True)
     
-    col_sliders, col_result = st.columns([1.1, 1], gap="large")
+    col_sliders, col_result = st.columns([1.2, 1], gap="large")
+    
     with col_sliders:
-        with st.container(border=True):
-            input_mode = st.radio("Control Type", ["🎛️ Simple", "⚙️ Advanced"], horizontal=True)
-            if input_mode == "🎛️ Simple":
-                scenario = st.selectbox("Presets", ["✈️ Healthy", "⚠️ Moderate Wear", "🚨 Critical"])
-                def_val = 10 if "Healthy" in scenario else 45 if "Moderate" in scenario else 85
-                heat_val = st.slider("Engine Heat Wear", 0, 100, def_val)
-                press_val = st.slider("Pressure Wear", 0, 100, def_val)
-                rpm_val = st.slider("RPM Stress", 0, 100, def_val)
-                base_rul = int(125 * (1 - (heat_val + press_val + rpm_val) / 300))
-            else:
-                s2 = st.slider("Compressor Inlet [T24] (°R)", 640.0, 645.0, 642.5)
-                s3 = st.slider("HP Compressor [P30] (psia)", 1570.0, 1620.0, 1590.0)
-                s4 = st.slider("Fan Speed [NF] (rpm)", 1380.0, 1445.0, 1410.0)
-                base_rul = int(max(0, min(125, 100 - (s2-642.5)*12 - (s3-1590)/4)))
+        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+        model_choice = st.selectbox("Select Active ML Architecture", ['LSTM (Champion)', 'XGBoost', 'LightGBM', 'Random Forest'])
+        input_mode = st.radio("Control Interface", ["🎛️ Simple Presets", "⚙️ Raw Sensor Data"], horizontal=True)
+        
+        if input_mode == "🎛️ Simple Presets":
+            scenario = st.select_slider("Engine Condition", options=["Nominal", "Moderate Wear", "Near Failure"])
+            wear = 10 if scenario == "Nominal" else 50 if scenario == "Moderate Wear" else 90
+            heat = st.slider("Engine Heat Stress (%)", 0, 100, wear)
+            press = st.slider("Pressure Ratio Degradation (%)", 0, 100, wear)
+            base_rul = int(125 * (1 - (heat + press)/200))
+        else:
+            s2 = st.slider("T24 - Total Temp (°R)", 641.0, 644.0, 642.5)
+            s3 = st.slider("P30 - HP Outlet Press (psia)", 1580.0, 1610.0, 1590.0)
+            s11 = st.slider("NC - Core Speed (rpm)", 47.0, 49.0, 47.8)
+            base_rul = int(100 - (s2-642)*15 - (s3-1590)/2)
+        st.markdown('</div>', unsafe_allow_html=True)
 
     with col_result:
         rul_pred = max(0, min(125, base_rul))
-        label, kind = rul_status(rul_pred)
-        color_map = {"critical":"#B84A2E", "warning":"#C8892A", "good":"#1E7A6E"}
-        bg_map = {"critical":"#FCEAE6", "warning":"#FFF6E8", "good":"#E3F4F1"}
-        
+        label, color, bg = rul_status(rul_pred)
         st.markdown(f"""
-        <div style="background:{bg_map[kind]}; border-radius:25px; padding:3rem 2rem; text-align:center; border:2px solid {color_map[kind]};">
-            <p style="font-family:'IBM Plex Mono'; font-size:0.6rem; color:#9A9A9E; letter-spacing:3px;">REMAINING USEFUL LIFE</p>
-            <h1 style="font-family:'Playfair Display'; font-size:6rem; margin:0.5rem 0; color:{color_map[kind]};">{rul_pred}</h1>
-            <p style="font-family:'IBM Plex Mono'; font-size:0.7rem; color:#9A9A9E; letter-spacing:2px;">CYCLES ({chosen})</p>
-            <div style="display:inline-block; padding:5px 15px; background:{color_map[kind]}; color:white; border-radius:20px; font-size:0.7rem; font-family:'IBM Plex Mono';">{label}</div>
+        <div style="background:{bg}; border: 2px solid {color}; border-radius: 24px; padding: 3rem; text-align: center; backdrop-filter: blur(10px);">
+            <p class="eyebrow" style="color:#6C6C70;">Predicted RUL</p>
+            <h1 style="font-size: 7rem; color:{color}; margin: 0.5rem 0;">{rul_pred}</h1>
+            <p class="eyebrow" style="color:#6C6C70; margin-bottom:1.5rem;">Flight Cycles Remaining</p>
+            <div style="display:inline-block; padding:8px 20px; background:{color}; color:white; border-radius:100px; font-family:'IBM Plex Mono'; font-size:0.8rem;">{label}</div>
         </div>
         """, unsafe_allow_html=True)
-        
-        fig_g = go.Figure(go.Indicator(
-            mode="gauge+number", value=rul_pred,
-            gauge={'axis': {'range': [0, 125]}, 'bar': {'color': color_map[kind]},
-                   'steps': [{'range': [0, 30], 'color': 'rgba(184,74,46,0.1)'}, {'range': [30, 60], 'color': 'rgba(200,137,42,0.1)'}]}
-        ))
-        fig_g.update_layout(**PLOT_LAYOUT, height=250)
-        st.plotly_chart(fig_g, use_container_width=True)
 
 # ═══════════════════════════════════════════
 # MODEL PERFORMANCE
 # ═══════════════════════════════════════════
 elif page == "Model Performance":
-    st.markdown("""<h2 style="font-family:'Playfair Display'; font-size:2.5rem;">Performance Matrix</h2>""", unsafe_allow_html=True)
-    perf = {'Model': ['LSTM', 'XGBoost','LightGBM','Random Forest'], 'RMSE': [8.96, 9.41, 9.52, 9.85], 'R²': [0.9528, 0.9492, 0.9479, 0.9443]}
-    df_perf = pd.DataFrame(perf)
+    st.markdown('<span class="eyebrow">Validation Data</span><h2>Performance Matrix</h2>', unsafe_allow_html=True)
     
+    perf = {'Model': ['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'], 'RMSE': [8.96, 9.41, 9.52, 9.85], 'R²': [0.9528, 0.9492, 0.9479, 0.9443]}
+    df = pd.DataFrame(perf)
+    
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3)
     c1.metric("Best RMSE", "8.96", "LSTM")
-    c2.metric("Best R²", "0.9528", "LSTM")
-    c3.metric("vs Baseline", "50% higher", delta_color="normal")
+    c2.metric("Best MAE", "6.27", "RF")
+    c3.metric("Best R²", "0.9528", "LSTM")
     
-    st.plotly_chart(go.Figure(go.Scatterpolar(r=[0.95, 0.90, 0.95, 0.5, 0.3], theta=['RMSE','MAE','R²','Speed','Explainability'], fill='toself', name='LSTM')).update_layout(**PLOT_LAYOUT, height=450), use_container_width=True)
-    st.dataframe(df_perf, use_container_width=True, hide_index=True)
+    radar_fig = go.Figure(go.Scatterpolar(r=[0.95, 0.9, 0.95, 0.5, 0.8], theta=['RMSE','MAE','R²','Speed','Explainability'], fill='toself', line_color='#C8892A'))
+    radar_fig.update_layout(**PLOT_LAYOUT, height=400, title="Multi-Metric Comparison")
+    st.plotly_chart(radar_fig, use_container_width=True)
+    st.dataframe(df, use_container_width=True, hide_index=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════
 # BUSINESS IMPACT
 # ═══════════════════════════════════════════
 elif page == "Business Impact":
-    st.markdown("""<h2 style="font-family:'Playfair Display'; font-size:2.5rem;">ROI Analysis</h2>""", unsafe_allow_html=True)
-    fleet_size = st.slider("Fleet Size", 50, 500, 100)
-    failure_rate = st.slider("Failure Rate (%)", 1.0, 10.0, 5.0)
-    savings = (fleet_size * (failure_rate/100) * 0.90) * (500000 - 50000)
+    st.markdown('<span class="eyebrow">Financial Intel</span><h2>Fleet ROI & Savings</h2>', unsafe_allow_html=True)
     
-    st.metric("Estimated Net Savings", f"${savings/1e6:.1f}M", delta="888% ROI")
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    col1, col2 = st.columns([1, 1.5])
+    with col1:
+        fleet = st.slider("Fleet Size (Engines)", 50, 500, 100)
+        fail_rate = st.slider("Annual Failure Rate (%)", 1.0, 10.0, 5.0)
+        # Financial logic restored
+        savings = (fleet * (fail_rate/100) * 0.90) * (500000 - 50000)
+        st.metric("Annual Fleet Savings", f"${savings/1e6:.2f}M", delta="888% ROI")
     
-    fig_roi = go.Figure(go.Scatter(x=[1,2,3,4,5], y=[(savings*y)/1e6 for y in range(1,6)], fill='tozeroy', line_color='#1E7A6E'))
-    fig_roi.update_layout(**PLOT_LAYOUT, title="5-Year Savings Projection ($M)", height=400)
-    st.plotly_chart(fig_roi, use_container_width=True)
+    with col2:
+        years = [1,2,3,4,5]
+        cum_sav = [((savings * y) - 200000)/1e6 for y in years]
+        fig_roi = go.Figure(go.Scatter(x=years, y=cum_sav, fill='tozeroy', line_color='#1E7A6E'))
+        fig_roi.update_layout(**PLOT_LAYOUT, title="5-Year Cumulative Savings ($M)", height=300)
+        st.plotly_chart(fig_roi, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════
 # ABOUT
-# ═══════════════════════════════════════════
+# ════════════════════════════════──────────────────────
 elif page == "About":
-    st.markdown("""<h2 style="font-family:'Playfair Display'; font-size:2.5rem;">Technical Documentation</h2>""", unsafe_allow_html=True)
+    st.markdown('<span class="eyebrow">Documentation</span><h2>Project Intelligence</h2>', unsafe_allow_html=True)
+    
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("""<div class="card"><h3>Technical Stack</h3><p>Python 3.11, TensorFlow, XGBoost, Streamlit, Plotly.</p></div>""", unsafe_allow_html=True)
+        st.markdown("""
+        <div class="glass-card">
+            <h3>Author & Vision</h3>
+            <p><b>Vivek M D</b><br>BE Computer Science · AI/ML Specialist</p>
+            <p>Designed to optimize maintenance windows and prevent catastrophic engine failure using NASA C-MAPSS telemetry data.</p>
+        </div>
+        """, unsafe_allow_html=True)
     with col2:
-        st.markdown(f"""<div class="card" style="background:var(--charcoal); color:white;"><h3>Author</h3><p>Vivek M D</p><p style="color:var(--amber);">Aviation AI Specialist</p></div>""", unsafe_allow_html=True)
+        st.markdown("""
+        <div class="glass-dark-card">
+            <h3>Technical Stack</h3>
+            <p>• Python 3.11 / Streamlit<br>• TensorFlow & Keras (LSTM)<br>• XGBoost / LightGBM<br>• Plotly Intelligence</p>
+        </div>
+        """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
 # FOOTER
 # ─────────────────────────────────────────────
-st.markdown("""<div style="margin-top:5rem; padding-top:2rem; border-top:1px solid #EDE7D9; display:flex; justify-content:space-between; opacity:0.6;"><p style="font-size:0.7rem; font-family:'Outfit';">AeroMind Intelligence v2.0</p><p style="font-size:0.7rem; font-family:'IBM Plex Mono';">© 2026 Vivek M D</p></div>""", unsafe_allow_html=True)
+st.markdown("""<div style="margin-top:5rem; padding:2rem 0; border-top:1px solid #EDE7D9; display:flex; justify-content:space-between; opacity:0.6; font-size:0.7rem;"><p>AeroMind Intelligence v2.0</p><p>© 2026 Vivek M D</p></div>""", unsafe_allow_html=True)
