@@ -24,11 +24,11 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (FINAL REFINEMENT)
+# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (REALISTIC GEAR & BLADES)
 # ─────────────────────────────────────────────
 import base64
 
-# Boeing 737 Realistic Specs: Thick Engines, Wedge Fan Blades, Low Landing Gear
+# Boeing 737 Specs: Heavy Strut Gear, Wide-Diameter Fan Blades, Connected Tail
 svg_icon = """
 <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
     <g stroke="#C8892A" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -38,46 +38,56 @@ svg_icon = """
         <path d="M 480 380 L 120 355 L 110 310 L 115 310 L 130 350 L 480 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
         <path d="M 720 380 L 1080 355 L 1090 310 L 1085 310 L 1070 350 L 720 360 Z" stroke-width="2.5" fill="rgba(200,137,42,0.05)" />
 
-        <path d="M 600 505 L 600 540 M 590 540 L 610 540" stroke-width="3" opacity="0.8" />
-        <circle cx="592" cy="545" r="5" fill="#C8892A" /> <circle cx="608" cy="545" r="5" fill="#C8892A" />
-        <path d="M 460 380 L 460 520 M 450 520 L 470 520" stroke-width="3.5" opacity="0.8" />
-        <circle cx="452" cy="525" r="7" fill="#C8892A" /> <circle cx="468" cy="525" r="7" fill="#C8892A" />
-        <path d="M 740 380 L 740 520 M 730 520 L 750 520" stroke-width="3.5" opacity="0.8" />
-        <circle cx="732" cy="525" r="7" fill="#C8892A" /> <circle cx="748" cy="525" r="7" fill="#C8892A" />
+        <g stroke-width="4" opacity="0.9">
+            <line x1="600" y1="505" x2="600" y2="540" />
+            <ellipse cx="590" cy="545" rx="10" ry="6" fill="#C8892A" /> 
+            <ellipse cx="610" cy="545" rx="10" ry="6" fill="#C8892A" />
+        </g>
+        <g stroke-width="5" opacity="0.9">
+            <path d="M 450 380 L 450 515 L 440 515" /> 
+            <ellipse cx="435" cy="525" rx="14" ry="9" fill="#C8892A" />
+            <ellipse cx="465" cy="525" rx="14" ry="9" fill="#C8892A" />
+        </g>
+        <g stroke-width="5" opacity="0.9">
+            <path d="M 750 380 L 750 515 L 760 515" />
+            <ellipse cx="735" cy="525" rx="14" ry="9" fill="#C8892A" />
+            <ellipse cx="765" cy="525" rx="14" ry="9" fill="#C8892A" />
+        </g>
 
-        <path d="M 310 360 L 310 405 M 330 360 L 330 405" stroke-width="3" stroke="rgba(200,137,42,0.9)" /> 
-        <path d="M 870 360 L 870 405 M 890 360 L 890 405" stroke-width="3" stroke="rgba(200,137,42,0.9)" /> 
+        <path d="M 310 360 L 310 405 M 330 360 L 330 405" stroke-width="4" stroke="rgba(200,137,42,1)" /> 
+        <path d="M 870 360 L 870 405 M 890 360 L 890 405" stroke-width="4" stroke="rgba(200,137,42,1)" /> 
 
         <ellipse cx="600" cy="380" rx="125" ry="125" stroke-width="3" fill="#FAF8F4" />
         <path d="M 530 330 Q 600 300 670 330 L 655 370 Q 600 350 545 370 Z" stroke-width="2" fill="rgba(200,137,42,0.15)" />
 
         <g transform="translate(320, 450)">
-            <circle cx="0" cy="0" r="72" stroke-width="8" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
+            <circle cx="0" cy="0" r="75" stroke-width="10" stroke="rgba(200,137,42,0.8)" fill="#FAF8F4" />
             <g>
-                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
-                <path d="M 0 0 L -10 -55 L 10 -55 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L -10 55 L 10 55 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L -55 -10 L -55 10 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L 55 -10 L 55 10 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L -40 -40 L -30 -50 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L 40 40 L 30 50 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L -40 40 L -50 30 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L 40 -40 L 50 -30 Z" fill="#C8892A" opacity="0.9" />
+                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
+                <path d="M 0 0 L -15 -68 L 15 -68 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -15 68 L 15 68 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -68 -15 L -68 15 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 68 -15 L 68 15 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -48 -48 L -35 -60 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 48 48 L 35 60 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -48 48 L -60 35 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 48 -48 L 60 -35 Z" fill="#C8892A" opacity="0.95" />
             </g>
-            <circle cx="0" cy="0" r="22" fill="#C8892A" /> </g>
+            <circle cx="0" cy="0" r="22" fill="#C8892A" /> 
+        </g>
         
         <g transform="translate(880, 450)">
-            <circle cx="0" cy="0" r="72" stroke-width="8" stroke="rgba(200,137,42,0.7)" fill="#FAF8F4" />
+            <circle cx="0" cy="0" r="75" stroke-width="10" stroke="rgba(200,137,42,0.8)" fill="#FAF8F4" />
             <g>
-                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
-                <path d="M 0 0 L -10 -55 L 10 -55 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L -10 55 L 10 55 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L -55 -10 L -55 10 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L 55 -10 L 55 10 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L -40 -40 L -30 -50 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L 40 40 L 30 50 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L -40 40 L -50 30 Z" fill="#C8892A" opacity="0.9" />
-                <path d="M 0 0 L 40 -40 L 50 -30 Z" fill="#C8892A" opacity="0.9" />
+                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.1s" repeatCount="indefinite" />
+                <path d="M 0 0 L -15 -68 L 15 -68 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -15 68 L 15 68 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -68 -15 L -68 15 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 68 -15 L 68 15 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -48 -48 L -35 -60 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 48 48 L 35 60 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L -48 48 L -60 35 Z" fill="#C8892A" opacity="0.95" />
+                <path d="M 0 0 L 48 -48 L 60 -35 Z" fill="#C8892A" opacity="0.95" />
             </g>
             <circle cx="0" cy="0" r="22" fill="#C8892A" />
         </g>
@@ -85,7 +95,6 @@ svg_icon = """
 </svg>
 """
 
-# Encode to Base64 to strictly prevent HTML spilling
 b64_svg = base64.b64encode(svg_icon.encode()).decode()
 
 st.markdown(f"""
@@ -98,7 +107,6 @@ st.markdown(f"""
     --charcoal:  #1C1C1E;
 }}
 
-/* Main background injection */
 [data-testid="stAppViewContainer"]::before {{
     content: "";
     position: fixed;
@@ -126,6 +134,7 @@ html, body, [data-testid="stAppViewContainer"] {{
 #MainMenu, footer, header, [data-testid="stDecoration"] {{ visibility: hidden; display: none; }}
 </style>
 """, unsafe_allow_html=True)
+
 
 # ─────────────────────────────────────────────
 # TOP NAVIGATION BAR
