@@ -64,12 +64,12 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     padding-top: 2rem !important;
     max-width: 1300px !important;
     position: relative;
-    z-index: 10; 
+    z-index: 10;
 }
 
 #MainMenu, footer, header { visibility: hidden; }
 [data-testid="stDecoration"] { display: none; }
-[data-testid="collapsedControl"] { display: none; } 
+[data-testid="collapsedControl"] { display: none; }
 
 h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif !important; color: var(--charcoal) !important; }
 p, li, span, div, label { font-family: 'Outfit', sans-serif !important; }
@@ -140,54 +140,56 @@ div[data-testid="stRadio"] label > div:first-child { display: none !important; }
 .pill-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 1rem; }
 .pill { background: var(--cream); border: 1px solid var(--warm-200); border-radius: 6px; padding: 4px 11px; font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: var(--slate); letter-spacing: 0.05em; }
 
+.roadmap-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--warm-100); }
+
 body::before {
     content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     opacity: 0.4;
 }
 
-.aircraft-bg-container { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100vw; height: 100vh; z-index: 0; pointer-events: none; display: flex; justify-content: center; align-items: center; overflow: hidden; opacity: 0.15; }
+.aircraft-bg-container {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 100vw; height: 100vh; z-index: 0; pointer-events: none;
+    display: flex; justify-content: center; align-items: center;
+    overflow: hidden; opacity: 0.15;
+}
 .aircraft-bg-container svg { width: 90%; max-width: 1200px; height: auto; }
+
+@keyframes blinkGreen { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
+@keyframes blinkRed   { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
+@keyframes strobe     { 0%,8%,100%{opacity:0} 4%{opacity:1} 50%,58%{opacity:0} 54%{opacity:1} }
+.light-green  { animation: blinkGreen 1.2s ease-in-out infinite; }
+.light-red    { animation: blinkRed   1.2s ease-in-out infinite 0.6s; }
+.light-strobe { animation: strobe 2s linear infinite; }
+
 </style>
+
 <div class="aircraft-bg-container">
 <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Green wingtip light (right side, starboard) -->
     <radialGradient id="greenLight" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#00FF88" stop-opacity="1"/>
       <stop offset="100%" stop-color="#00FF88" stop-opacity="0"/>
     </radialGradient>
-    <!-- Red wingtip light (left side, port) -->
     <radialGradient id="redLight" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#FF3333" stop-opacity="1"/>
       <stop offset="100%" stop-color="#FF3333" stop-opacity="0"/>
     </radialGradient>
-    <!-- White strobe -->
     <radialGradient id="whiteStrobe" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
       <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
     </radialGradient>
-    <style>
-      @keyframes blinkGreen { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
-      @keyframes blinkRed   { 0%,45%,55%,100%{opacity:1} 48%,52%{opacity:0.1} }
-      @keyframes strobe     { 0%,8%,100%{opacity:0} 4%{opacity:1} 50%,58%{opacity:0} 54%{opacity:1} }
-      .light-green { animation: blinkGreen 1.2s ease-in-out infinite; }
-      .light-red   { animation: blinkRed   1.2s ease-in-out infinite 0.6s; }
-      .light-strobe{ animation: strobe 2s linear infinite; }
-    </style>
   </defs>
 
   <g stroke="#C8892A" stroke-width="2" fill="none">
 
-    <!-- ═══ FUSELAGE ═══ -->
-    <!-- Main tube -->
+    <!-- FUSELAGE -->
     <path d="M 540 230 Q 530 300 535 420 L 545 500 Q 600 530 655 500 L 665 420 Q 670 300 660 230 Q 600 200 540 230 Z"
           fill="rgba(200,137,42,0.06)" stroke="#C8892A" stroke-width="1.5"/>
-    <!-- Nose cone -->
     <path d="M 540 230 Q 600 160 660 230" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="1.5"/>
-    <!-- Nose tip -->
-    <path d="M 555 210 Q 600 155 645 210 Q 600 185 555 210 Z" fill="rgba(200,137,42,0.2)"/>
-    <!-- Window row -->
+    <path d="M 555 210 Q 600 155 645 210 Q 600 185 555 210 Z" fill="rgba(200,137,42,0.2)" stroke="none"/>
+    <!-- Windows -->
     <rect x="575" y="270" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
     <rect x="588" y="270" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
     <rect x="601" y="270" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
@@ -197,106 +199,86 @@ body::before {
     <rect x="601" y="285" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
     <rect x="614" y="285" width="8" height="5" rx="2" fill="rgba(200,137,42,0.25)" stroke="none"/>
 
-    <!-- ═══ MAIN WINGS (swept, tapered — A320/B737 shape) ═══ -->
-    <!-- Left wing: sweeps from fuselage ~y310 outward to tip at x=60 y=380 -->
+    <!-- MAIN WINGS — swept tapered A320/B737 -->
     <path d="M 543 310 L 60 385 L 80 400 L 543 340 Z"
           fill="rgba(200,137,42,0.08)" stroke="#C8892A" stroke-width="1.5"/>
-    <!-- Left wing leading edge detail -->
     <path d="M 543 310 L 60 385" stroke="#C8892A" stroke-width="1" opacity="0.5"/>
-    <!-- Left wing trailing edge flapline -->
     <path d="M 543 335 L 120 398" stroke="#C8892A" stroke-width="0.8" opacity="0.3" stroke-dasharray="4,4"/>
 
-    <!-- Right wing: mirror -->
     <path d="M 657 310 L 1140 385 L 1120 400 L 657 340 Z"
           fill="rgba(200,137,42,0.08)" stroke="#C8892A" stroke-width="1.5"/>
     <path d="M 657 310 L 1140 385" stroke="#C8892A" stroke-width="1" opacity="0.5"/>
     <path d="M 657 335 L 1080 398" stroke="#C8892A" stroke-width="0.8" opacity="0.3" stroke-dasharray="4,4"/>
 
-    <!-- ═══ HORIZONTAL STABILIZER (tail) ═══ -->
+    <!-- HORIZONTAL STABILIZER -->
     <path d="M 547 490 L 390 530 L 400 542 L 547 505 Z"
           fill="rgba(200,137,42,0.07)" stroke="#C8892A" stroke-width="1.2"/>
     <path d="M 653 490 L 810 530 L 800 542 L 653 505 Z"
           fill="rgba(200,137,42,0.07)" stroke="#C8892A" stroke-width="1.2"/>
 
-    <!-- ═══ VERTICAL STABILIZER (tailfin) ═══ -->
+    <!-- VERTICAL STABILIZER -->
     <path d="M 595 430 Q 590 380 600 340 Q 610 380 605 430 Z"
           fill="rgba(200,137,42,0.12)" stroke="#C8892A" stroke-width="1.2"/>
 
-    <!-- ═══ ENGINES (under-wing, pylons — A320/B737 style) ═══ -->
-    <!-- Left engine pylon -->
+    <!-- LEFT ENGINE -->
     <line x1="460" y1="345" x2="460" y2="370" stroke="#C8892A" stroke-width="1.5"/>
-    <!-- Left engine nacelle -->
     <ellipse cx="460" cy="390" rx="28" ry="10" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="1.5"/>
     <ellipse cx="460" cy="390" rx="22" ry="7" fill="rgba(200,137,42,0.05)" stroke="#C8892A" stroke-width="1"/>
     <path d="M 432 390 L 488 390" stroke="#C8892A" stroke-width="0.8" opacity="0.4"/>
-    <!-- Engine fan blur -->
-    <g transform="translate(460,390)">
+    <g>
       <animateTransform attributeName="transform" type="rotate" from="0 460 390" to="360 460 390" dur="0.3s" repeatCount="indefinite"/>
-      <line x1="0" y1="-7" x2="0" y2="7" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
-      <line x1="-7" y1="0" x2="7" y2="0" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
-      <line x1="-5" y1="-5" x2="5" y2="5" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
-      <line x1="5" y1="-5" x2="-5" y2="5" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
+      <line x1="460" y1="383" x2="460" y2="397" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
+      <line x1="453" y1="390" x2="467" y2="390" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
+      <line x1="455" y1="385" x2="465" y2="395" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
+      <line x1="465" y1="385" x2="455" y2="395" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
     </g>
 
-    <!-- Right engine pylon -->
+    <!-- RIGHT ENGINE -->
     <line x1="740" y1="345" x2="740" y2="370" stroke="#C8892A" stroke-width="1.5"/>
-    <!-- Right engine nacelle -->
     <ellipse cx="740" cy="390" rx="28" ry="10" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="1.5"/>
     <ellipse cx="740" cy="390" rx="22" ry="7" fill="rgba(200,137,42,0.05)" stroke="#C8892A" stroke-width="1"/>
     <path d="M 712 390 L 768 390" stroke="#C8892A" stroke-width="0.8" opacity="0.4"/>
-    <g transform="translate(740,390)">
+    <g>
       <animateTransform attributeName="transform" type="rotate" from="0 740 390" to="360 740 390" dur="0.3s" repeatCount="indefinite"/>
-      <line x1="0" y1="-7" x2="0" y2="7" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
-      <line x1="-7" y1="0" x2="7" y2="0" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
-      <line x1="-5" y1="-5" x2="5" y2="5" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
-      <line x1="5" y1="-5" x2="-5" y2="5" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
+      <line x1="740" y1="383" x2="740" y2="397" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
+      <line x1="733" y1="390" x2="747" y2="390" stroke="#C8892A" stroke-width="1.2" opacity="0.5"/>
+      <line x1="735" y1="385" x2="745" y2="395" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
+      <line x1="745" y1="385" x2="735" y2="395" stroke="#C8892A" stroke-width="1" opacity="0.4"/>
     </g>
 
-    <!-- ═══ LANDING GEAR (A320/B737 style, deployed) ═══ -->
-    <!-- Nose gear strut -->
+    <!-- NOSE GEAR -->
     <line x1="600" y1="440" x2="600" y2="490" stroke="#C8892A" stroke-width="2"/>
-    <!-- Nose gear axle -->
     <line x1="589" y1="490" x2="611" y2="490" stroke="#C8892A" stroke-width="2"/>
-    <!-- Nose wheels -->
-    <circle cx="591" cy="493" r="5" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
-    <circle cx="609" cy="493" r="5" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
-    <!-- Nose gear door -->
+    <circle cx="591" cy="494" r="5" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
+    <circle cx="609" cy="494" r="5" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
     <path d="M 593 440 L 583 460 L 583 455 L 593 438 Z" fill="rgba(200,137,42,0.12)" stroke="#C8892A" stroke-width="1"/>
     <path d="M 607 440 L 617 460 L 617 455 L 607 438 Z" fill="rgba(200,137,42,0.12)" stroke="#C8892A" stroke-width="1"/>
 
-    <!-- Left main gear (under left wing root) -->
-    <!-- Strut -->
+    <!-- LEFT MAIN GEAR -->
     <line x1="555" y1="430" x2="548" y2="490" stroke="#C8892A" stroke-width="2"/>
-    <!-- Axle -->
     <line x1="537" y1="490" x2="559" y2="490" stroke="#C8892A" stroke-width="2"/>
-    <!-- Bogie (2 wheels front/rear like B737) -->
-    <circle cx="539" cy="493" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
-    <circle cx="557" cy="493" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
-    <!-- Torque link -->
+    <circle cx="539" cy="494" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
+    <circle cx="557" cy="494" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
     <path d="M 555 445 L 550 460 L 548 460" stroke="#C8892A" stroke-width="1" opacity="0.6"/>
-    <!-- Gear door -->
     <path d="M 542 430 L 532 470 L 532 465 L 542 428 Z" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="0.8"/>
 
-    <!-- Right main gear (mirror) -->
+    <!-- RIGHT MAIN GEAR -->
     <line x1="645" y1="430" x2="652" y2="490" stroke="#C8892A" stroke-width="2"/>
     <line x1="641" y1="490" x2="663" y2="490" stroke="#C8892A" stroke-width="2"/>
-    <circle cx="643" cy="493" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
-    <circle cx="661" cy="493" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
+    <circle cx="643" cy="494" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
+    <circle cx="661" cy="494" r="6" fill="rgba(200,137,42,0.2)" stroke="#C8892A" stroke-width="1.5"/>
     <path d="M 645 445 L 650 460 L 652 460" stroke="#C8892A" stroke-width="1" opacity="0.6"/>
     <path d="M 658 430 L 668 470 L 668 465 L 658 428 Z" fill="rgba(200,137,42,0.1)" stroke="#C8892A" stroke-width="0.8"/>
 
-    <!-- ═══ NAV LIGHTS ═══ -->
-    <!-- Red light — port (left) wingtip -->
+    <!-- NAV LIGHTS -->
     <g class="light-red">
       <circle cx="62" cy="390" r="10" fill="url(#redLight)" opacity="0.9"/>
       <circle cx="62" cy="390" r="4" fill="#FF3333" opacity="0.95"/>
     </g>
-    <!-- Green light — starboard (right) wingtip -->
     <g class="light-green">
       <circle cx="1138" cy="390" r="10" fill="url(#greenLight)" opacity="0.9"/>
       <circle cx="1138" cy="390" r="4" fill="#00FF88" opacity="0.95"/>
     </g>
-    <!-- White strobe — tail -->
     <g class="light-strobe">
       <circle cx="600" cy="520" r="8" fill="url(#whiteStrobe)" opacity="0.9"/>
       <circle cx="600" cy="520" r="3" fill="#FFFFFF" opacity="1"/>
