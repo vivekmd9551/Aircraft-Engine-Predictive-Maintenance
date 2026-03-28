@@ -24,117 +24,96 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL CSS & ANIMATED AIRCRAFT BACKGROUND (FINAL FIX)
+# GLOBAL CSS & INJECTED AIRCRAFT BACKGROUND
 # ─────────────────────────────────────────────
-st.markdown("""
+import base64
+
+# Boeing 737 Sharp Scimitar SVG with Animations
+# We encode this so Streamlit CANNOT render it as raw text.
+svg_bg = """
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#C8892A" stroke-width="2" fill="none" stroke-linecap="round">
+        <path d="M 585 240 L 600 50 L 615 240 Z" fill="rgba(200,137,42,0.05)" />
+        <path d="M 480 400 L 80 370 L 60 250 L 75 250 L 100 360 L 480 375 Z" fill="rgba(200,137,42,0.05)" />
+        <path d="M 720 400 L 1120 370 L 1140 250 L 1125 250 L 1100 360 L 720 375 Z" fill="rgba(200,137,42,0.05)" />
+        <circle cx="600" cy="380" r="130" fill="#FAF8F4" />
+        <g transform="translate(280, 460)">
+            <circle cx="0" cy="0" r="65" stroke-width="4" stroke="#C8892A" />
+            <g stroke="#C8892A" stroke-width="2">
+                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.15s" repeatCount="indefinite" />
+                <line x1="0" y1="-50" x2="0" y2="50" /><line x1="-50" y1="0" x2="50" y2="0" />
+            </g>
+        </g>
+        <g transform="translate(920, 460)">
+            <circle cx="0" cy="0" r="65" stroke-width="4" stroke="#C8892A" />
+            <g stroke="#C8892A" stroke-width="2">
+                <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.15s" repeatCount="indefinite" />
+                <line x1="0" y1="-50" x2="0" y2="50" /><line x1="-50" y1="0" x2="50" y2="0" />
+            </g>
+        </g>
+    </g>
+</svg>
+"""
+
+# Convert to Base64 to hide the tags from Streamlit's parser
+b64_svg = base64.b64encode(svg_bg.encode()).decode()
+
+st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
-:root {
+:root {{
     --ivory:     #FAF8F4;
     --amber:     #C8892A;
     --charcoal:  #1C1C1E;
     --warm-100:  #EDE7D9;
     --warm-200:  #D9CEBC;
-    --radius:    18px;
-}
+}}
 
-/* Page Reset */
-html, body, [data-testid="stAppViewContainer"] {
-    background: var(--ivory) !important;
-    font-family: 'Outfit', sans-serif !important;
-}
-
-[data-testid="stMainBlockContainer"] {
-    position: relative;
-    z-index: 100; /* High z-index to stay above background */
-    padding-top: 2rem !important;
-    max-width: 1350px !important;
-}
-
-#MainMenu, footer, header, [data-testid="stDecoration"] { visibility: hidden; display: none; }
-
-/* AIRCRAFT BACKGROUND - Centered & Large */
-.aircraft-viewport {
+/* The Core Background Fix */
+[data-testid="stAppViewContainer"]::before {{
+    content: "";
     position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    z-index: -1; /* Strictly behind */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 0;
+    background-image: url("data:image/svg+xml;base64,{b64_svg}");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 95%; /* Large Size */
+    opacity: 0.15;
     pointer-events: none;
-    opacity: 0.18;
-}
+}}
 
-.aircraft-viewport svg {
-    width: 98%;
-    max-width: 1500px;
-    height: auto;
-}
+/* Layering the Main Content */
+[data-testid="stMainBlockContainer"] {{
+    position: relative;
+    z-index: 10;
+    max-width: 1300px !important;
+}}
 
-/* Component Styling */
-div[data-testid="stRadio"] > div[role="radiogroup"] {
+#MainMenu, footer, header {{ visibility: hidden; display: none; }}
+
+/* Navigation and UI */
+div[data-testid="stRadio"] > div[role="radiogroup"] {{
     display: flex; flex-direction: row; gap: 12px; justify-content: center;
-}
-div[data-testid="stRadio"] label {
+}}
+div[data-testid="stRadio"] label {{
     background: #FFFFFF; padding: 10px 24px !important; border-radius: 30px !important;
     border: 1px solid var(--warm-200) !important; font-family: 'IBM Plex Mono', monospace !important;
-    font-size: 0.75rem !important; text-transform: uppercase !important; color: #3A3A3C !important;
-    transition: 0.3s;
-}
-div[data-testid="stRadio"] label[data-checked="true"] { 
+    font-size: 0.75rem !important; color: #3A3A3C !important; box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}}
+div[data-testid="stRadio"] label[data-checked="true"] {{ 
     background: var(--charcoal) !important; border-color: var(--charcoal) !important; 
-}
-div[data-testid="stRadio"] label[data-checked="true"] * { color: #E8A83E !important; }
+}}
+div[data-testid="stRadio"] label[data-checked="true"] * {{ color: #E8A83E !important; }}
 
-[data-testid="stMetric"] {
+[data-testid="stMetric"] {{
     background: #FFFFFF !important; border: 1px solid var(--warm-100) !important; 
-    border-radius: var(--radius) !important; border-top: 3px solid var(--amber) !important;
-}
+    border-radius: 18px !important; border-top: 3px solid var(--amber) !important;
+}}
 
-.card { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: var(--radius); padding: 1.8rem 2rem; margin-bottom: 1.2rem; }
-.hero { background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: 24px; padding: 3.5rem; margin-bottom: 2rem; box-shadow: 0 16px 56px rgba(28,28,30,0.1); }
+.hero {{ background: #FFFFFF; border: 1px solid var(--warm-100); border-radius: 24px; padding: 3.5rem; margin-bottom: 2rem; box-shadow: 0 16px 56px rgba(0,0,0,0.05); }}
 </style>
-
-<div class="aircraft-viewport">
-    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-        <g stroke="#C8892A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M 585 240 L 600 50 L 615 240 Z" fill="rgba(200,137,42,0.05)" />
-            
-            <path d="M 480 400 L 80 370 L 65 280 L 75 280 L 95 360 L 480 375 Z" fill="rgba(200,137,42,0.05)" />
-            
-            <path d="M 720 400 L 1120 370 L 1135 280 L 1125 280 L 1105 360 L 720 375 Z" fill="rgba(200,137,42,0.05)" />
-            
-            <circle cx="600" cy="380" r="130" fill="#FAF8F4" />
-            <circle cx="600" cy="380" r="115" stroke-dasharray="10 5" opacity="0.2" />
-            
-            <g transform="translate(280, 460)">
-                <circle cx="0" cy="0" r="65" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
-                <g stroke="#C8892A" stroke-width="2.5">
-                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
-                    <line x1="0" y1="-55" x2="0" y2="55" />
-                    <line x1="-55" y1="0" x2="55" y2="0" />
-                    <line x1="-40" y1="-40" x2="40" y2="40" />
-                    <line x1="-40" y1="40" x2="40" y2="-40" />
-                </g>
-                <circle cx="0" cy="0" r="15" fill="#C8892A" />
-            </g>
-            
-            <g transform="translate(920, 460)">
-                <circle cx="0" cy="0" r="65" stroke-width="4" fill="#FAF8F4" stroke="#C8892A" />
-                <g stroke="#C8892A" stroke-width="2.5">
-                    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="0.12s" repeatCount="indefinite" />
-                    <line x1="0" y1="-55" x2="0" y2="55" />
-                    <line x1="-55" y1="0" x2="55" y2="0" />
-                    <line x1="-40" y1="-40" x2="40" y2="40" />
-                    <line x1="-40" y1="40" x2="40" y2="-40" />
-                </g>
-                <circle cx="0" cy="0" r="15" fill="#C8892A" />
-            </g>
-        </g>
-    </svg>
-</div>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
