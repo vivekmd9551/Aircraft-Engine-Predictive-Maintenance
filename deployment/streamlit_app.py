@@ -1,7 +1,7 @@
 """
 ✈️ AeroMind — Aircraft Engine Predictive Maintenance
 Author: Vivek M D
-Design: Premium Glassmorphism — Total Restoration
+Design: Premium Glassmorphism — Total Content Restoration
 """
 
 import os
@@ -25,7 +25,7 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# BACKGROUND SVG ENCODING (Base64 Hidden)
+# BACKGROUND SVG ENCODING (High Intensity & Sharp)
 # ─────────────────────────────────────────────
 svg_icon = """
 <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
@@ -82,30 +82,31 @@ st.markdown(f"""
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root {{
-    --ivory: #FAF8F4;
-    --amber: #C8892A;
-    --charcoal: #1C1C1E;
-    --glass: rgba(255, 255, 255, 0.6);
+    --ivory:     #FAF8F4;
+    --cream:     #F3EFE7;
+    --warm-100:  #EDE7D9;
+    --warm-200:  #D9CEBC;
+    --amber:     #C8892A;
+    --charcoal:  #1C1C1E;
+    --glass:     rgba(255, 255, 255, 0.72);
 }}
 
-html, body, [data-testid="stAppViewContainer"] {{
+html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {{
     background: var(--ivory) !important;
+    font-family: 'Outfit', sans-serif !important;
 }}
 
-/* Aircraft Background Fix */
+/* THE BACKGROUND FIX */
 [data-testid="stAppViewContainer"]::before {{
     content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: 0; pointer-events: none;
     background-image: url("data:image/svg+xml;base64,{b64_svg}");
     background-repeat: no-repeat; background-position: center center;
-    background-size: 85% auto; opacity: 0.2;
+    background-size: 85% auto; opacity: 0.22;
 }}
 
-/* KILL THE WHITE BOXES */
-[data-testid="stMainBlockContainer"], 
-[data-testid="stVerticalBlock"], 
-[data-testid="stHorizontalBlock"],
-div.stElementContainer {{
+/* KILL WHITE BOXES */
+[data-testid="stMainBlockContainer"], div[data-testid="stVerticalBlock"] > div {{
     background-color: transparent !important;
 }}
 
@@ -119,72 +120,54 @@ div.stElementContainer {{
 div[data-testid="stRadio"] > div[role="radiogroup"] {{
     background: var(--charcoal);
     padding: 10px 15px; border-radius: 100px;
-    display: flex; justify-content: center; gap: 12px;
+    display: flex; justify-content: center; gap: 15px;
     border: 1px solid rgba(200, 137, 42, 0.4);
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     margin-bottom: 2.5rem;
 }}
 div[data-testid="stRadio"] label {{
     background: transparent !important; border: none !important;
-    padding: 8px 20px !important; border-radius: 100px !important;
+    padding: 8px 22px !important; border-radius: 100px !important;
     transition: 0.3s ease !important;
 }}
 div[data-testid="stRadio"] label p {{
     color: #9A9A9E !important; font-family: 'IBM Plex Mono', monospace !important;
-    font-size: 0.72rem !important; text-transform: uppercase !important; letter-spacing: 0.12em;
+    font-size: 0.75rem !important; letter-spacing: 0.12em !important; text-transform: uppercase !important;
 }}
-div[data-testid="stRadio"] label[data-checked="true"] {{
-    background: var(--amber) !important;
-}}
-div[data-testid="stRadio"] label[data-checked="true"] p {{
-    color: white !important; font-weight: 600 !important;
-}}
+div[data-testid="stRadio"] label[data-checked="true"] {{ background: var(--amber) !important; }}
+div[data-testid="stRadio"] label[data-checked="true"] p {{ color: white !important; font-weight: 600 !important; }}
 div[data-testid="stRadio"] label > div:first-child {{ display: none !important; }}
 
 /* GLASS PANELS */
 .glass-card {{
     background: var(--glass);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(200, 137, 42, 0.15);
-    border-radius: 28px;
-    padding: 2.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 8px 32px rgba(28, 28, 30, 0.05);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(200, 137, 42, 0.12);
+    border-radius: 28px; padding: 2.5rem;
+    margin-bottom: 1.5rem; box-shadow: 0 8px 32px rgba(28, 28, 30, 0.05);
 }}
 
-/* ALERT BOXES */
+/* ALERTS */
 .alert-box {{ border-radius: 12px; padding: 1.2rem; border-left: 5px solid; margin: 1rem 0; }}
 .alert-critical {{ background: rgba(184, 74, 46, 0.15); border-color: #B84A2E; color: #7A2A18; }}
 .alert-warning {{ background: rgba(200, 137, 42, 0.15); border-color: #C8892A; color: #7A4E00; }}
 .alert-good {{ background: rgba(30, 122, 110, 0.15); border-color: #1E7A6E; color: #165A50; }}
 
-/* METRICS */
-[data-testid="stMetric"] {{
-    background: rgba(255, 255, 255, 0.4) !important;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(200, 137, 42, 0.1) !important;
-    border-radius: 18px !important;
-    padding: 1.2rem !important;
-}}
+/* PILLS */
+.pill-grid {{ display: flex; flex-wrap: wrap; gap: 7px; margin-top: 1rem; }}
+.pill {{ background: var(--warm-100); border: 1px solid var(--warm-200); border-radius: 6px; padding: 4px 11px; font-family: 'IBM Plex Mono'; font-size: 0.65rem; color: var(--charcoal); }}
 
-.rule {{ display: flex; align-items: center; gap: 1rem; margin: 2.5rem 0; }}
-.rule-line {{ flex: 1; height: 1px; background: rgba(200, 137, 42, 0.2); }}
+/* TITLES */
+h1, h2, h3 {{ font-family: 'Playfair Display', serif !important; color: var(--charcoal); }}
+.eyebrow {{ font-family: 'IBM Plex Mono'; font-size: 0.62rem; letter-spacing: 3px; color: var(--amber); text-transform: uppercase; }}
 </style>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
-# LOGO
+# LOGO & NAVIGATION
 # ─────────────────────────────────────────────
-st.markdown("""
-<div style="text-align: center; margin-bottom: 1rem;">
-    <div style="font-family:'Playfair Display',serif; font-size: 2.6rem; font-weight: 900; color: #1C1C1E;">✈ AeroMind</div>
-</div>
-""", unsafe_allow_html=True)
+st.markdown("""<div style="text-align: center; margin-bottom: 1rem;"><div style="font-family:'Playfair Display',serif; font-size: 2.6rem; font-weight: 900; color: #1C1C1E; letter-spacing: -1px;">✈ AeroMind</div></div>""", unsafe_allow_html=True)
 
-# ─────────────────────────────────────────────
-# NAVIGATION
-# ─────────────────────────────────────────────
 col_nav1, col_nav2, col_nav3 = st.columns([1, 10, 1])
 with col_nav2:
     page = st.radio("NAV", ["Home", "RUL Prediction", "Model Performance", "Business Impact", "About"], horizontal=True, label_visibility="collapsed")
@@ -206,8 +189,9 @@ PLOT_LAYOUT = dict(
     paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
     font=dict(family='Outfit, sans-serif', color='#3A3A3C'),
     margin=dict(l=24, r=24, t=48, b=40),
-    xaxis=dict(gridcolor='rgba(200,137,42,0.1)', linecolor='rgba(200,137,42,0.1)'),
-    yaxis=dict(gridcolor='rgba(200,137,42,0.1)', linecolor='rgba(200,137,42,0.1)'),
+    xaxis=dict(gridcolor='rgba(200,137,42,0.08)', linecolor='rgba(200,137,42,0.1)', tickfont=dict(family='IBM Plex Mono', size=11)),
+    yaxis=dict(gridcolor='rgba(200,137,42,0.08)', linecolor='rgba(200,137,42,0.1)', tickfont=dict(family='IBM Plex Mono', size=11)),
+    colorway=['#C8892A','#1E7A6E','#B84A2E','#1C1C1E','#E8A83E'],
 )
 
 # ═══════════════════════════════════════════
@@ -216,28 +200,25 @@ PLOT_LAYOUT = dict(
 if page == "Home":
     st.markdown("""
     <div class="glass-card" style="text-align: center; padding: 5rem 3rem;">
-        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(200,137,42,0.1); border-radius: 30px; padding: 6px 16px; color: var(--amber); font-family: 'IBM Plex Mono'; font-size: 0.65rem; letter-spacing: 2px; margin-bottom: 2rem;">
-            LIVE MONITORING ACTIVE
-        </div>
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(200,137,42,0.1); border-radius: 30px; padding: 6px 16px; color: var(--amber); font-family: 'IBM Plex Mono'; font-size: 0.65rem; letter-spacing: 2px; margin-bottom: 2rem;">LIVE MONITORING ACTIVE</div>
         <h1 style="font-size: 4.5rem; line-height: 1; margin: 0;">Aircraft Engine<br><em style="color:var(--amber); font-style:italic;">Health Intelligence</em></h1>
-        <p style="color: #6C6C70; max-width: 650px; margin: 2rem auto 3.5rem; font-size: 1.2rem; font-weight: 300;">
-            Predicting Remaining Useful Life of turbofan engines using deep learning — 50% beyond industry benchmarks on NASA C-MAPSS data.
-        </p>
+        <p style="color: #6C6C70; max-width: 650px; margin: 2rem auto 3.5rem; font-size: 1.2rem; font-weight: 300;">Predicting Remaining Useful Life of turbofan engines using deep learning — 50% beyond industry benchmarks on NASA C-MAPSS data.</p>
         <div style="display: flex; justify-content: center; gap: 4.5rem; border-top: 1px solid rgba(200,137,42,0.15); padding-top: 3rem;">
-            <div><h2 style="margin:0;">8.96</h2><p style="font-family:'IBM Plex Mono'; font-size:0.6rem; color:var(--amber); letter-spacing:2px;">RMSE Cycles</p></div>
-            <div><h2 style="margin:0;">95.3%</h2><p style="font-family:'IBM Plex Mono'; font-size:0.6rem; color:var(--amber); letter-spacing:2px;">R² Accuracy</p></div>
-            <div><h2 style="margin:0;">$2M+</h2><p style="font-family:'IBM Plex Mono'; font-size:0.6rem; color:var(--amber); letter-spacing:2px;">Annual Savings</p></div>
+            <div><h2 style="margin:0;">8.96</h2><p class="eyebrow">RMSE Cycles</p></div>
+            <div><h2 style="margin:0;">95.3%</h2><p class="eyebrow">R² Accuracy</p></div>
+            <div><h2 style="margin:0;">4</h2><p class="eyebrow">ML Models</p></div>
+            <div><h2 style="margin:0;">$2M+</h2><p class="eyebrow">Annual Savings</p></div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
     c1, c2, c3, c4 = st.columns(4)
-    with c1: st.metric("Models Trained", "4")
-    with c2: st.metric("Features Engineered", "117", delta="+106")
-    with c3: st.metric("Training Engines", "80")
-    with c4: st.metric("Validation R²", "95.3%")
+    with c1: st.metric("Models Trained", "4", help="RF, XGBoost, LightGBM, LSTM")
+    with c2: st.metric("Features Engineered", "117", delta="+106 engineered")
+    with c3: st.metric("Training Engines", "80", help="16,561 training samples")
+    with c4: st.metric("Validation R²", "95.3%", delta="50% better")
 
-    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    st.markdown('<div class="glass-card" style="margin-top:2rem;">', unsafe_allow_html=True)
     fig = go.Figure(go.Bar(
         x=['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'], y=[8.96, 9.41, 9.52, 9.85],
         marker=dict(color=['#1C1C1E','#C8892A','#E8A83E','#D9CEBC'], cornerradius=10),
@@ -253,7 +234,7 @@ if page == "Home":
 # ═══════════════════════════════════════════
 elif page == "RUL Prediction":
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown('<h3>Inference Console</h3>', unsafe_allow_html=True)
+    st.markdown('<span class="eyebrow">Inference Console</span><h2>Remaining Useful Life Prediction</h2>', unsafe_allow_html=True)
     chosen = st.selectbox("Select Active ML Model", ['LSTM', 'XGBoost', 'LightGBM', 'Random Forest'])
     
     col_sliders, col_result = st.columns([1.1, 1], gap="large")
@@ -268,13 +249,13 @@ elif page == "RUL Prediction":
             rpm_val = st.slider("Fan & Core Speed Stress [NF / NC]", 0, 100, def_r, format="%d%% wear")
             base_rul = int(125 * (1 - (heat_val + press_val + rpm_val) / 300))
         else:
-            # RESTORED ALL SENSOR SLIDERS
-            s2 = st.slider("Compressor Inlet Temp [T24] (°R)", 640.0, 645.0, 642.5)
-            s3 = st.slider("HP Compressor Outlet [P30] (psia)", 1570.0, 1620.0, 1590.0)
-            s4 = st.slider("Fan Speed [NF] (rpm)", 1380.0, 1445.0, 1410.0)
-            s7 = st.slider("Static Pressure [Ps30] (psia)", 550.0, 556.0, 553.0)
-            s11 = st.slider("Core Speed [NC] (rpm)", 46.0, 49.0, 47.5)
-            s12 = st.slider("LPT Outlet Temp [T50] (°R)", 518.0, 524.0, 521.0)
+            # RESTORED ALL ORIGINAL ADVANCED SLIDERS
+            s2  = st.slider("Compressor Inlet Temperature [T24] (°R)", 640.0, 645.0, 642.5, 0.1)
+            s3  = st.slider("High Pressure Compressor Outlet [P30] (psia)", 1570.0, 1620.0, 1590.0, 1.0)
+            s4  = st.slider("Fan Speed [NF] (rpm)", 1380.0, 1445.0, 1410.0, 1.0)
+            s7  = st.slider("Static Pressure [Ps30] (psia)", 550.0, 556.0, 553.0, 0.1)
+            s11 = st.slider("Core Speed [NC] (rpm)", 46.0, 49.0, 47.5, 0.1)
+            s12 = st.slider("LPT Outlet Temp [T50] (°R)", 518.0, 524.0, 521.0, 0.5)
             base_rul = int(max(0, min(125, 100 - (s2-642.5)*12 - (s3-1590)/4 - (s4-1410)/3)))
 
     with col_result:
@@ -282,10 +263,10 @@ elif page == "RUL Prediction":
         label, kind = rul_status(rul_pred)
         cost = maintenance_cost(rul_pred)
         color_map = {"critical":"#B84A2E", "warning":"#C8892A", "good":"#1E7A6E"}
-        bg_map = {"critical":"#FCEAE6", "warning":"#FFF6E8", "good":"#E3F4F1"}
+        bg_map = {"critical":"rgba(184, 74, 46, 0.15)", "warning":"rgba(200, 137, 42, 0.15)", "good":"rgba(30, 122, 110, 0.15)"}
         
         st.markdown(f"""
-        <div style="background:{bg_map[kind]}; border: 2px solid {color_map[kind]}; border-radius: 25px; padding: 3rem 2rem; text-align: center; backdrop-filter: blur(10px);">
+        <div style="background:{bg_map[kind]}; border: 2.5px solid {color_map[kind]}; border-radius: 25px; padding: 3rem; text-align: center; backdrop-filter: blur(10px);">
             <p style="font-family:'IBM Plex Mono'; font-size:0.65rem; color:#9A9A9E; letter-spacing:3px; text-transform:uppercase;">Predicted Remaining Useful Life</p>
             <h1 style="font-family:'Playfair Display'; font-size:6.5rem; color:{color_map[kind]}; margin: 0.5rem 0;">{rul_pred}</h1>
             <p style="font-family:'IBM Plex Mono'; font-size:0.7rem; color:#9A9A9E; letter-spacing:2px;">CYCLES REMAINING ({chosen})</p>
@@ -293,13 +274,12 @@ elif page == "RUL Prediction":
         </div>
         """, unsafe_allow_html=True)
         
-        # RESTORED INFORMATION TEXT
         if kind == "critical":
-            st.markdown(f"""<div class="alert-box alert-critical"><h4>🔴 Immediate Maintenance Required</h4><p>Action: Ground and inspect within 5 cycles. Cost: ${cost:,} vs $500k+ unscheduled.</p></div>""", unsafe_allow_html=True)
+            st.markdown(f"""<div class="alert-box alert-critical"><h4>🔴 Immediate Maintenance Required</h4><p><b>Action:</b> Ground and inspect within 5 flight cycles. Scheduled maintenance cost: ${cost:,} — vs $500,000+ unscheduled.</p></div>""", unsafe_allow_html=True)
         elif kind == "warning":
-            st.markdown(f"""<div class="alert-box alert-warning"><h4>⚠️ Maintenance Recommended</h4><p>Action: Schedule preventive check within 30 cycles. Estimated cost: ${cost:,}.</p></div>""", unsafe_allow_html=True)
+            st.markdown(f"""<div class="alert-box alert-warning"><h4>⚠️ Maintenance Recommended</h4><p><b>Action:</b> Schedule preventive maintenance within 30 cycles. Estimated cost: ${cost:,}</p></div>""", unsafe_allow_html=True)
         else:
-            st.markdown("""<div class="alert-box alert-good"><h4>✅ Engine Nominal</h4><p>Status: No immediate action required. Continue standard monitoring intervals.</p></div>""", unsafe_allow_html=True)
+            st.markdown("""<div class="alert-box alert-good"><h4>✅ Engine Nominal</h4><p><b>Status:</b> No immediate action required. Continue standard monitoring intervals.</p></div>""", unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════
@@ -307,19 +287,28 @@ elif page == "RUL Prediction":
 # ═══════════════════════════════════════════
 elif page == "Model Performance":
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown('<h3>Validation Matrix</h3>', unsafe_allow_html=True)
-    perf = {'Model': ['LSTM', 'XGBoost','LightGBM','Random Forest'], 'RMSE': [8.96, 9.41, 9.52, 9.85], 'R²': [0.9528, 0.9492, 0.9479, 0.9443]}
+    st.markdown('<span class="eyebrow">Validation Results</span><h2>Technical Matrix & Comparison</h2>', unsafe_allow_html=True)
     
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Best RMSE", "8.96", "LSTM")
-    c2.metric("Best MAE", "6.27", "RF")
-    c3.metric("Best R²", "0.9528", "LSTM")
-    c4.metric("vs Target", "50% better")
+    perf = {'Model': ['LSTM', 'XGBoost','LightGBM','Random Forest'], 'RMSE': [8.96, 9.41, 9.52, 9.85], 'MAE': [6.83, 6.35, 6.48, 6.27], 'R²': [0.9528, 0.9492, 0.9479, 0.9443], 'Speed': ['Medium','Fast','Fast','Fast'], 'Explainability': ['Low','High','High','High']}
+    df_perf = pd.DataFrame(perf)
 
-    radar_fig = go.Figure(go.Scatterpolar(r=[0.95, 0.9, 0.95, 0.5, 0.8], theta=['RMSE','MAE','R²','Speed','Explainability'], fill='toself', line_color='#C8892A'))
-    radar_fig.update_layout(**PLOT_LAYOUT, height=450)
-    st.plotly_chart(radar_fig, use_container_width=True)
-    st.dataframe(pd.DataFrame(perf), use_container_width=True, hide_index=True)
+    c1, c2, c3, c4 = st.columns(4)
+    with c1: st.metric("Best RMSE", "8.96", delta="LSTM")
+    with c2: st.metric("Best MAE", "6.27", delta="Random Forest")
+    with c3: st.metric("Best R²", "0.9528", delta="LSTM")
+    with c4: st.metric("vs Target", "−9.04", delta="50% better")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.plotly_chart(go.Figure(go.Bar(x=df_perf['Model'], y=df_perf['RMSE'], marker=dict(color=['#1C1C1E','#C8892A','#E8A83E','#D9CEBC'], cornerradius=10))).update_layout(**PLOT_LAYOUT, title="RMSE Comparison", height=350), use_container_width=True)
+    with col2:
+        st.plotly_chart(go.Figure(go.Bar(x=df_perf['Model'], y=df_perf['R²'], marker=dict(color=['#1C1C1E','#C8892A','#E8A83E','#D9CEBC'], cornerradius=10))).update_layout(**PLOT_LAYOUT, title="R² Accuracy", height=350).update_yaxes(range=[0.93, 0.96]), use_container_width=True)
+
+    radar_fig = go.Figure()
+    for m, vals in {'LSTM': [0.95, 0.9, 0.95, 0.5, 0.3], 'XGBoost': [0.91, 0.95, 0.94, 0.9, 0.9]}.items():
+        radar_fig.add_trace(go.Scatterpolar(r=vals, theta=['RMSE','MAE','R²','Speed','Explainability'], fill='toself', name=m))
+    st.plotly_chart(radar_fig.update_layout(**PLOT_LAYOUT, height=450, title="Multi-Dimensional Comparison"), use_container_width=True)
+    st.dataframe(df_perf, use_container_width=True, hide_index=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════
@@ -327,20 +316,27 @@ elif page == "Model Performance":
 # ═══════════════════════════════════════════
 elif page == "Business Impact":
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown('<h3>Fleet Financial ROI</h3>', unsafe_allow_html=True)
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Unscheduled Cost", "$500,000")
-    c2.metric("Scheduled Cost", "$50,000")
-    c3.metric("Year 1 ROI", "888%")
-    c4.metric("Payback", "1.2 mo")
-
-    fleet = st.slider("Fleet Size (Engines)", 50, 500, 100)
-    savings = (fleet * 0.05 * 0.90) * (500000 - 50000)
-    st.metric("Total Annual Savings", f"${savings/1e6:.1f}M")
+    st.markdown('<span class="eyebrow">Financial Intelligence</span><h2>ROI & Fleet Savings</h2>', unsafe_allow_html=True)
     
-    fig_roi = go.Figure(go.Scatter(x=[1,2,3,4,5], y=[(savings*y)/1e6 for y in range(1,6)], fill='tozeroy', line_color='#1E7A6E'))
-    fig_roi.update_layout(**PLOT_LAYOUT, title="5-Year Cumulative Savings projection ($M)", height=400)
-    st.plotly_chart(fig_roi, use_container_width=True)
+    c1, c2, c3, c4 = st.columns(4)
+    with c1: st.metric("Unscheduled Failure", "$500,000")
+    with c2: st.metric("Scheduled Maintenance", "$50,000")
+    with c3: st.metric("Year 1 ROI", "888%")
+    with c4: st.metric("Payback Period", "1.2 mo")
+
+    col_ctrl, col_chart = st.columns([1, 1.4], gap="large")
+    with col_ctrl:
+        st.markdown("<p class='eyebrow'>Fleet Parameters</p>", unsafe_allow_html=True)
+        fleet_size = st.slider("Fleet Size (engines)", 50, 500, 100)
+        failure_rate = st.slider("Annual Failure Rate (%)", 1.0, 10.0, 5.0)
+        prevention_rt = st.slider("ML Prevention Rate (%)", 70.0, 95.0, 90.0)
+        savings = (fleet_size * (failure_rate/100) * (prevention_rt/100)) * (500000 - 50000)
+        st.markdown(f"<div style='background:var(--charcoal); padding:2rem; border-radius:20px; color:white; text-align:center;'><p class='eyebrow'>Net Savings</p><h2>${savings/1e6:.1f}M / yr</h2></div>", unsafe_allow_html=True)
+
+    with col_chart:
+        years = [1,2,3,4,5]
+        cum_sav = [((savings * y) - 200000)/1e6 for y in years]
+        st.plotly_chart(go.Figure(go.Scatter(x=years, y=cum_sav, fill='tozeroy', line_color='#1E7A6E')).update_layout(**PLOT_LAYOUT, height=350, title="5-Year Projected Savings ($M)"), use_container_width=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════
@@ -348,17 +344,17 @@ elif page == "Business Impact":
 # ════════════════════════════════──────────────────────
 elif page == "About":
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([1.2, 1])
     with col1:
-        st.markdown("### Vivek M D")
-        st.markdown("BE Computer Science Graduate · AI/ML Specialist")
-        st.markdown("### Tech Stack")
-        st.markdown("Python 3.11, TensorFlow, XGBoost, Streamlit, Plotly, Optuna.")
+        st.markdown("<p class='eyebrow'>Technical Stack</p><h3>Technologies Used</h3>", unsafe_allow_html=True)
+        st.markdown('<div class="pill-grid"><span class="pill">Python 3.11</span><span class="pill">TensorFlow</span><span class="pill">XGBoost</span><span class="pill">Optuna</span><span class="pill">SHAP</span><span class="pill">Streamlit</span></div>', unsafe_allow_html=True)
+        st.markdown("### NASA C-MAPSS Dataset")
+        st.markdown("Turbofan Engine Degradation Simulation. 100 training engines, 26 original features spanning 21 sensor channels.")
     with col2:
-        st.markdown("Built on the NASA C-MAPSS turbofan dataset. The system provides real-time health intelligence to reduce fleet downtime.")
+        st.markdown("<div style='background:var(--charcoal); padding:2rem; border-radius:20px; color:white;'><h3>Vivek M D</h3><p>BE Computer Science Graduate · AI/ML Specialist</p></div>", unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
 # FOOTER
 # ─────────────────────────────────────────────
-st.markdown("""<div style="margin-top:5rem; padding:2rem 0; border-top:1px solid #EDE7D9; display:flex; justify-content:space-between; opacity:0.6; font-size:0.7rem;"><p>AeroMind Intelligence v2.0</p><p>© 2026 Vivek M D</p></div>""", unsafe_allow_html=True)
+st.markdown("""<div style="margin-top:4rem; padding:2rem 0; border-top:1px solid #EDE7D9; display:flex; justify-content:space-between; opacity:0.6; font-size:0.7rem;"><p>AeroMind Intelligence v2.0</p><p>© 2026 Vivek M D</p></div>""", unsafe_allow_html=True)
